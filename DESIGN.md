@@ -77,7 +77,7 @@ Shared Layout owns navigation, language switching and SEO. Breadcrumbs and Steel
 
 ## Do's and Don'ts
 
-Do label sample equipment and illustrative photographs in both languages. Do hide unverified brands/contact channels. Do not claim production readiness, dealership status, live stock, or email delivery until verified. Functional hover transitions stay near 220ms. The homepage stage has one 3.5-second light entrance, then input-driven depth movement limited to a few pixels. Nothing loops or delays access to content. Disable movement for reduced-motion preferences, stop updating off-screen, and preserve the complete layout without JavaScript. Scrollbars remain visible and inherit the global steel/cobalt baseline.
+Do label sample equipment and illustrative photographs in both languages. Do hide unverified brands/contact channels. Do not claim production readiness, dealership status, live stock, or email delivery until verified. Functional hover transitions stay near 220ms. The homepage stage has one 3.5-second light entrance, then input-driven depth movement limited to a few pixels. Homepage art never loops or delays access to content; the optional loading treatment follows the readiness contract below. Disable movement for reduced-motion preferences, stop updating off-screen, and preserve the complete layout without JavaScript. Scrollbars remain visible and inherit the global steel/cobalt baseline.
 
 ## Current owner preferences
 
@@ -110,3 +110,11 @@ Verification evidence and comparison history are maintained in `design-qa.md`. P
 ## GitHub Pages preview behavior
 
 The public hosted preview is static. Keep the approved contact layout and selected-machine context, but label its disabled send action Preview only / Yalnızca önizleme and explain that contact details are not collected. Disable personal contact inputs there. Local development keeps its working sample enquiry flow. `PUBLIC_HOSTING=github-pages` owns this deployment-specific distinction; never imply a hosted enquiry was saved locally. All local asset and native route rendering goes through the common base-path helper for repository hosting.
+
+## Selected steel loading screen
+
+The owner selected option 2, The steel reveal, on 2026-10-20. `SteelRevealArt.astro` and `steel-reveal.css` own its photographic excavator, silver HTML wordmark and three steel shutters, shared with the comparison page. `SteelLoader.astro`, `steel-loader.css` and `steel-loader.ts` own the actual loading lifecycle in the shared bilingual Layout.
+
+This is a readiness treatment, with no minimum display period or forced 4.8-second loop. On a first session visit, wait 160ms before displaying it; cancel it if the above-the-fold eager images and fonts are ready first. Finish immediately when readiness resolves, allowing only a 160ms opacity exit. An independent two-second deadline and CSS escape hatch prevent missing media, fonts or interrupted scripts from trapping visitors. Failed media counts as settled. Skip repeat session visits, history restoration and automatic reduced-motion playback. A Continue to website control, keyboard focus and scroll interaction can dismiss it. Storage restrictions and disabled JavaScript must leave content usable. Fetch the decorative loader photograph at low priority only when shown; never wait for that photograph to open the actual page.
+
+The `/design/loaders/` comparison includes an explicit Try selected loader action. This labelled preview holds the selected design for inspection, traps focus on its exit and restores the opener. Its timing is separate from actual page loading. Reduced-motion preview uses a complete still composition. Keep titles without terminal full stops, avoid decorative arrows, and preserve the existing page layout and navigation.

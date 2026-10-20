@@ -1,0 +1,68 @@
+---
+import Excavator from './Excavator.astro';
+import SteelRevealArt from './SteelRevealArt.astro';
+interface Props {
+  concept: 'hydraulic' | 'reveal' | 'blueprint';
+  id: string;
+}
+const { concept, id } = Astro.props;
+---
+
+<div class={`animation-surface ${concept}`} data-playing="false" data-concept={concept}>
+  <div class="scene-brand" aria-hidden="true">
+    <span class="brand-cut"></span>MACHINA
+  </div>
+  <div class="scene-corner" aria-hidden="true">
+    {concept === 'blueprint' ? 'ENGINEERED TO WORK' : 'BUILT FOR THE WORK AHEAD'}
+  </div>
+  {concept === 'hydraulic' && (
+    <>
+      <div class="scene-headline" aria-hidden="true">
+        GROUND
+        <br />
+        WORK
+      </div>
+      <div class="hydraulic-machine">
+        <Excavator id={id} />
+      </div>
+      <div class="ground-line" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+        <i />
+        <i />
+      </div>
+      <div class="excavation-blocks" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+      </div>
+    </>
+  )}
+  {concept === 'reveal' && <SteelRevealArt />}
+  {concept === 'blueprint' && (
+    <>
+      <div class="blueprint-word" aria-hidden="true">
+        FORM
+        <br />
+        FOLLOWS
+        <br />
+        FUNCTION
+      </div>
+      <div class="blueprint-machine">
+        <Excavator id={id} technical />
+      </div>
+      <div class="blueprint-scan" aria-hidden="true" />
+      <div class="drawing-caption" aria-hidden="true">
+        EXCAVATOR / SIDE ELEVATION
+      </div>
+    </>
+  )}
+  <div class="scene-status">
+    <span>Preparing the catalogue</span>
+    <div class="loading-rule" aria-hidden="true">
+      <i />
+    </div>
+  </div>
+  <span class="scene-note">Motion concept · illustrative equipment</span>
+</div>

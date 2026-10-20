@@ -28,6 +28,8 @@ Company name, exact address, brands, and actual inventory are undecided. MACHINA
 
 The user selected the second homepage proposal, Machine Theatre, on 2026-10-20. No decorative arrows or terminal full stops in titles. Specific visual implementation belongs in DESIGN.md.
 
+The user also selected the second excavator loading proposal, The steel reveal. It may accompany genuine first-visit loading but must not impose an artificial waiting period or prevent access when scripts, media or storage fail.
+
 ## Evidence on Hand
 
 The agreed first-release plan is in the conversation. README.md and docs/ describe the implemented scope. src/data/sample.ts contains explicitly labelled sample machines and editorial drafts. Company details and actual equipment photographs remain unverified; illustrative artwork must be labelled accordingly.

@@ -1,0 +1,34 @@
+---
+import { withBase } from '../../lib/paths';
+import '../../styles/steel-reveal.css';
+interface Props {
+  brand?: string;
+  deferred?: boolean;
+}
+const { brand = 'MACHINA', deferred = false } = Astro.props;
+const machine = withBase('/images/steel/new-excavator.webp');
+---
+
+<div class="steel-reveal-art" aria-hidden="true">
+  <div class="metal-headline">{brand}</div>
+  <img
+    class="reveal-machine"
+    src={
+      deferred
+        ? 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+        : machine
+    }
+    data-loader-src={deferred ? machine : undefined}
+    width="900"
+    height="420"
+    alt=""
+    decoding="async"
+    fetchpriority={deferred ? 'low' : 'auto'}
+  />
+  <div class="steel-shutters">
+    <i />
+    <i />
+    <i />
+  </div>
+  <div class="reveal-light" />
+</div>

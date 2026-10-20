@@ -1,0 +1,220 @@
+.steel-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  isolation: isolate;
+  overflow: hidden;
+  container-type: size;
+  background: var(--stage);
+  color: var(--stage-ink);
+  opacity: 1;
+}
+.steel-loader[data-state='loading'] {
+  animation: steel-loader-failsafe 2.3s step-end forwards;
+}
+.steel-loader[data-state='closing'] {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease-out;
+}
+.steel-loader[data-page-hidden='true'] * {
+  animation-play-state: paused !important;
+}
+.steel-loader-brand {
+  position: absolute;
+  left: 7%;
+  top: 7%;
+  display: flex;
+  align-items: center;
+  gap: 1cqw;
+  z-index: 5;
+  font: 400 clamp(20px, 2cqw, 32px)/1 var(--hero-display);
+  letter-spacing: 0.025em;
+}
+.steel-loader-brand span {
+  width: 1.5cqw;
+  min-width: 15px;
+  height: 1.8cqw;
+  min-height: 20px;
+  background: currentColor;
+  clip-path: polygon(38% 0, 100% 0, 62% 100%, 0 100%);
+}
+.steel-loader-corner {
+  position: absolute;
+  top: 8%;
+  right: 7%;
+  z-index: 5;
+  font-size: clamp(9px, 0.9cqw, 14px);
+  letter-spacing: 0.06em;
+}
+.steel-loader .metal-headline {
+  top: 15%;
+  font-size: 19cqw;
+}
+.steel-loader .reveal-machine {
+  width: 78%;
+  left: 14%;
+  bottom: 4%;
+}
+.steel-loader .steel-shutters i {
+  animation: steel-loader-open 850ms cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+.steel-loader .steel-shutters i:nth-child(2) {
+  animation-delay: 45ms;
+}
+.steel-loader .steel-shutters i:nth-child(3) {
+  animation-delay: 90ms;
+}
+.steel-loader .reveal-light {
+  animation: steel-loader-light 1.2s ease-out both;
+}
+.steel-loader-status {
+  position: absolute;
+  bottom: 12%;
+  left: 7%;
+  width: 22%;
+  min-width: 180px;
+  z-index: 5;
+  font-size: clamp(14px, 1.15cqw, 18px);
+}
+.steel-loader-rule {
+  height: 2px;
+  margin-top: 14px;
+  background: var(--stage-border);
+  overflow: hidden;
+}
+.steel-loader-rule i {
+  display: block;
+  width: 38%;
+  height: 100%;
+  background: var(--stage-accent);
+  animation: steel-loader-working 1.3s ease-in-out infinite;
+}
+.steel-loader-note {
+  position: absolute;
+  bottom: 4%;
+  left: 7%;
+  z-index: 5;
+  color: var(--stage-muted);
+  font-size: clamp(11px, 0.8cqw, 13px);
+}
+.steel-loader-skip {
+  position: absolute;
+  bottom: 4%;
+  right: 7%;
+  z-index: 5;
+  border: 1px solid var(--stage-border);
+  border-radius: var(--radius);
+  padding: 10px 18px;
+  min-height: 44px;
+  color: var(--stage-ink);
+  background: var(--stage);
+  font-size: 14px;
+}
+.steel-loader-skip:hover {
+  background: var(--stage-menu);
+  border-color: var(--stage-muted);
+}
+.steel-loader-skip:focus-visible {
+  outline-color: var(--stage-focus);
+}
+@keyframes steel-loader-open {
+  from {
+    transform: translateY(0) skew(-14deg);
+  }
+  to {
+    transform: translateY(-104%) skew(-14deg);
+  }
+}
+@keyframes steel-loader-light {
+  from {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.65;
+  }
+  to {
+    transform: translateX(91cqw);
+    opacity: 0;
+  }
+}
+@keyframes steel-loader-working {
+  from {
+    transform: translateX(-110%);
+  }
+  to {
+    transform: translateX(280%);
+  }
+}
+/* Independent CSS escape hatch in case script execution stops after activation. */
+@keyframes steel-loader-failsafe {
+  to {
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+@media (max-aspect-ratio: 3/2) {
+  .steel-loader .metal-headline {
+    top: 27%;
+    font-size: 20cqw;
+  }
+  .steel-loader .reveal-machine {
+    width: 114%;
+    left: -7%;
+    bottom: 22%;
+  }
+  .steel-loader-status {
+    bottom: 15%;
+    width: 45%;
+  }
+}
+@media (max-width: 600px) {
+  .steel-loader .metal-headline {
+    top: 30%;
+  }
+  .steel-loader .reveal-machine {
+    bottom: 29%;
+  }
+  .steel-loader-brand {
+    top: 7%;
+  }
+  .steel-loader-corner {
+    top: 13%;
+    left: 7%;
+    right: auto;
+    font-size: 10px;
+  }
+  .steel-loader-status {
+    bottom: 21%;
+    width: 64%;
+  }
+  .steel-loader-note {
+    bottom: 4%;
+    font-size: 11px;
+  }
+  .steel-loader-skip {
+    bottom: 10%;
+    left: 7%;
+    right: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .steel-loader .steel-shutters i,
+  .steel-loader .reveal-light,
+  .steel-loader-rule i {
+    animation: none;
+  }
+  .steel-loader[data-state='closing'] {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .steel-loader {
+    background: Canvas;
+    color: CanvasText;
+  }
+  .steel-loader-skip {
+    border-color: ButtonText;
+  }
+}

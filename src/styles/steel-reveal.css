@@ -1,0 +1,70 @@
+/* Shared artwork owner for the approved loading screen and its design study. */
+.steel-reveal-art {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  overflow: hidden;
+}
+.metal-headline {
+  position: absolute;
+  top: 26%;
+  left: 6%;
+  font: 400 20cqw/1.2 var(--hero-display);
+  letter-spacing: 0;
+  color: var(--stage-silver);
+  background: url('/images/theatre/title-metal.webp') center/cover;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.reveal-machine {
+  position: absolute;
+  width: 114%;
+  max-width: none;
+  left: -7%;
+  bottom: 13%;
+  height: auto;
+  z-index: 2;
+}
+.steel-shutters {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+.steel-shutters i {
+  position: absolute;
+  top: -20%;
+  height: 140%;
+  width: 43%;
+  transform: translateY(-104%) skew(-14deg);
+  background: url('/images/theatre/title-metal.webp') center/cover;
+  box-shadow:
+    inset 1px 0 var(--stage-muted),
+    inset -2px 0 var(--stage);
+  filter: brightness(0.24);
+}
+.steel-shutters i:nth-child(1) {
+  left: -14%;
+}
+.steel-shutters i:nth-child(2) {
+  left: 29%;
+}
+.steel-shutters i:nth-child(3) {
+  left: 72%;
+}
+.reveal-light {
+  position: absolute;
+  inset: 17% auto 16% 3%;
+  width: 1px;
+  background: var(--stage-focus);
+  opacity: 0.5;
+  z-index: 3;
+  transform: translateX(86cqw);
+}
+@media (forced-colors: active) {
+  .metal-headline {
+    background: none;
+    -webkit-text-fill-color: CanvasText;
+  }
+}

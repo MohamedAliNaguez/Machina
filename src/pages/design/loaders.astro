@@ -1,0 +1,140 @@
+---
+import LoadingStage from '../../components/loading/LoadingStage.astro';
+import SteelLoader from '../../components/loading/SteelLoader.astro';
+import { withBase } from '../../lib/paths';
+import '@fontsource/anton/latin-400.css';
+import '@fontsource/source-sans-3/latin-400.css';
+import '@fontsource/source-sans-3/latin-600.css';
+import '../../styles/global.css';
+import '../../styles/theatre.css';
+import '../../styles/loading-concepts.css';
+const concepts = [
+  {
+    id: 'hydraulic' as const,
+    name: 'Hydraulic rhythm',
+    description:
+      'A jointed excavator lowers, curls its bucket and lifts. Bold typography, yellow steel and a deliberate mechanical pace.',
+    character: 'Mechanical · Graphic · 4.8 second loop',
+  },
+  {
+    id: 'reveal' as const,
+    name: 'The steel reveal',
+    description:
+      'Steel plates part to uncover the excavator and silver wordmark. The closest continuation of your homepage.',
+    character: 'Cinematic · Photographic · 4.8 second loop',
+  },
+  {
+    id: 'blueprint' as const,
+    name: 'From the drawing board',
+    description:
+      'Cobalt linework draws the excavator from its tracks to its bucket. A lighter, precise take on the steel identity.',
+    character: 'Architectural · Minimal · 4.8 second loop',
+  },
+];
+const canonical = new URL(
+  Astro.url.pathname,
+  import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321',
+).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Excavator loading concepts | MACHINA</title>
+    <meta
+      name="description"
+      content="Compare three animated excavator loading screen concepts for the MACHINA steel website."
+    />
+    <meta name="robots" content="noindex,follow" />
+    <meta name="theme-color" content="#11171C" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+  </head>
+  <body class="loading-review">
+    <SteelLoader locale="en" automatic={false} />
+    <a class="skip-link" href="#main">
+      Skip to concepts
+    </a>
+    <header class="review-header">
+      <a class="review-brand" href={withBase('/en/')} aria-label="MACHINA homepage">
+        <span class="brand-cut" aria-hidden="true"></span>MACHINA
+      </a>
+      <span>Motion studies</span>
+      <a href={withBase('/en/')}>Back to website</a>
+    </header>
+    <main id="main">
+      <div class="review-intro">
+        <div>
+          <h1>Before the work begins</h1>
+          <p>Selected: The steel reveal</p>
+        </div>
+        <div class="playback-controls" aria-label="Animation controls">
+          <button type="button" data-toggle aria-pressed="false">
+            Pause animations
+          </button>
+          <button type="button" data-replay>
+            Replay all
+          </button>
+          <button type="button" data-preview-steel-loader>
+            Try selected loader
+          </button>
+        </div>
+      </div>
+      <div class="concepts">
+        {concepts.map((concept, index) => (
+          <article class="loading-concept" aria-labelledby={`${concept.id}-title`}>
+            <div class="concept-preview">
+              <LoadingStage concept={concept.id} id={`${concept.id}-small`} />
+            </div>
+            <div class="concept-heading">
+              <h2 id={`${concept.id}-title`}>{concept.name}</h2>
+              <span class="concept-number" aria-label={`Option ${index + 1}`}>
+                {index + 1}
+              </span>
+            </div>
+            <p class="concept-description">{concept.description}</p>
+            <p class="concept-character">{concept.character}</p>
+            <button class="open-preview" type="button" data-open={concept.id}>
+              View {concept.name.toLowerCase()}
+            </button>
+            <dialog id={`dialog-${concept.id}`} aria-labelledby={`dialog-title-${concept.id}`}>
+              <div class="expanded-toolbar">
+                <h2 id={`dialog-title-${concept.id}`}>{concept.name}</h2>
+                <div>
+                  <button type="button" data-toggle aria-pressed="false">
+                    Pause animations
+                  </button>
+                  <button type="button" data-replay>
+                    Replay
+                  </button>
+                  <button type="button" data-close>
+                    Close preview
+                  </button>
+                </div>
+              </div>
+              <LoadingStage concept={concept.id} id={`${concept.id}-large`} />
+            </dialog>
+          </article>
+        ))}
+      </div>
+      <div class="review-note">
+        <p>Open a preview to see it at full size</p>
+        <p>
+          Option 2 is now the website loader. Fast visits skip it; slow visits reveal the page as
+          soon as it is ready. Use “Try selected loader” to inspect it without waiting for a slow
+          connection.
+        </p>
+        <p class="motion-preference" role="status" data-motion-status></p>
+      </div>
+      <noscript>
+        <p class="review-note">
+          Enable JavaScript to play the animations and open the full-size previews. All three still
+          designs are visible above.
+        </p>
+      </noscript>
+    </main>
+    <script src="../../scripts/loading-concepts.ts"></script>
+  </body>
+</html>

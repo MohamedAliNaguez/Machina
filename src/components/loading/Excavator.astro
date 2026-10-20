@@ -1,0 +1,95 @@
+---
+interface Props {
+  id: string;
+  technical?: boolean;
+}
+const { id, technical = false } = Astro.props;
+---
+
+<!-- An intentionally schematic side elevation, with articulated pivot groups. -->
+<svg
+  class:list={['excavator-drawing', { technical }]}
+  viewBox="0 0 800 430"
+  fill="none"
+  aria-hidden="true"
+  data-rig={!technical ? '' : undefined}
+>
+  <defs>
+    <pattern id={`${id}-treads`} width="19" height="80" patternUnits="userSpaceOnUse">
+      <path d="M3 0V80M8 0V80" stroke="currentColor" stroke-width="2" />
+    </pattern>
+  </defs>
+  <g class="construction-lines" stroke="currentColor" stroke-width="1">
+    <path d="M80 356H731M118 376H704M198 77V380M392 62V380M594 62V380M143 120H698" />
+    <circle cx="392" cy="262" r="172" stroke-dasharray="3 9" />
+    <path d="M186 120H210M198 108V132M582 120H606M594 108V132" />
+  </g>
+  <g class="machine-geometry" stroke-linejoin="round" stroke-linecap="round">
+    <g class="rig-chassis">
+      <path class="rig-track" d="M194 310H400A38 38 0 0 1 400 386H194A38 38 0 0 1 194 310Z" />
+      <path
+        class="tread-detail"
+        d="M194 318H400A30 30 0 0 1 400 378H194A30 30 0 0 1 194 318Z"
+        fill={`url(#${id}-treads)`}
+      />
+      <path class="rig-track-inner" d="M196 328H399A20 20 0 0 1 399 368H196A20 20 0 0 1 196 328Z" />
+      {[195, 239, 282, 325, 368, 401].map((x) => (
+        <circle class="rig-wheel" cx={x} cy="348" r={x === 195 || x === 401 ? 15 : 12} />
+      ))}
+      <path class="rig-dark" d="M256 292H359V313H256Z" />
+      <path
+        class="rig-yellow"
+        d="M159 237Q154 233 154 247V283Q154 292 168 292H389L408 274L397 238L333 218H208Z"
+      />
+      <path class="rig-shade" d="M158 266H235V288H166Q158 288 158 280Z" />
+      <path class="rig-panel" d="M174 239H225V258H174Z" />
+      <path class="rig-vent" d="M178 242H217M178 247H217M178 252H217" />
+      <path class="rig-dark" d="M225 180H236V227H225Z" />
+      <path class="rig-cab" d="M252 149H318L343 224V267H248V171Z" />
+      <path class="rig-glass" d="M261 158H307L326 216H261Z" />
+      <path class="rig-glass" d="M261 224H328V257H261Z" />
+      <path class="rig-window" d="M273 160V212M270 228V250M308 229V252M282 210L302 173" />
+      <path class="rig-dark" d="M245 145H318V153H245Z" />
+      <path class="rig-trim" d="M240 270H342M250 278H322M357 273H383" />
+      <circle class="rig-pivot" cx="377" cy="251" r="15" />
+    </g>
+    <g transform="translate(377 251)">
+      <g data-boom class="rig-boom">
+        <path
+          class="rig-yellow"
+          d="M-13 3L26-52L109-158Q119-174 135-169L161-157L155-140L137-146L65-24L14 16Z"
+        />
+        <path class="rig-highlight" d="M3-4L43-56L121-157L143-156" />
+        <path class="rig-hose" d="M-5-17L30-74L109-175Q120-188 139-179L159-169" />
+        <path class="rig-cylinder" d="M3-9L76-102" />
+        <path class="rig-piston" d="M76-102L115-151" />
+        <circle class="rig-pivot" cx="0" cy="0" r="8" />
+        <g transform="translate(146 -153)">
+          <g data-stick class="rig-stick">
+            <path class="rig-yellow" d="M-8-5L11-13L74 100L84 155L68 164L51 116Z" />
+            <path class="rig-highlight" d="M9 1L61 106L73 146" />
+            <path class="rig-hose" d="M20-7L84 106L92 140" />
+            <path class="rig-cylinder" d="M22 20L61 90" />
+            <path class="rig-piston" d="M61 90L79 127" />
+            <circle class="rig-pivot" cx="0" cy="0" r="9" />
+            <g transform="translate(76 154)">
+              <g data-bucket class="rig-bucket">
+                <path
+                  class="rig-bucket-metal"
+                  d="M-10-10L12-15L44 13L67 51L19 70Q-10 68-22 41L-31 15Z"
+                />
+                <path class="rig-bucket-face" d="M-20 19L14 49L51 42L67 51L19 70Q-9 67-22 41Z" />
+                <path
+                  class="rig-teeth"
+                  d="M24 65L30 80L36 63M42 58L48 73L54 56M59 51L66 65L72 49"
+                />
+                <path class="rig-trim" d="M-14 12L12 36L43 29" />
+                <circle class="rig-pivot" cx="0" cy="0" r="8" />
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

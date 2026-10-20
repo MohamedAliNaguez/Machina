@@ -1,5 +1,6 @@
 ---
 import { withBase } from '../lib/paths';
+import SteelLoader from '../components/loading/SteelLoader.astro';
 import '@fontsource/barlow-condensed/latin-600.css';
 import '@fontsource/barlow-condensed/latin-700.css';
 import '@fontsource/barlow-condensed/latin-ext-600.css';
@@ -121,6 +122,7 @@ const crumbSchema = breadcrumbs.length
     ))}
   </head>
   <body class:list={{ 'steel-page': true, 'theatre-page': appearance === 'theatre' }}>
+    <SteelLoader locale={locale} brand={settings.name} />
     <a class="skip-link" href="#main">
       {l(locale, 'İçeriğe geç', 'Skip to content')}
     </a>

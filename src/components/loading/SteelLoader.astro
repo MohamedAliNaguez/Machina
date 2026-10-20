@@ -1,0 +1,47 @@
+---
+import SteelRevealArt from './SteelRevealArt.astro';
+import { l } from '../../lib/i18n';
+import type { Locale } from '../../lib/types';
+import '../../styles/steel-loader.css';
+interface Props {
+  locale: Locale;
+  brand?: string;
+  automatic?: boolean;
+}
+const { locale, brand = 'MACHINA', automatic = true } = Astro.props;
+---
+
+<div
+  id="steel-loader"
+  class="steel-loader"
+  data-site-loader
+  data-automatic={String(automatic)}
+  data-state="idle"
+  data-loading-text={l(locale, 'Sayfa hazırlanıyor', 'Preparing the page')}
+  data-preview-text={l(locale, 'Çelik açılış önizlemesi', 'Steel reveal preview')}
+  hidden
+>
+  <SteelRevealArt brand={brand} deferred />
+  <div class="steel-loader-brand" aria-hidden="true">
+    <span></span>
+    {brand}
+  </div>
+  <span class="steel-loader-corner" aria-hidden="true">
+    {l(locale, 'İŞİNİZ İÇİN HAZIR', 'BUILT FOR THE WORK AHEAD')}
+  </span>
+  <div class="steel-loader-status">
+    <span data-loader-status role="status" aria-live="polite">
+      {l(locale, 'Sayfa hazırlanıyor', 'Preparing the page')}
+    </span>
+    <div class="steel-loader-rule" aria-hidden="true">
+      <i />
+    </div>
+  </div>
+  <span class="steel-loader-note">
+    {l(locale, 'Temsili makine görseli', 'Illustrative equipment')}
+  </span>
+  <button class="steel-loader-skip" type="button" data-loader-dismiss>
+    {l(locale, 'Web sitesine devam et', 'Continue to website')}
+  </button>
+</div>
+<script src="../../scripts/steel-loader.ts"></script>
