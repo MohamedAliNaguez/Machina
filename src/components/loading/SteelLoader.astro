@@ -17,7 +17,7 @@ const { locale, brand = 'MACHINA', automatic = true } = Astro.props;
   data-site-loader
   data-automatic={String(automatic)}
   data-state="idle"
-  data-loading-text={l(locale, 'Sayfa hazırlanıyor', 'Preparing the page')}
+  data-intro-text={l(locale, 'Yeni ve ikinci el iş makineleri', 'New and used machinery')}
   data-preview-text={l(locale, 'Çelik açılış önizlemesi', 'Steel reveal preview')}
   hidden
 >
@@ -31,7 +31,7 @@ const { locale, brand = 'MACHINA', automatic = true } = Astro.props;
   </span>
   <div class="steel-loader-status">
     <span data-loader-status role="status" aria-live="polite">
-      {l(locale, 'Sayfa hazırlanıyor', 'Preparing the page')}
+      {l(locale, 'Yeni ve ikinci el iş makineleri', 'New and used machinery')}
     </span>
     <div class="steel-loader-rule" aria-hidden="true">
       <i />

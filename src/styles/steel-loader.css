@@ -57,13 +57,13 @@
   bottom: 4%;
 }
 .steel-loader .steel-shutters i {
-  animation: steel-loader-open 850ms cubic-bezier(0.76, 0, 0.24, 1) both;
+  animation: steel-loader-open 600ms cubic-bezier(0.76, 0, 0.24, 1) both;
 }
 .steel-loader .steel-shutters i:nth-child(2) {
-  animation-delay: 45ms;
+  animation-delay: 35ms;
 }
 .steel-loader .steel-shutters i:nth-child(3) {
-  animation-delay: 90ms;
+  animation-delay: 70ms;
 }
 .steel-loader .reveal-light {
   animation: steel-loader-light 1.2s ease-out both;

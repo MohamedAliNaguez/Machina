@@ -1,21 +1,22 @@
-// Optional first-visit treatment. All content is rendered and accessible without this script.
+// A one-second first-visit introduction. Content remains usable without this script.
 const loader = document.querySelector<HTMLElement>('[data-site-loader]');
 if (loader) {
   const root = loader;
-  const sessionKey = 'machina:steel-loader:v1';
+  const sessionKey = 'machina:steel-loader:v2';
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const previewTrigger = document.querySelector<HTMLButtonElement>('[data-preview-steel-loader]');
-  let showTimer: ReturnType<typeof setTimeout> | undefined;
+  let readyTimer: ReturnType<typeof setTimeout> | undefined;
   let deadline: ReturnType<typeof setTimeout> | undefined;
   let cleanupTimer: ReturnType<typeof setTimeout> | undefined;
   let finished = false;
   let preview = false;
+  let shownAt = 0;
   const previewBackground: HTMLElement[] = [];
 
   function hide(reason: string, immediate = false) {
     if (finished) return;
     finished = true;
-    clearTimeout(showTimer);
+    clearTimeout(readyTimer);
     clearTimeout(deadline);
     root.dataset.result = reason;
     if (!root.hidden && !immediate && !reducedMotion.matches) {
@@ -48,7 +49,7 @@ if (loader) {
     root.dataset.state = isPreview ? 'preview' : 'loading';
     root.querySelector('[data-loader-status]')!.textContent = isPreview
       ? root.dataset.previewText!
-      : root.dataset.loadingText!;
+      : root.dataset.introText!;
     root.querySelectorAll<HTMLImageElement>('[data-loader-src]').forEach((image) => {
       image.addEventListener(
         'error',
@@ -60,6 +61,7 @@ if (loader) {
       image.src = image.dataset.loaderSrc!;
     });
     root.hidden = false;
+    shownAt = performance.now();
     root.dataset.displayed = 'true';
     if (isPreview) {
       document.body.dataset.steelPreview = 'true';
@@ -86,7 +88,7 @@ if (loader) {
 
   // Explicit design-review playback is separate from real page readiness and never stores a visit.
   previewTrigger?.addEventListener('click', () => {
-    clearTimeout(showTimer);
+    clearTimeout(readyTimer);
     clearTimeout(deadline);
     finished = false;
     show(true);
@@ -153,7 +155,7 @@ if (loader) {
     if (visited || reducedMotion.matches || navigation?.type === 'back_forward') {
       hide(visited ? 'session-skipped' : 'motion-or-history-skipped', true);
     } else {
-      showTimer = setTimeout(() => show(), 160);
+      show();
       deadline = setTimeout(() => hide('timeout'), 2000);
       const checkReadiness = () => {
         const images = [...document.querySelectorAll<HTMLImageElement>('main img')].filter(
@@ -165,7 +167,11 @@ if (loader) {
         const decoding = images.map((image) => image.decode().catch(() => undefined));
         const fonts = document.fonts?.ready || Promise.resolve();
         // Failed images resolve as well: unavailable media must never hold the page hostage.
-        void Promise.allSettled([...decoding, fonts]).then(() => hide('ready'));
+        void Promise.allSettled([...decoding, fonts]).then(() => {
+          if (finished || preview) return;
+          const remaining = Math.max(0, 1000 - (performance.now() - shownAt));
+          readyTimer = setTimeout(() => hide('ready'), remaining);
+        });
       };
       if (document.readyState === 'loading')
         document.addEventListener('DOMContentLoaded', checkReadiness, { once: true });
