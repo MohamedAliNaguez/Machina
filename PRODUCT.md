@@ -28,7 +28,7 @@ Company name, exact address, brands, and actual inventory are undecided. MACHINA
 
 The user selected the second homepage proposal, Machine Theatre, on 2026-10-20. No decorative arrows or terminal full stops in titles. Specific visual implementation belongs in DESIGN.md.
 
-The user also selected the second excavator loading proposal, The steel reveal. After finding the load-only version too easy to miss, the user explicitly approved a visible one-second introduction once per session. Preserve immediate dismissal, reduced-motion skipping and fail-safe access when scripts, media or storage fail.
+The user also selected the second excavator loading proposal, The steel reveal. After finding the shorter versions too easy to miss, the user explicitly requested a 3–4-second introduction on the first visit, implemented as 3.5 seconds once per session. Preserve immediate dismissal, reduced-motion skipping and fail-safe access when scripts, media or storage fail.
 
 ## Evidence on Hand
 

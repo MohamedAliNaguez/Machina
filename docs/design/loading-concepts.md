@@ -31,3 +31,7 @@ The owner could not notice the load-only treatment and explicitly chose “Show 
 Verified the built `/Machina` About page through a temporary instrumented local server: the complete visible cycle measured approximately 1.1 seconds including its exit, and a same-session reload returned `session-skipped`. The timing instrumentation was confined to ignored local test fixtures. Type checking, all 18 unit tests, formatting and the 57-page built-site verification passed. The strict premium audit and selected-code detector returned no findings.
 
 The intro caption is static brand text rather than a live status announcement. This keeps enquiry success/error announcements semantically distinct, including the short overlap while the introduction fades out.
+
+## Approved longer introduction (v3)
+
+The owner then requested 3–4 seconds so the introduction could be fully noticed. Its minimum is now 3.5 seconds plus the existing 160ms fade. The shutters open over 1.1 seconds with 70ms offsets, followed by a clear hold on the excavator and wordmark. The independent script deadline is four seconds and the CSS escape hatch is 4.3 seconds. The v3 session key allows this revision to appear once for existing visitors. Early dismissal, session skipping, reduced motion and truthful caption semantics remain unchanged.
