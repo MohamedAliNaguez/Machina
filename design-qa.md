@@ -72,3 +72,7 @@ Browser interaction and axe checks ran through the in-app browser against a temp
 ## Launch boundaries
 
 Company details, approved actual stock imagery/specifications, reviewed bilingual articles/privacy copy, provider credentials and real sales destinations remain launch inputs. Local preview completion does not configure Sanity accounts, Cloudflare hosting, Resend delivery or public indexing. The existing launch guard prevents publishing sample data as verified live content. No paid services or public deployment were initiated.
+
+## Subsequent GitHub Pages preview
+
+The owner later authorized a public `Machina` repository and GitHub-only hosting. That preview is now deployed; the earlier launch-boundary statement above describes the initial implementation review. Native route/public image helpers and Astro's base setting preserve `/Machina/` paths. The hosted form clearly disables sending and contact-data inputs, while local development keeps its sample storage flow. All 18 unit tests, the repository-prefixed build and GitHub's six website browser workflows passed. The source and deployed preview remain distinct from the unconfigured full company launch. See `docs/VERIFICATION.md` for deployment scope and editor dependency maintenance.

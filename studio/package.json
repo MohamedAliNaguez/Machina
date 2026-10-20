@@ -9,14 +9,15 @@
     "check": "tsc --noEmit"
   },
   "dependencies": {
-    "sanity": "^6.20.0",
-    "@sanity/ui": "latest",
     "@sanity/image-url": "latest",
+    "@sanity/ui": "latest",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "sanity": "^6.20.0",
     "styled-components": "^6.1.15"
   },
   "devDependencies": {
+    "@types/node": "^24.19.2",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "typescript": "latest"

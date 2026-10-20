@@ -4,7 +4,7 @@ A bilingual Astro catalogue for an Ankara-based heavy machinery reseller. Includ
 
 ## GitHub Pages preview
 
-Public repository: [MohamedAliNaguez/Machina](https://github.com/MohamedAliNaguez/Machina).
+Live preview: [Machina](https://mohamedalinaguez.github.io/Machina/en/). Public repository: [MohamedAliNaguez/Machina](https://github.com/MohamedAliNaguez/Machina).
 
 The GitHub Pages workflow builds and publishes the static preview on every push to `main`, using the repository's Pages origin and base path. It needs no Cloudflare account or deployment secret. Repository settings → Pages → Source must be **GitHub Actions**.
 
@@ -56,6 +56,6 @@ See [design rules](DESIGN.md), [content/launch requirements](docs/CONTENT.md), [
 
 The default build is **noindex**, excludes URLs from the sitemap and uses sample labels. It is a working preview, not a live company or inventory feed. No sales contact destinations are invented.
 
-Production requires genuine company copy, approved machine images/specifications, reviewed translations and privacy copy, actual contact details, and provider configuration. `PUBLIC_LAUNCH_READY=true` is deliberately blocked with sample data. See the launch preflight in the operations guide. All accounts should belong to the company. No payment, public deployment or account creation is performed by this project.
+Production requires genuine company copy, approved machine images/specifications, reviewed translations and privacy copy, actual contact details, and provider configuration. `PUBLIC_LAUNCH_READY=true` is deliberately blocked with sample data. See the launch preflight in the operations guide. All accounts should belong to the company. The public GitHub Pages preview is separate from this verified company launch. No paid provider plan has been enabled.
 
 The approved steel interior screen family is implemented across the public templates. See [visual and functional review](design-qa.md) for comparison evidence, tested journeys and remaining launch inputs.

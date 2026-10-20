@@ -1,26 +1,28 @@
-# Local implementation verification
+# Implementation and hosted-preview verification
 
-The website is a local preview. No cloud account, paid service, public deployment or real sales destination has been enabled.
+Verified on 2026-10-20. The public GitHub Pages preview is published from [MohamedAliNaguez/Machina](https://github.com/MohamedAliNaguez/Machina). It uses labelled sample content, noindex metadata and a disabled enquiry form; it is not the verified company launch.
 
-## Completed checks
+## Current checks
 
-- Astro/public-site type check: zero errors, warnings or hints.
-- Cloudflare endpoint/worker TypeScript check: passed.
-- Production-format static build: 56 pages generated, in preview mode.
-- Built-page integrity: 1,607 internal links/asset references checked; JSON-LD parsed successfully; translated-page links verified as reciprocal. Preview pages remain excluded from indexing and the sitemap.
-- Unit/integration suite: 16 tests passed. Includes content completeness/launch gates, used-machine facts, duplicate routes, unsafe media URLs, contact validation, same-origin checks, rate limiting, durable storage, duplicate/racing requests, database failures, challenge verification, notification failures/retries and notification leases.
-- Browser suite: six workflows passed. Covers translated navigation, URL filters, empty results, clear/reset, form validation and actual local storage, interrupted requests, mobile navigation, reduced motion, horizontal overflow, loaded images, preview metadata and sold-machine alternatives.
-- Accessibility: axe checked five representative Turkish/English pages with WCAG 2 A/AA, WCAG 2.1 A/AA and WCAG 2.2 AA tags. No violations in the final run. This is automated coverage, not a claim of full manual assistive-technology certification.
-- Sanity Studio type check and static build: passed using the explicit non-connected `preview00` build ID. No real project was accessed. Authenticated publishing/preview against the company's account remains to be configured and verified.
-- Cloudflare local emulator: Pages Functions compiled; D1 migration applied; built pages served successfully; a sample enquiry saved; duplicate retry returned the same reference; preview/filter indexing headers verified.
-- Local D1 export restored into an isolated SQLite database, preserving the sample enquiry. The scheduled notification Worker bundled successfully in dry-run mode without deployment.
-- Premium static project audit: no findings. Official DESIGN.md lint: zero errors; informational orphan-token warnings remain because runtime CSS usage is documented rather than encoded as component references.
-- Formatting check: passed.
+- Astro/public-site and backend TypeScript checks: zero errors, warnings or hints.
+- Static GitHub Pages build: 56 pages, 1310 valid internal link/asset references, valid JSON-LD and reciprocal language links. Every local URL retains the repository base path.
+- Unit/backend suite: 18 tests pass, covering content/launch gates, translations, used-machine fields, validation, same-origin requests, rate limits, durable storage, duplicate/concurrent submissions, database failure, challenge validation, notification retry/lease behavior and repository path handling.
+- GitHub's website verification job passed formatting, types, unit tests, build and all six Playwright browser workflows on a clean Ubuntu runner. The first Pages deployment completed successfully; latest statuses are visible in [Actions](https://github.com/MohamedAliNaguez/Machina/actions).
+- Browser checks against the repository-hosted build: ten representative English/Turkish screens have no missing eager images or links escaping /Machina/. URL filters return the expected four matches; language switching retains filters. Gallery images and selected-machine context retain the base path.
+- Hosted personal-data inputs and Send action are disabled with explicit preview-only copy; there is no outgoing form request. Local development retains its working sample enquiry API.
+- Static preview remains noindex. A project-scoped robots.txt does not govern the github.io root; native per-page metadata is retained.
+- Existing steel-design accessibility scans and visual comparison history are documented in [design-qa.md](../design-qa.md). This is automated/manual coverage, not formal assistive-technology certification.
+- Sanity Studio has its own explicit Node type dependency for clean standalone installation. Its type check passes locally, and the verification workflow separately installs, checks and builds it. No real Sanity project is connected or deployed.
+- Private environment files, local databases, exports and generated workspace folders are ignored by Git. A credential-pattern scan of the initial published source found no credential matches.
 
-## Performance
+## Dependency maintenance
 
-A mobile Lighthouse run against the built site in the local Cloudflare emulator measured a performance score of 100, FCP 0.8 seconds, LCP 1.2 seconds, total blocking time 0 milliseconds and CLS 0.001. These are local lab observations, not production field guarantees. INP requires real interaction/field data after launch. The preview deliberately fails the indexability SEO check; do not remove that protection while sample content remains.
+Installing the standalone editor's explicit Node types reported 17 existing/transitive audit findings (8 moderate, 9 high) in the Studio dependency tree. Studio is not included in the GitHub Pages artifact. Review these dependencies before connecting or publishing the editor; a forced breaking upgrade was not applied during website deployment.
 
-## External verification still required at launch
+## Earlier local-runtime evidence
 
-Company-owned Sanity project, published content and webhook; protected full-site draft host; verified email sender and sales destination; production Turnstile keys; actual Cloudflare bindings/secrets; remote backup and deployment rollback rehearsal; Search Console ownership; approved company/privacy content and native-language review. No real email, live availability, SEO ranking, GEO citation or production recovery outcome is claimed by the local preview.
+Before the steel screen implementation, the local Cloudflare rehearsal compiled Pages Functions, applied the local D1 migration, saved an example enquiry, confirmed duplicate handling and restored an isolated SQLite export. The notification Worker bundled without deployment. A mobile Lighthouse run on that earlier local baseline measured score 100, LCP 1.2 seconds and CLS 0.001; those historical lab numbers are not measurements or guarantees for the newly hosted steel site. Real-user INP and field performance remain to be measured.
+
+## Full-launch inputs
+
+Verified company/contact data, actual inventory/photos/specifications, reviewed bilingual copy and privacy policy; a company-owned content editor/project; a real enquiry backend, notification destination and spam protection; content publishing automation; production backups/rollback rehearsal; Search Console and field measurement. No email delivery, live stock, ranking, GEO citation or production recovery outcome is claimed by the static preview.
