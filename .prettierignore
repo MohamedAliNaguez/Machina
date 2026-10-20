@@ -1,0 +1,11 @@
+node_modules
+dist
+.astro
+.wrangler
+package-lock.json
+studio/package-lock.json
+test-results
+playwright-report
+public/images
+exports
+premium-audit.json

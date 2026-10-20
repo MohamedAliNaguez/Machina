@@ -1,0 +1,33 @@
+---
+import type { Article, Locale } from '../lib/types';
+import { l, url } from '../lib/i18n';
+import Media from './Media.astro';
+interface Props {
+  article: Article;
+  locale: Locale;
+}
+const { article, locale } = Astro.props;
+---
+
+<article class="article-card">
+  <a
+    class="article-image"
+    href={url(locale, 'guides', article.slug[locale])}
+    aria-label={article.title[locale]}
+  >
+    <Media src={article.image} alt="" width="640" height="420" loading="lazy" />
+  </a>
+  <div class="article-meta">
+    <span>{article.tag[locale]}</span>
+    <span>
+      {article.minutes} {l(locale, 'dk', 'min read')}
+    </span>
+  </div>
+  <h3>
+    <a href={url(locale, 'guides', article.slug[locale])}>{article.title[locale]}</a>
+  </h3>
+  <p>{article.excerpt[locale]}</p>
+  <a class="text-link" href={url(locale, 'guides', article.slug[locale])}>
+    {l(locale, 'Rehberi okuyun', 'Read the guide')}
+  </a>
+</article>

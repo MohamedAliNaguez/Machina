@@ -1,0 +1,320 @@
+---
+import { withBase } from '../lib/paths';
+import Layout from '../layouts/Layout.astro';
+import SteelIntro from './SteelIntro.astro';
+import MachineCard from './MachineCard.astro';
+import { getContent } from '../lib/content';
+import { l, labels, otherLocale, url } from '../lib/i18n';
+import type { Category, Locale } from '../lib/types';
+interface Props {
+  locale: Locale;
+  category?: Category;
+  brandId?: string;
+}
+const { locale, category, brandId } = Astro.props;
+const { machines, categories, brands, articles } = await getContent();
+const copy = labels(locale);
+const brand = brands.find((item) => item.id === brandId && item.verified);
+const order = ['ex210', 'wl180', 'rc120', 'ex140', 'wl150', 'th140'];
+const visible = machines
+  .filter(
+    (m) =>
+      m.published.includes(locale) &&
+      (!category || m.categoryId === category.id) &&
+      (!brandId || m.brandId === brandId),
+  )
+  .sort((a, b) => {
+    if (!a.sample || !b.sample) return 0;
+    const rank = (id: string) => (order.includes(id) ? order.indexOf(id) : 100);
+    return rank(a.id) - rank(b.id);
+  });
+const title = category ? category.name[locale] : brand?.name || copy.machines;
+const years = [...new Set(visible.filter((m) => m.kind === 'used').map((m) => m.year))]
+  .filter(Boolean)
+  .sort((a, b) => b! - a!);
+const description =
+  category?.description[locale] ||
+  l(
+    locale,
+    'Yeni modeller ve ikinci el makineler, bir arada',
+    'New models and used equipment, in one place',
+  );
+const crumbs = category
+  ? [{ name: copy.machines, href: url(locale, 'machines') }, { name: title }]
+  : [];
+const guide = articles.find(
+  (article) => article.categoryId === category?.id && article.published.includes(locale),
+);
+---
+
+<Layout
+  locale={locale}
+  title={title}
+  description={description}
+  section="machines"
+  alternate={url(
+    otherLocale(locale),
+    category ? 'categories' : 'machines',
+    category?.slug[otherLocale(locale)],
+  )}
+  breadcrumbs={crumbs.length ? crumbs : [{ name: title }]}
+>
+  <SteelIntro
+    locale={locale}
+    title={title.toLocaleUpperCase(locale === 'tr' ? 'tr-TR' : 'en-GB')}
+    subtitle={description}
+    eyebrow={!category ? l(locale, 'MAKİNE KATALOĞU', 'EQUIPMENT CATALOGUE') : undefined}
+    note={
+      !category && visible.some((m) => m.sample)
+        ? l(locale, 'Tasarım önizlemesi · Örnek ilanlar', 'Design preview · Sample inventory')
+        : undefined
+    }
+    variant={category ? 'category-intro' : 'catalogue-intro'}
+    image={
+      category?.id === 'excavators'
+        ? '/images/steel/category-excavator.webp'
+        : '/images/steel/header-bucket.webp'
+    }
+    breadcrumbs={crumbs}
+  />
+  <div
+    class:list={['container', 'steel-catalogue', { 'category-catalogue': !!category }]}
+    data-catalogue
+    data-locale={locale}
+    data-fixed-category={category?.id || ''}
+    data-samples={visible.every((m) => m.sample)}
+  >
+    <div class="catalogue-search search-box">
+      <img
+        class="control-icon"
+        src={withBase('/icons/magnifying-glass.svg')}
+        alt=""
+        width="20"
+        height="20"
+      />
+      <label for="machine-search" class="sr-only">
+        {l(locale, 'Marka veya model arayın', 'Search brand or model')}
+      </label>
+      <input
+        id="machine-search"
+        type="search"
+        placeholder={
+          category
+            ? l(
+                locale,
+                category.name.tr + ' içinde arayın',
+                'Search ' + category.name.en.toLowerCase(),
+              )
+            : l(locale, 'Model arayın', 'Search by model')
+        }
+        autocomplete="off"
+      />
+      <button
+        type="button"
+        data-clear-search
+        hidden
+        aria-label={l(locale, 'Aramayı temizle', 'Clear search')}
+      >
+        {l(locale, 'Temizle', 'Clear')}
+      </button>
+    </div>
+    <div class="mobile-filter-row">
+      <button
+        class="mobile-filter-toggle"
+        type="button"
+        data-filter-toggle
+        aria-expanded="false"
+        aria-controls="machine-filters"
+      >
+        <img
+          class="control-icon"
+          src={withBase('/icons/faders-horizontal.svg')}
+          alt=""
+          width="20"
+          height="20"
+        />
+        {l(locale, 'Filtreler', 'Filters')}
+      </button>
+      <span class="filter-current" data-filter-current>
+        {l(locale, 'Tüm makineler', 'All equipment')}
+      </span>
+    </div>
+    <div class="catalogue-layout">
+      <aside
+        id="machine-filters"
+        class="filter-panel"
+        aria-label={l(locale, 'Makine filtreleri', 'Machine filters')}
+      >
+        <fieldset class="filter-group">
+          <legend>{l(locale, 'DURUM', 'CONDITION')}</legend>
+          {[
+            [
+              '',
+              category
+                ? l(
+                    locale,
+                    'Tüm ' + category.name.tr.toLocaleLowerCase('tr-TR'),
+                    'All ' + category.name.en.toLowerCase(),
+                  )
+                : l(locale, 'Tüm makineler', 'All equipment'),
+            ],
+            ['new', l(locale, 'Yeni modeller', 'New models')],
+            ['used', l(locale, 'İkinci el makineler', 'Used machines')],
+          ].map(([value, label]) => (
+            <label class="filter-choice">
+              <input
+                type="radio"
+                name="kind"
+                data-filter="kind"
+                value={value}
+                checked={value === ''}
+              />
+              {label}
+            </label>
+          ))}
+        </fieldset>
+        {!category && (
+          <fieldset class="filter-group">
+            <legend>{l(locale, 'KATEGORİ', 'CATEGORY')}</legend>
+            {categories.map((c) => (
+              <label class="filter-choice">
+                <input type="checkbox" data-filter="category" value={c.id} />
+                {c.name[locale]}
+              </label>
+            ))}
+          </fieldset>
+        )}
+        {brands.some((b) => b.verified) && (
+          <label class="filter-field">
+            <span>{l(locale, 'Marka', 'Brand')}</span>
+            <select data-filter="brand">
+              <option value="">{l(locale, 'Tüm markalar', 'All brands')}</option>
+              {brands
+                .filter((b) => b.verified)
+                .map((b) => (
+                  <option value={b.id}>{b.name}</option>
+                ))}
+            </select>
+          </label>
+        )}
+        <label class="filter-field" data-used-filter hidden>
+          <span>{l(locale, 'En erken üretim yılı', 'Minimum year')}</span>
+          <select data-filter="year">
+            <option value="">{l(locale, 'Tüm yıllar', 'Any year')}</option>
+            {years.map((year) => (
+              <option value={year}>{year}</option>
+            ))}
+          </select>
+        </label>
+        <label class="filter-field" data-used-filter hidden>
+          <span>{l(locale, 'En fazla çalışma saati', 'Maximum operating hours')}</span>
+          <select data-filter="hours">
+            <option value="">{l(locale, 'Sınır yok', 'Any hours')}</option>
+            {[2500, 5000, 7500].map((hours) => (
+              <option value={hours}>
+                {new Intl.NumberFormat(locale === 'tr' ? 'tr-TR' : 'en-GB').format(hours)}
+              </option>
+            ))}
+          </select>
+        </label>
+        <button class="filter-reset" type="button" data-reset>
+          {l(locale, 'Filtreleri temizle', 'Reset filters')}
+        </button>
+      </aside>
+      <section
+        class="catalogue-results"
+        aria-label={l(locale, 'Makine sonuçları', 'Machine results')}
+      >
+        {category && (
+          <div class="category-copy">
+            <h2>{l(locale, 'Yapılacak işe göre seçin', 'Choose by the work ahead')}</h2>
+            <p>
+              {l(
+                locale,
+                'Makine boyutunu, saha koşullarını ve ataşman gereksinimlerini birlikte değerlendirin. Yeni modelleri ve ikinci el makineleri aynı yerde inceleyin.',
+                category.id === 'excavators'
+                  ? 'From compact machines for restricted sites to larger excavators for demanding ground conditions. Compare new models and used machines, and find the right configuration and attachments for your work.'
+                  : 'Compare new models and individual used machines for your work. Confirm site conditions, configurations and compatible equipment with sales.',
+              )}
+            </p>
+            <div class="category-routes">
+              <button type="button" class="button" data-kind-route="new">
+                {l(locale, 'Yeni modeller', 'New models')}
+              </button>
+              <button type="button" class="button button-outline" data-kind-route="used">
+                {l(locale, 'İkinci el makineler', 'Used machines')}
+              </button>
+            </div>
+          </div>
+        )}
+        <p class="results-count" aria-live="polite" aria-atomic="true" data-results-count>
+          {visible.length} {l(locale, 'örnek ilan', 'sample listings')}
+        </p>
+        <div class="machine-grid">
+          {visible.map((machine, index) => (
+            <MachineCard machine={machine} locale={locale} priority={index < 3} />
+          ))}
+        </div>
+        <div class="empty-state" data-empty hidden>
+          <h2>{l(locale, 'Eşleşen makine bulunamadı', 'No machines match these filters')}</h2>
+          <p>
+            {l(
+              locale,
+              'Başka bir model arayın veya filtreleri temizleyin.',
+              'Try another model or reset the filters.',
+            )}
+          </p>
+          <button type="button" class="button button-outline" data-reset>
+            {l(locale, 'Filtreleri temizle', 'Reset filters')}
+          </button>
+          <a class="text-link" href={url(locale, 'contact')}>
+            {l(locale, 'Satış ekibiyle görüşün', 'Contact sales')}
+          </a>
+        </div>
+        <noscript>
+          <p class="notice">
+            {l(
+              locale,
+              'Tüm makineler aşağıda listelenmiştir. Arama ve filtreler için JavaScript gereklidir.',
+              'All machines are listed. Search and filters require JavaScript.',
+            )}
+          </p>
+        </noscript>
+      </section>
+    </div>
+  </div>
+  {category && guide && (
+    <section class="photo-callout">
+      <img
+        src={withBase('/images/steel/callout-bucket.webp')}
+        alt=""
+        width="1440"
+        height="230"
+        loading="lazy"
+      />
+      <div class="container">
+        <h2>
+          {category.id === 'excavators'
+            ? l(locale, 'SEÇİMİNİZDEN ÖNCE', 'BEFORE YOU CHOOSE AN EXCAVATOR')
+            : l(locale, 'İŞİNİZ İÇİN DOĞRU BİLGİ', 'INFORMATION FOR THE WORK AHEAD')}
+        </h2>
+        <div>
+          <p>
+            {l(
+              locale,
+              'Erişimi, zemin koşullarını ve işe uygun ataşmanları birlikte değerlendirin.',
+              'Consider access, ground conditions and the right attachments for your site.',
+            )}
+          </p>
+          <a href={url(locale, 'guides', guide.slug[locale])}>
+            {l(locale, 'Rehberi okuyun', 'Read the guide')}
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+  <script>
+    import { initCatalogue } from '../scripts/catalogue';
+    initCatalogue();
+  </script>
+</Layout>

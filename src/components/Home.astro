@@ -1,0 +1,280 @@
+---
+import { withBase } from '../lib/paths';
+import Layout from '../layouts/Layout.astro';
+import Icon from './Icon.astro';
+import MachineCard from './MachineCard.astro';
+import ArticleCard from './ArticleCard.astro';
+import { getContent } from '../lib/content';
+import { labels, l, url, otherLocale } from '../lib/i18n';
+import type { Locale } from '../lib/types';
+import '../styles/theatre.css';
+import '@fontsource/anton/latin-400.css';
+import '@fontsource/anton/latin-ext-400.css';
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const { categories, machines, articles, settings } = await getContent();
+const copy = labels(locale);
+const visible = machines.filter((m) => m.published.includes(locale));
+const hasSamples = visible.some((m) => m.sample);
+const heroImage = settings.heroImage || {
+  src: '/images/theatre/stage.webp',
+  alt: {
+    tr: 'Çelik bir platform üzerinde ekskavatör ve lastikli yükleyici; temsili sahne',
+    en: 'An excavator and wheel loader on a sculptural steel stage; illustrative scene',
+  },
+  illustrative: true,
+};
+const categoryImages: Record<string, string> = {
+  excavators: 'excavators',
+  loaders: 'loaders',
+  road: 'road',
+  lifting: 'lifting',
+  attachments: 'attachments',
+};
+const featured = [
+  visible.find((m) => m.kind === 'new'),
+  visible.find((m) => m.kind === 'used' && m.status === 'available'),
+  visible.find((m) => m.kind === 'used' && m.id !== visible.find((m) => m.kind === 'used')?.id),
+].filter(Boolean);
+---
+
+<Layout
+  locale={locale}
+  appearance="theatre"
+  socialImage={heroImage.src}
+  title={l(locale, 'İşinize uygun makine', 'The right machine for the work ahead')}
+  description={l(
+    locale,
+    'Yeni ve ikinci el iş makinelerini keşfedin. Kategorilere göz atın, makine bilgilerini inceleyin ve ihtiyaçlarınızı paylaşın.',
+    'Explore new and used construction machinery. Browse categories, review equipment information and discuss your requirements.',
+  )}
+  alternate={url(otherLocale(locale))}
+>
+  <section
+    class:list={['theatre-hero', { 'theatre-composited': !settings.heroImage }]}
+    data-theatre
+    aria-labelledby="theatre-title"
+  >
+    <div class="theatre-scene" aria-hidden="true">
+      <picture>
+        {!settings.heroImage && (
+          <source
+            media="(max-width: 900px)"
+            srcset={withBase('/images/theatre/stage-mobile.webp')}
+          />
+        )}
+        <img
+          src={withBase(
+            settings.heroImage ? heroImage.src : '/images/theatre/stage-foreground-v2.webp',
+          )}
+          alt=""
+          width="1832"
+          height="859"
+          fetchpriority="high"
+          decoding="async"
+          loading="eager"
+        />
+      </picture>
+    </div>
+    <div class="container theatre-content">
+      <h1 id="theatre-title">{l(locale, 'İŞİNİZE GÜÇ KATIN', 'BUILT FOR THE WORK')}</h1>
+      <div class="theatre-copy">
+        <p class="theatre-lead">
+          {l(locale, 'Yeni ve ikinci el iş makineleri', 'New and used machinery')}
+        </p>
+        <p>{l(locale, 'Bir sonraki işiniz için', 'Selected for the work ahead')}</p>
+        <div class="theatre-actions">
+          <a class="button" href={url(locale, 'machines')}>
+            {copy.explore}
+          </a>
+          <a class="text-link" href={url(locale, 'contact')}>
+            {l(locale, 'Satış ekibiyle görüşün', 'Talk to sales')}
+          </a>
+        </div>
+      </div>
+      <div class="theatre-caption">
+        <span>{l(locale, 'İŞ MAKİNELERİ / ANKARA', 'CONSTRUCTION EQUIPMENT / ANKARA')}</span>
+        <span class="theatre-caption-notice">
+          {!settings.identityVerified && (
+            <span>{l(locale, 'ÖRNEK KİMLİK', 'SAMPLE IDENTITY')}</span>
+          )}
+          <span>
+            {heroImage.illustrative
+              ? l(locale, 'TEMSİLİ EKİPMAN', 'ILLUSTRATIVE EQUIPMENT')
+              : settings.name}
+          </span>
+        </span>
+      </div>
+      <p class="sr-only">{heroImage.alt[locale]}</p>
+    </div>
+  </section>
+  <section class="container theatre-categories" aria-labelledby="category-heading">
+    <div class="theatre-section-label">
+      <h2 id="category-heading">{l(locale, 'MAKİNENİZİ BULUN', 'FIND YOUR EQUIPMENT')}</h2>
+    </div>
+    <div class="theatre-category-grid">
+      {categories.map((category) => (
+        <a class="theatre-category" href={url(locale, 'categories', category.slug[locale])}>
+          {categoryImages[category.id] ? (
+            <img
+              src={withBase(`/images/theatre/category-${categoryImages[category.id]}.webp`)}
+              alt=""
+              width="600"
+              height="360"
+              decoding="async"
+              loading="eager"
+            />
+          ) : (
+            <span class="theatre-category-space" aria-hidden="true" />
+          )}
+          <span>{category.name[locale]}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+  <section
+    class="container theatre-paths"
+    aria-label={l(locale, 'Yeni ve ikinci el ekipman', 'New and used equipment')}
+  >
+    <a href={`${url(locale, 'machines')}?kind=new`} class="theatre-path">
+      <div class="theatre-path-copy">
+        <span class="eyebrow">{l(locale, 'YENİ MODELLER', 'NEW MODELS')}</span>
+        <h2>{l(locale, 'Yeni modeller', 'New models')}</h2>
+        <p>{l(locale, 'Konfigürasyonları keşfedin', 'Explore configurations')}</p>
+        <span class="button">{l(locale, 'Yeni modelleri inceleyin', 'Explore new models')}</span>
+      </div>
+      <img
+        src={withBase('/images/theatre/detail-new.webp')}
+        alt=""
+        width="900"
+        height="1000"
+        loading="lazy"
+        decoding="async"
+      />
+    </a>
+    <a href={`${url(locale, 'machines')}?kind=used`} class="theatre-path">
+      <div class="theatre-path-copy">
+        <span class="eyebrow">{l(locale, 'İKİNCİ EL EKİPMAN', 'USED EQUIPMENT')}</span>
+        <h2>{l(locale, 'İkinci el ekipman', 'Used equipment')}</h2>
+        <p>{l(locale, 'Her makineyi ayrı değerlendirin', 'Review individual machines')}</p>
+        <span class="button">
+          {l(locale, 'İkinci el makineleri inceleyin', 'Explore used equipment')}
+        </span>
+      </div>
+      <img
+        src={withBase('/images/theatre/detail-used.webp')}
+        alt=""
+        width="900"
+        height="1000"
+        loading="lazy"
+        decoding="async"
+      />
+    </a>
+  </section>
+  <section class="inventory-section">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">{l(locale, 'KATALOĞA YAKINDAN BAKIN', 'A CLOSER LOOK')}</span>
+          <h2>{l(locale, 'Öne çıkan makineler', 'Selected equipment')}</h2>
+        </div>
+        <a class="text-link" href={url(locale, 'machines')}>
+          {l(locale, 'Kataloğu görüntüleyin', 'View the catalogue')}
+        </a>
+      </div>
+      <div class="machine-grid">
+        {featured.map((machine) => machine && <MachineCard machine={machine} locale={locale} />)}
+      </div>
+      {hasSamples && (
+        <p class="section-note">
+          {l(
+            locale,
+            'Tasarım önizlemesi: tüm ilanlar ve teknik değerler örnektir. Stok ve model bilgileri satış ekibi tarafından teyit edilmelidir.',
+            'Design preview: listings and technical figures are examples. Availability and model details must be confirmed with sales.',
+          )}
+        </p>
+      )}
+    </div>
+  </section>
+  <section class="container approach-section">
+    <div>
+      <span class="eyebrow">{l(locale, 'ÖNCE İHTİYACINIZ', 'START WITH YOUR REQUIREMENTS')}</span>
+      <h2>
+        {l(locale, 'Makineden önce,', 'Before the machine,')}
+        <br />
+        <span class="blue-text">{l(locale, 'yapılacak iş', 'understand the job')}</span>
+      </h2>
+      <p>
+        {l(
+          locale,
+          'İyi bir görüşme, doğru sorularla başlar. İhtiyacınızı somutlaştıran bilgileri bir araya getirin.',
+          'A useful conversation starts with the right questions. Bring together the details that make your requirements clear.',
+        )}
+      </p>
+      <a class="text-link" href={url(locale, 'about')}>
+        {l(locale, 'Yaklaşımımızı keşfedin', 'Explore the approach')}
+      </a>
+    </div>
+    <div class="approach-list">
+      {[
+        [
+          l(locale, 'İşin gereksinimleri', 'The work requirements'),
+          l(
+            locale,
+            'Malzeme, saha erişimi ve kullanım planınızı paylaşın.',
+            'Share the material, site access and intended utilisation.',
+          ),
+        ],
+        [
+          l(locale, 'Karşılaştırılabilir bilgiler', 'Comparable information'),
+          l(
+            locale,
+            'Model, konfigürasyon ve ikinci el kondisyonunu birlikte inceleyin.',
+            'Review the model, configuration and used-machine condition together.',
+          ),
+        ],
+        [
+          l(locale, 'Net bir sonraki adım', 'A clear next step'),
+          l(
+            locale,
+            'Teklif kapsamını ve teslimat ihtiyacını görüşün.',
+            'Discuss quotation scope and delivery requirements.',
+          ),
+        ],
+      ].map(([heading, text]) => (
+        <div>
+          <Icon name="plus" size={24} />
+          <section>
+            <h3>{heading}</h3>
+            <p>{text}</p>
+          </section>
+        </div>
+      ))}
+    </div>
+  </section>
+  <section class="guides-section container">
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">{l(locale, 'BİLGİYLE KARAR VERİN', 'MAKE AN INFORMED CHOICE')}</span>
+        <h2>{l(locale, 'Sahadan önce, rehberiniz', 'Knowledge for a better decision')}</h2>
+      </div>
+      <a class="text-link" href={url(locale, 'guides')}>
+        {l(locale, 'Tüm rehberler', 'All guides')}
+      </a>
+    </div>
+    <div class="article-grid">
+      {articles
+        .filter((a) => a.published.includes(locale))
+        .slice(0, 3)
+        .map((article) => (
+          <ArticleCard article={article} locale={locale} />
+        ))}
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import '../scripts/theatre';
+</script>

@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import { withBase } from '../lib/paths';
+import type { ImageMetadata } from 'astro';
+import type { HTMLAttributes } from 'astro/types';
+import excavator from '../assets/excavator.jpg';
+import loader from '../assets/loader.jpg';
+import lifting from '../assets/lifting.jpg';
+import site from '../assets/site.jpg';
+interface Props extends HTMLAttributes<'img'> {
+  src: string;
+  alt: string;
+  width: number | string;
+  height: number | string;
+}
+const {
+  src,
+  alt,
+  width,
+  height,
+  sizes = '(max-width: 640px) 90vw, (max-width: 900px) 44vw, 32vw',
+  ...attributes
+} = Astro.props;
+const local: Record<string, ImageMetadata> = {
+  '/images/excavator.jpg': excavator,
+  '/images/loader.jpg': loader,
+  '/images/lifting.jpg': lifting,
+  '/images/site.jpg': site,
+};
+const source = local[src];
+const remote = src.startsWith('https://cdn.sanity.io/')
+  ? `${src}?auto=format&fit=crop&w=${width}&q=80`
+  : withBase(src);
+---
+
+{source ? (
+  <Image
+    src={source}
+    alt={alt}
+    width={Number(width)}
+    height={Number(height)}
+    widths={[360, 720, 1100, 1600].filter((size) => size <= source.width)}
+    sizes={sizes}
+    format="webp"
+    quality={80}
+    {...attributes}
+  />
+) : (
+  <img src={remote} alt={alt} width={width} height={height} sizes={sizes} {...attributes} />
+)}

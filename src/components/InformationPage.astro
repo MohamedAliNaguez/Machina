@@ -1,0 +1,440 @@
+---
+import { withBase } from '../lib/paths';
+import Layout from '../layouts/Layout.astro';
+import SteelIntro from './SteelIntro.astro';
+import EnquiryForm from './EnquiryForm.astro';
+import { getContent } from '../lib/content';
+import { labels, l, otherLocale, url, type Section } from '../lib/i18n';
+import type { Locale } from '../lib/types';
+interface Props {
+  locale: Locale;
+  section: Section;
+}
+const { locale, section } = Astro.props;
+const { settings, articles, brands } = await getContent();
+const copy = labels(locale),
+  visibleArticles = articles.filter((a) => a.published.includes(locale));
+const featured = visibleArticles[0];
+const titles: Record<Section, string> = {
+  guides: l(locale, 'REHBERLER', 'GUIDES'),
+  about: l(locale, 'İŞİNİZ İÇİN\nBİR ADIM ÖNDE', 'FOR THE\nWORK AHEAD'),
+  contact: l(locale, 'İLETİŞİM', "LET'S TALK"),
+  privacy: l(locale, 'GİZLİLİK', 'PRIVACY'),
+  brands: l(locale, 'MARKALAR', 'BRANDS'),
+  machines: copy.machines,
+  categories: l(locale, 'KATEGORİLER', 'CATEGORIES'),
+};
+const descriptions: Record<Section, string> = {
+  guides: l(
+    locale,
+    'Bir sonraki işiniz için pratik bilgiler',
+    'Practical knowledge for the work ahead',
+  ),
+  about: l(locale, 'İş makineleri · Ankara, Türkiye', 'Construction machinery · Ankara, Türkiye'),
+  contact: l(
+    locale,
+    'İşiniz ve makine ihtiyacınız hakkında konuşalım',
+    'Tell us about the machine and the work ahead',
+  ),
+  privacy: l(locale, 'Gizlilik bildirimi', 'Privacy notice'),
+  brands: l(locale, 'Doğrulanmış marka bilgileri', 'Verified brand information'),
+  machines: '',
+  categories: '',
+};
+const title = titles[section];
+const privacySections = [
+  {
+    id: 'controller',
+    title: l(locale, 'Talepleri kim yönetir', 'Who handles enquiries'),
+    text: l(
+      locale,
+      'Doğrulanmış şirket adı ve gizlilik iletişim bilgileri burada yer alacaktır.',
+      'Verified company name and privacy contact will appear here. This section will set out who is responsible for handling enquiries submitted through this website.',
+    ),
+  },
+  {
+    id: 'information',
+    title: l(locale, 'Paylaştığınız bilgiler', 'Information you provide'),
+    text: l(
+      locale,
+      'Bu bölüm, talep formu aracılığıyla istenen bilgileri ve nasıl toplandığını açıklayacaktır.',
+      'This section will describe the information requested through the enquiry form, and how it is collected.',
+    ),
+  },
+  {
+    id: 'retention',
+    title: l(locale, 'Kullanım ve saklama', 'Use and retention'),
+    text: l(
+      locale,
+      'Onaylanmış işleme amaçları, hizmet sağlayıcıları ve saklama bilgileri onaylı metinde yer alacaktır.',
+      'Confirmed processing purposes, service providers and retention information will appear in the approved notice.',
+    ),
+  },
+  {
+    id: 'privacy-contact',
+    title: l(locale, 'İletişim', 'Your contact'),
+    text: l(
+      locale,
+      'Gizlilik talepleri için onaylanmış iletişim kanalı burada yer alacaktır.',
+      'The approved contact route for privacy requests will appear here.',
+    ),
+  },
+];
+---
+
+<Layout
+  locale={locale}
+  title={title.replace('\n', ' ')}
+  description={descriptions[section]}
+  section={section}
+  noindex={section === 'brands' && !brands.some((b) => b.verified)}
+  alternate={url(otherLocale(locale), section)}
+  breadcrumbs={[
+    {
+      name:
+        section === 'privacy'
+          ? descriptions.privacy
+          : copy[section as 'guides' | 'about' | 'contact' | 'brands'] || title,
+    },
+  ]}
+>
+  <SteelIntro
+    locale={locale}
+    title={title}
+    subtitle={descriptions[section]}
+    image={
+      section === 'privacy'
+        ? '/images/steel/header-panels.webp'
+        : section === 'guides' || section === 'about'
+          ? '/images/steel/header-hydraulics.webp'
+          : section === 'contact'
+            ? '/images/steel/header-contact.webp'
+            : '/images/steel/header-bucket.webp'
+    }
+    variant={'information-intro ' + section + '-intro'}
+    eyebrow={
+      section === 'about' && !settings.identityVerified
+        ? l(locale, 'MACHINA HAKKINDA · ÖRNEK KİMLİK', 'ABOUT MACHINA · SAMPLE IDENTITY')
+        : undefined
+    }
+    note={
+      section === 'guides' && visibleArticles.some((a) => a.sample)
+        ? l(locale, 'Önizleme içerikleri · Taslak rehberler', 'Preview content · Draft articles')
+        : undefined
+    }
+  />
+  {section === 'guides' && (
+    <section class="container steel-guides">
+      {featured && (
+        <div class="editorial-grid">
+          <article class="featured-story">
+            <a href={url(locale, 'guides', featured.slug[locale])}>
+              <img
+                src={withBase(featured.image)}
+                alt={l(
+                  locale,
+                  'Temsili iş makinesi ayrıntısı',
+                  'Illustrative construction equipment detail',
+                )}
+                width="1200"
+                height="500"
+                loading="eager"
+              />
+            </a>
+            <span class="story-tag">{featured.tag[locale]}</span>
+            <h2>
+              <a href={url(locale, 'guides', featured.slug[locale])}>{featured.title[locale]}</a>
+            </h2>
+            <p>{featured.excerpt[locale]}</p>
+            <a class="text-link" href={url(locale, 'guides', featured.slug[locale])}>
+              {l(locale, 'Rehberi okuyun', 'Read guide')}
+            </a>
+          </article>
+          <div class="supporting-stories">
+            {visibleArticles.slice(1).map((article) => (
+              <article>
+                <a
+                  aria-label={article.title[locale]}
+                  href={url(locale, 'guides', article.slug[locale])}
+                >
+                  <img
+                    src={withBase(article.image)}
+                    alt=""
+                    width="900"
+                    height="380"
+                    loading="lazy"
+                  />
+                </a>
+                <h2>
+                  <a href={url(locale, 'guides', article.slug[locale])}>{article.title[locale]}</a>
+                </h2>
+                <a class="text-link" href={url(locale, 'guides', article.slug[locale])}>
+                  {l(locale, 'Rehberi okuyun', 'Read guide')}
+                </a>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
+      {!featured && (
+        <div class="empty-state">
+          <h2>{l(locale, 'Rehberler hazırlanıyor', 'Guides are being prepared')}</h2>
+        </div>
+      )}
+      <div class="guide-practice">
+        <h2>{l(locale, 'Bilgiyi işe dönüştürün', 'Put the guide into practice')}</h2>
+        <p>
+          {l(
+            locale,
+            'Bir sonraki işiniz için makine seçeneklerini inceleyin',
+            'Explore excavators and other machines for your upcoming work',
+          )}
+        </p>
+        <a
+          class="button"
+          href={url(locale, 'categories', locale === 'tr' ? 'ekskavatorler' : 'excavators')}
+        >
+          {l(locale, 'Ekskavatörleri inceleyin', 'Browse excavators')}
+        </a>
+      </div>
+    </section>
+  )}
+  {section === 'about' && (
+    <>
+      <section class="container steel-about">
+        <div class="about-copy">
+          <h2>
+            {l(locale, 'Bir sonraki makinenize net bir bakış', 'A clear view of your next machine')}
+          </h2>
+          <p>
+            {settings.about?.[locale] ||
+              l(
+                locale,
+                'Yeni modelleri ve ikinci el makineleri inceleyebileceğiniz, yararlı bir görüşmeye başlamak için ihtiyaç duyduğunuz bilgileri sunan bir katalog.',
+                'A catalogue for exploring new models and individual used machines, with the information you need to start a useful conversation',
+              )}
+          </p>
+          {!settings.identityVerified && (
+            <p class="about-pending">
+              {l(
+                locale,
+                'Şirket geçmişi, ekip tanıtımları ve doğrulanmış destek hizmetleri inceleme sonrasında eklenecektir',
+                'Company history, team introductions and confirmed support services will be added after review',
+              )}
+            </p>
+          )}
+        </div>
+        <div class="about-routes">
+          <a href={url(locale, 'machines') + '?kind=new'}>
+            <img
+              src={withBase('/images/steel/catalogue-excavator.webp')}
+              alt=""
+              width="500"
+              height="250"
+              loading="lazy"
+            />
+            <div>
+              <h2>{l(locale, 'Yeni modeller', 'New models')}</h2>
+              <p>
+                {l(
+                  locale,
+                  'Konfigürasyonlar ve uygulamalar, net bir şekilde',
+                  'Configurations and applications, presented clearly',
+                )}
+              </p>
+            </div>
+          </a>
+          <a href={url(locale, 'machines') + '?kind=used'}>
+            <img
+              src={withBase('/images/steel/catalogue-loader.webp')}
+              alt=""
+              width="500"
+              height="250"
+              loading="lazy"
+            />
+            <div>
+              <h2>{l(locale, 'İkinci el makineler', 'Used machines')}</h2>
+              <p>
+                {l(
+                  locale,
+                  'Yıl, saat ve kondisyon bilgileriyle bireysel ilanlar',
+                  'Individual listings with year, hours and condition information',
+                )}
+              </p>
+            </div>
+          </a>
+        </div>
+      </section>
+      <section class="photo-callout about-callout">
+        <img
+          src={withBase('/images/steel/callout-tracks.webp')}
+          alt=""
+          width="1440"
+          height="240"
+          loading="lazy"
+        />
+        <div class="container">
+          <div>
+            <h2>{l(locale, 'Doğru bilgilerle başlayın', 'Start with the right information')}</h2>
+            <div class="callout-actions">
+              <a class="button" href={url(locale, 'machines')}>
+                {l(locale, 'Makineleri inceleyin', 'Browse machines')}
+              </a>
+              <a href={url(locale, 'contact')}>
+                {l(locale, 'Satış ekibiyle görüşün', 'Contact sales')}
+              </a>
+            </div>
+            {!settings.identityVerified && (
+              <p class="callout-note">
+                {l(
+                  locale,
+                  'Örnek kimlik · Şirket bilgileri doğrulanmayı bekliyor',
+                  'Sample identity · Business details pending verification',
+                )}
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+    </>
+  )}
+  {section === 'contact' && (
+    <div class="container steel-contact">
+      <aside class="contact-aside">
+        <h2>{l(locale, 'Satış ekibiyle görüşün', 'Contact sales')}</h2>
+        <strong class="contact-city">{settings.city}, Türkiye</strong>
+        {settings.address ? (
+          <p>{settings.address}</p>
+        ) : (
+          <p>
+            {l(
+              locale,
+              'Kesin konum ve satış iletişim bilgileri yayımdan önce doğrulanacaktır',
+              'Exact location and sales contacts will be confirmed before launch',
+            )}
+          </p>
+        )}
+        {settings.phone ? (
+          <div class="contact-channel">
+            <strong>{l(locale, 'Telefon', 'Phone')}</strong>
+            <a href={'tel:' + settings.phone.replace(/[^+\d]/g, '')}>{settings.phone}</a>
+          </div>
+        ) : (
+          !settings.identityVerified && (
+            <div class="contact-channel">
+              <strong>{l(locale, 'Telefon', 'Phone')}</strong>
+              <span>{l(locale, 'Bilgiler bekleniyor', 'Details pending')}</span>
+            </div>
+          )
+        )}
+        {settings.whatsapp ? (
+          <div class="contact-channel">
+            <strong>WhatsApp</strong>
+            <a
+              href={'https://wa.me/' + settings.whatsapp.replace(/\D/g, '')}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {l(locale, 'WhatsApp ile görüşün', 'Chat on WhatsApp')}
+            </a>
+          </div>
+        ) : (
+          !settings.identityVerified && (
+            <div class="contact-channel">
+              <strong>WhatsApp</strong>
+              <span>{l(locale, 'Bilgiler bekleniyor', 'Details pending')}</span>
+            </div>
+          )
+        )}
+        {settings.email && (
+          <div class="contact-channel">
+            <strong>{l(locale, 'E-posta', 'Email')}</strong>
+            <a href={'mailto:' + settings.email}>{settings.email}</a>
+          </div>
+        )}
+      </aside>
+      <EnquiryForm locale={locale} />
+    </div>
+  )}
+  {section === 'privacy' && (
+    <div class="container steel-reading privacy-reading">
+      {!settings.privacyNotice && (
+        <nav class="reading-outline" aria-label={l(locale, 'Bu sayfada', 'On this page')}>
+          <span>{l(locale, 'BU SAYFADA', 'ON THIS PAGE')}</span>
+          {privacySections.map((item) => (
+            <a href={'#' + item.id}>{item.title}</a>
+          ))}
+        </nav>
+      )}
+      <article class="steel-prose">
+        {settings.privacyNotice ? (
+          <p>{settings.privacyNotice[locale]}</p>
+        ) : (
+          <>
+            <div class="draft-notice">
+              <strong>
+                {l(
+                  locale,
+                  'TASLAK DÜZEN · İÇERİK İNCELEME BEKLİYOR',
+                  'DRAFT LAYOUT · CONTENT PENDING REVIEW',
+                )}
+              </strong>
+              <p>
+                {l(
+                  locale,
+                  'Şirketin onaylı gizlilik bildirimi yayımdan önce tamamlanacaktır. Bu önizlemede yalnızca örnek bilgiler kullanın.',
+                  'The company notice must be completed before launch. Use sample information only in this preview.',
+                )}
+              </p>
+            </div>
+            {privacySections.map((item) => (
+              <section id={item.id}>
+                <h2>{item.title}</h2>
+                <p>{item.text}</p>
+              </section>
+            ))}
+          </>
+        )}
+        <a class="text-link" href={url(locale, 'contact')}>
+          {l(locale, 'İletişime dönün', 'Return to contact')}
+        </a>
+      </article>
+    </div>
+  )}
+  {section === 'brands' && (
+    <section class="container steel-brand-list">
+      {brands.some((b) => b.verified) ? (
+        brands
+          .filter((b) => b.verified)
+          .map((brand) => (
+            <article>
+              <h2>{brand.name}</h2>
+              <p>{brand.description[locale]}</p>
+              <a
+                class="text-link"
+                href={url(locale, 'machines') + '?brand=' + encodeURIComponent(brand.id)}
+              >
+                {copy.machines}
+              </a>
+            </article>
+          ))
+      ) : (
+        <div class="empty-state">
+          <h2>
+            {l(locale, 'Marka bilgileri hazırlanıyor', 'Brand information is being prepared')}
+          </h2>
+          <p>
+            {l(
+              locale,
+              'Yalnızca doğrulanmış marka bilgileri yayımlanacaktır',
+              'Only verified brand information will be published',
+            )}
+          </p>
+          <a class="button" href={url(locale, 'machines')}>
+            {copy.all}
+          </a>
+        </div>
+      )}
+    </section>
+  )}
+</Layout>

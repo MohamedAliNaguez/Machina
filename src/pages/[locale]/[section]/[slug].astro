@@ -1,0 +1,40 @@
+---
+import Catalogue from '../../../components/Catalogue.astro';
+import MachineDetail from '../../../components/MachineDetail.astro';
+import ArticleDetail from '../../../components/ArticleDetail.astro';
+import { getContent } from '../../../lib/content';
+import { paths } from '../../../lib/i18n';
+import type { Article, Category, Locale, Machine } from '../../../lib/types';
+export async function getStaticPaths() {
+  const content = await getContent();
+  return (['tr', 'en'] as Locale[]).flatMap((locale) => [
+    ...content.machines
+      .filter((m) => m.published.includes(locale))
+      .map((machine) => ({
+        params: { locale, section: paths.machines[locale], slug: machine.slug[locale] },
+        props: { kind: 'machine', machine },
+      })),
+    ...content.categories.map((category) => ({
+      params: { locale, section: paths.categories[locale], slug: category.slug[locale] },
+      props: { kind: 'category', category },
+    })),
+    ...content.articles
+      .filter((a) => a.published.includes(locale))
+      .map((article) => ({
+        params: { locale, section: paths.guides[locale], slug: article.slug[locale] },
+        props: { kind: 'article', article },
+      })),
+  ]);
+}
+const locale = Astro.params.locale as Locale;
+const props = Astro.props as {
+  kind: string;
+  machine?: Machine;
+  category?: Category;
+  article?: Article;
+};
+---
+
+{props.kind === 'category' && <Catalogue locale={locale} category={props.category!} />}
+{props.kind === 'machine' && <MachineDetail locale={locale} machine={props.machine!} />}
+{props.kind === 'article' && <ArticleDetail locale={locale} article={props.article!} />}

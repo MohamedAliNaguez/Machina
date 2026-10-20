@@ -1,0 +1,47 @@
+---
+import Breadcrumbs from './Breadcrumbs.astro';
+import { withBase } from '../lib/paths';
+import type { Locale } from '../lib/types';
+interface Props {
+  locale: Locale;
+  title: string;
+  subtitle?: string;
+  eyebrow?: string;
+  note?: string;
+  image?: string;
+  variant?: string;
+  breadcrumbs?: { name: string; href?: string }[];
+}
+const {
+  locale,
+  title,
+  subtitle,
+  eyebrow,
+  note,
+  image = '/images/steel/header-bucket.webp',
+  variant = '',
+  breadcrumbs = [],
+} = Astro.props;
+---
+
+<section class:list={['steel-intro', variant]}>
+  {image && (
+    <img
+      class="steel-intro-art"
+      src={withBase(image)}
+      alt=""
+      width="1440"
+      height="400"
+      fetchpriority="high"
+      decoding="async"
+    />
+  )}
+  <div class="container steel-intro-content">
+    {breadcrumbs.length > 0 && <Breadcrumbs locale={locale} items={breadcrumbs} />}
+    {eyebrow && <span class="steel-eyebrow">{eyebrow}</span>}
+    <h1 class="metal-title">{title}</h1>
+    {subtitle && <p class="steel-intro-subtitle">{subtitle}</p>}
+    {note && <p class="steel-intro-note">{note}</p>}
+    <slot />
+  </div>
+</section>

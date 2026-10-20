@@ -1,0 +1,162 @@
+---
+import { withBase } from '../lib/paths';
+import Layout from '../layouts/Layout.astro';
+import SteelIntro from './SteelIntro.astro';
+import MachineCard from './MachineCard.astro';
+import { getContent } from '../lib/content';
+import { labels, l, url, otherLocale } from '../lib/i18n';
+import type { Article, Locale } from '../lib/types';
+interface Props {
+  locale: Locale;
+  article: Article;
+}
+const { locale, article } = Astro.props;
+const { settings, categories, machines } = await getContent();
+const category = categories.find((c) => c.id === article.categoryId);
+const related = machines.find(
+  (m) => m.categoryId === article.categoryId && m.kind === 'new' && m.published.includes(locale),
+);
+const origin = import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321';
+const schema = article.sample
+  ? []
+  : [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: article.title[locale],
+        description: article.excerpt[locale],
+        image: new URL(withBase(article.image), origin).href,
+        author: article.author ? { '@type': 'Person', name: article.author } : undefined,
+        dateModified: article.reviewedAt,
+        inLanguage: locale,
+        publisher: { '@type': 'Organization', name: settings.legalName || settings.name },
+      },
+    ];
+const title =
+  article.sample && article.id === 'choosing'
+    ? l(locale, 'İŞİNİZE UYGUN\nEKSKAVATÖRÜ SEÇİN', 'CHOOSING AN EXCAVATOR\nFOR YOUR WORK')
+    : article.title[locale].toLocaleUpperCase(locale === 'tr' ? 'tr-TR' : 'en-GB');
+const answerTitle =
+  article.sample && article.id === 'choosing'
+    ? l(locale, 'Modelden önce yapılacak işi düşünün', 'Start with the job, not the model')
+    : article.title[locale];
+const answer =
+  article.sample && article.id === 'choosing'
+    ? l(
+        locale,
+        'Makineleri karşılaştırmadan önce malzemeyi, erişim sınırlarını ve çalışma koşullarını tanımlayın',
+        'Define the material, access limits and working conditions before comparing machines',
+      )
+    : article.excerpt[locale];
+---
+
+<Layout
+  locale={locale}
+  title={article.title[locale]}
+  description={article.excerpt[locale]}
+  section="guides"
+  alternate={
+    article.published.includes(otherLocale(locale))
+      ? url(otherLocale(locale), 'guides', article.slug[otherLocale(locale)])
+      : undefined
+  }
+  breadcrumbs={[
+    { name: labels(locale).guides, href: url(locale, 'guides') },
+    { name: article.title[locale] },
+  ]}
+  schema={schema}
+  socialImage={article.image}
+>
+  <SteelIntro
+    locale={locale}
+    title={title}
+    image="/images/steel/header-bucket.webp"
+    variant="article-intro"
+    breadcrumbs={[{ name: labels(locale).guides }]}
+    eyebrow={article.tag[locale] + (article.sample ? l(locale, ' · TASLAK', ' · DRAFT') : '')}
+    note={
+      article.sample
+        ? l(
+            locale,
+            'Örnek editoryal içerik · Temsili görseller',
+            'Sample editorial layout · Illustrative imagery',
+          )
+        : undefined
+    }
+  />
+  <div class="container steel-reading">
+    <nav class="reading-outline" aria-label={l(locale, 'Bu sayfada', 'On this page')}>
+      <span>{l(locale, 'BU SAYFADA', 'ON THIS PAGE')}</span>
+      {article.sections.map((section, index) => (
+        <a href={'#article-section-' + index}>{section.heading[locale]}</a>
+      ))}
+    </nav>
+    <article class="steel-prose">
+      {!article.sample && (article.author || article.reviewedAt) && (
+        <div class="article-byline">
+          {article.author}
+          {article.reviewedAt &&
+            ' · ' +
+              l(locale, 'İnceleme: ', 'Reviewed: ') +
+              new Intl.DateTimeFormat(locale === 'tr' ? 'tr-TR' : 'en-GB', {
+                dateStyle: 'long',
+                timeZone: 'Europe/Istanbul',
+              }).format(new Date(article.reviewedAt))}
+        </div>
+      )}
+      <div class="article-answer">
+        <h2>{answerTitle}</h2>
+        <p>{answer}</p>
+      </div>
+      {article.sections.map((section, index) => (
+        <section id={'article-section-' + index}>
+          <h2>{section.heading[locale]}</h2>
+          {section.text[locale].split('\n\n').map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+          {index === 0 && (
+            <>
+              <img
+                class="article-inline-image"
+                src={withBase(article.image)}
+                alt={l(locale, 'Makine ayrıntısı', 'Equipment detail')}
+                width="1200"
+                height="500"
+                loading="eager"
+              />
+              {article.sample && (
+                <p class="article-image-caption">
+                  {l(locale, 'Temsili ekipman', 'Illustrative equipment')}
+                </p>
+              )}
+            </>
+          )}
+        </section>
+      ))}
+      {article.sources.length > 0 && (
+        <section>
+          <h2>{l(locale, 'Kaynaklar', 'Sources')}</h2>
+          <ul>
+            {article.sources.map((source) => (
+              <li>
+                <a href={source.url} target="_blank" rel="noopener noreferrer">
+                  {source.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+      {related && (
+        <div class="article-related">
+          <MachineCard machine={related} locale={locale} compact />
+        </div>
+      )}
+      {category && (
+        <a class="text-link" href={url(locale, 'categories', category.slug[locale])}>
+          {l(locale, 'İlgili makineleri inceleyin', 'Explore related equipment')}
+        </a>
+      )}
+    </article>
+  </div>
+</Layout>

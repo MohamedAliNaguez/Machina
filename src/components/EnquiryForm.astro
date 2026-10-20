@@ -1,0 +1,218 @@
+---
+import { withBase } from '../lib/paths';
+import { getContent } from '../lib/content';
+import { l, url, labels } from '../lib/i18n';
+import type { Locale } from '../lib/types';
+interface Props {
+  locale: Locale;
+  machineId?: string;
+}
+const { locale, machineId } = Astro.props;
+const { machines, settings } = await getContent();
+const selected = machines.find((machine) => machine.id === machineId);
+const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
+---
+
+<form
+  class="enquiry-form"
+  data-enquiry-form
+  data-locale={locale}
+  data-preview={!settings.identityVerified}
+  data-static-hosting={staticHosting}
+  data-sitekey={staticHosting ? '' : settings.turnstileSiteKey || ''}
+  action={staticHosting ? undefined : withBase('/api/enquiries')}
+  method="post"
+  novalidate
+>
+  <h2>{l(locale, 'Teklif isteyin', 'Request a quote')}</h2>
+  <div class="enquiry-machine-context" data-machine-context hidden={!selected}>
+    <img
+      data-context-image
+      src={withBase((selected || machines[0])?.images[0].src || '')}
+      alt=""
+      width="230"
+      height="110"
+    />
+    <div>
+      <strong data-context-model>{selected?.model}</strong>
+      <span data-context-sample>{selected?.sample ? labels(locale).sample : ''}</span>
+      <button type="button" data-remove-machine>
+        {l(locale, 'Makineyi kaldır', 'Remove machine')}
+      </button>
+    </div>
+  </div>
+  <div class="form-field machine-chooser" data-machine-chooser hidden={!!selected}>
+    <label for="enquiry-machine">
+      {l(locale, 'İlgilendiğiniz makine', 'Machine of interest')}{' '}
+      <span>{l(locale, '(isteğe bağlı)', '(optional)')}</span>
+    </label>
+    <select id="enquiry-machine" name="machineId">
+      <option value="">{l(locale, 'Genel bilgi talebi', 'General enquiry')}</option>
+      {machines
+        .filter((m) => m.published.includes(locale))
+        .map((m) => (
+          <option
+            value={m.id}
+            selected={m.id === machineId}
+            data-model={m.model}
+            data-image={withBase(m.images[0].src)}
+            data-sample={m.sample}
+          >
+            {m.name[locale]}
+          </option>
+        ))}
+    </select>
+  </div>
+  <input type="hidden" name="language" value={locale} />
+  <div class="form-field">
+    <label for="enquiry-name">{l(locale, 'Adınız', 'Name')} *</label>
+    <input
+      id="enquiry-name"
+      name="name"
+      disabled={staticHosting}
+      autocomplete="name"
+      placeholder={l(locale, 'Adınız ve soyadınız', 'Your full name')}
+      required
+      maxlength="120"
+      aria-describedby="name-error"
+    />
+    <span class="field-error" id="name-error"></span>
+  </div>
+  <div class="form-row">
+    <div class="form-field">
+      <label for="enquiry-email">{l(locale, 'E-posta', 'Email')}</label>
+      <input
+        id="enquiry-email"
+        name="email"
+        disabled={staticHosting}
+        type="email"
+        autocomplete="email"
+        placeholder={l(locale, 'E-posta adresiniz', 'Your email address')}
+        maxlength="254"
+        aria-describedby="email-error contact-help"
+      />
+      <span class="field-error" id="email-error"></span>
+    </div>
+    <div class="form-field">
+      <label for="enquiry-phone">{l(locale, 'Telefon', 'Phone')}</label>
+      <input
+        id="enquiry-phone"
+        name="phone"
+        disabled={staticHosting}
+        type="tel"
+        autocomplete="tel"
+        placeholder={l(locale, 'Telefon numaranız', 'Your phone number')}
+        maxlength="40"
+        aria-describedby="phone-error contact-help"
+      />
+      <span class="field-error" id="phone-error"></span>
+    </div>
+  </div>
+  <p class="contact-help" id="contact-help">
+    {l(locale, 'E-posta veya telefon bilgisi girin', 'Provide an email address or a phone number')}
+  </p>
+  <div class="form-field">
+    <label for="enquiry-message">{l(locale, 'Mesajınız', 'Message')} *</label>
+    <textarea
+      id="enquiry-message"
+      name="message"
+      disabled={staticHosting}
+      rows="3"
+      required
+      minlength="10"
+      maxlength="4000"
+      placeholder={l(locale, 'İhtiyacınızı kısaca anlatın', 'Tell us about your requirements')}
+      aria-describedby="message-error"
+    ></textarea>
+    <span class="field-error" id="message-error"></span>
+  </div>
+  <div class="honeypot" aria-hidden="true">
+    <label for="enquiry-website">Website</label>
+    <input id="enquiry-website" name="website" tabindex="-1" autocomplete="off" />
+  </div>
+  {!staticHosting && settings.turnstileSiteKey && <div id="turnstile-widget"></div>}
+  <p class="privacy-help">
+    {l(locale, 'Göndermeden önce ', 'Read our ')}
+    <a href={url(locale, 'privacy')}>{l(locale, 'gizlilik bildirimini', 'privacy notice')}</a>
+    {l(locale, ' okuyun', ' before submitting')}
+  </p>
+  <button
+    class="button"
+    type="submit"
+    disabled={staticHosting}
+    aria-describedby={staticHosting ? 'enquiry-preview-notice' : undefined}
+  >
+    <span data-submit-label>
+      {staticHosting
+        ? l(locale, 'Yalnızca önizleme', 'Preview only')
+        : l(locale, 'Talep gönder', 'Send enquiry')}
+    </span>
+  </button>
+  {(staticHosting || !settings.identityVerified) && (
+    <p class="enquiry-preview-note" id="enquiry-preview-notice">
+      {staticHosting
+        ? l(
+            locale,
+            'Tasarım önizlemesi · Talep gönderimi etkin değil. Bu sürüm iletişim bilgisi toplamaz.',
+            'Design preview · Enquiry sending is not enabled. This version does not collect contact details.',
+          )
+        : l(
+            locale,
+            'Önizleme · Örnek talepler yerel ortamda saklanır; satış e-postası gönderilmez.',
+            'Preview · Sample enquiries are saved locally; no sales email is sent.',
+          )}
+    </p>
+  )}
+  <div class="form-status" role="status" aria-live="polite" data-form-status></div>
+  <noscript>
+    <p class="notice">
+      {l(
+        locale,
+        'Bu form için JavaScript gereklidir. Varsa doğrudan iletişim kanallarını kullanabilirsiniz.',
+        'This form requires JavaScript. Use direct contact channels when available.',
+      )}
+    </p>
+  </noscript>
+</form>
+<script>
+  import { initEnquiryForm } from '../scripts/enquiry';
+  initEnquiryForm();
+  const form = document.querySelector<HTMLFormElement>('[data-enquiry-form]');
+  if (form) {
+    const select = form.elements.namedItem('machineId') as HTMLSelectElement;
+    const context = form.querySelector<HTMLElement>('[data-machine-context]')!;
+    const chooser = form.querySelector<HTMLElement>('[data-machine-chooser]')!;
+    const tr = form.dataset.locale === 'tr';
+    const update = () => {
+      const option = select.selectedOptions[0],
+        has = !!select.value;
+      context.hidden = !has;
+      chooser.hidden = has;
+      if (has) {
+        form.querySelector<HTMLImageElement>('[data-context-image]')!.src =
+          option.dataset.image || '';
+        form.querySelector('[data-context-model]')!.textContent =
+          option.dataset.model || option.textContent;
+        form.querySelector('[data-context-sample]')!.textContent =
+          option.dataset.sample === 'true' ? (tr ? 'Örnek ilan' : 'Sample listing') : '';
+      }
+    };
+    select.addEventListener('change', update);
+    form.querySelector('[data-remove-machine]')?.addEventListener('click', () => {
+      select.value = '';
+      update();
+      select.focus();
+      const params = new URLSearchParams(location.search);
+      params.delete('machine');
+      history.replaceState(null, '', location.pathname + (params.size ? '?' + params : ''));
+      const alternate = document.querySelector<HTMLAnchorElement>('.languages a');
+      if (alternate) {
+        const target = new URL(alternate.href);
+        target.searchParams.delete('machine');
+        alternate.href = target.href;
+      }
+    });
+    form.addEventListener('reset', () => queueMicrotask(update));
+    update();
+  }
+</script>

@@ -1,0 +1,222 @@
+---
+import { withBase } from '../lib/paths';
+import '@fontsource/barlow-condensed/latin-600.css';
+import '@fontsource/barlow-condensed/latin-700.css';
+import '@fontsource/barlow-condensed/latin-ext-600.css';
+import '@fontsource/barlow-condensed/latin-ext-700.css';
+import '@fontsource/source-sans-3/latin-400.css';
+import '@fontsource/source-sans-3/latin-600.css';
+import '@fontsource/source-sans-3/latin-ext-400.css';
+import '@fontsource/source-sans-3/latin-ext-600.css';
+import '../styles/global.css';
+import '../styles/theatre.css';
+import '../styles/steel.css';
+import '../styles/steel-content.css';
+import '@fontsource/anton/latin-400.css';
+import '@fontsource/anton/latin-ext-400.css';
+import { getContent, launchReady, isDraftPreview } from '../lib/content';
+import { labels, l, otherLocale, url, type Section } from '../lib/i18n';
+import type { Locale } from '../lib/types';
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  section?: Section;
+  alternate?: string;
+  breadcrumbs?: { name: string; href?: string }[];
+  schema?: unknown[];
+  noindex?: boolean;
+  appearance?: 'default' | 'theatre' | 'steel';
+  socialImage?: string;
+}
+const {
+  locale,
+  title,
+  description,
+  section,
+  alternate,
+  breadcrumbs = [],
+  schema = [],
+  noindex = false,
+  appearance = 'steel',
+  socialImage,
+} = Astro.props;
+const { settings, brands } = await getContent();
+const copy = labels(locale);
+const origin = new URL(import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321');
+const canonical = new URL(Astro.url.pathname, origin).href;
+const indexing = launchReady && settings.identityVerified && !isDraftPreview && !noindex;
+const nav: ('machines' | 'brands' | 'guides' | 'about' | 'contact')[] = [
+  'machines',
+  ...(brands.some((b) => b.verified) ? ['brands' as const] : []),
+  'guides',
+  'about',
+  'contact',
+];
+const baseSchema = settings.identityVerified
+  ? [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: settings.legalName || settings.name,
+        url: origin.href,
+        email: settings.email,
+        telephone: settings.phone,
+        address: settings.address
+          ? {
+              '@type': 'PostalAddress',
+              streetAddress: settings.address,
+              addressLocality: settings.city,
+              addressCountry: 'TR',
+            }
+          : undefined,
+      },
+    ]
+  : [];
+const crumbSchema = breadcrumbs.length
+  ? [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [{ name: copy.home, href: url(locale) }, ...breadcrumbs].map((c, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: c.name,
+          item: new URL(c.href || Astro.url.pathname, origin).href,
+        })),
+      },
+    ]
+  : [];
+---
+
+<!doctype html>
+<html lang={locale} data-indexing={indexing ? 'index,follow' : 'noindex,follow'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | {settings.name}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={indexing ? 'index,follow' : 'noindex,follow'} />
+    <meta name="theme-color" content="#11171C" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={locale} href={canonical} />
+    {alternate && (
+      <link rel="alternate" hreflang={otherLocale(locale)} href={new URL(alternate, origin).href} />
+    )}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={`${title} | ${settings.name}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta
+      property="og:image"
+      content={
+        new URL(withBase(socialImage || settings.heroImage?.src || '/images/excavator.jpg'), origin)
+          .href
+      }
+    />
+    <meta property="og:locale" content={locale === 'tr' ? 'tr_TR' : 'en_GB'} />
+    {[...baseSchema, ...crumbSchema, ...schema].map((item) => (
+      <script type="application/ld+json" set:html={JSON.stringify(item).replace(/</g, '\\u003c')} />
+    ))}
+  </head>
+  <body class:list={{ 'steel-page': true, 'theatre-page': appearance === 'theatre' }}>
+    <a class="skip-link" href="#main">
+      {l(locale, 'İçeriğe geç', 'Skip to content')}
+    </a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="wordmark" href={url(locale)}>
+          <span class="brand-mark" aria-hidden="true">
+            <i></i>
+            <i></i>
+            <i></i>
+          </span>
+          <span>
+            {settings.name}
+            <small>{l(locale, 'MAKİNE & EKİPMAN', 'MACHINERY & EQUIPMENT')}</small>
+          </span>
+        </a>
+        <button
+          id="menu-toggle"
+          class="menu-toggle"
+          type="button"
+          aria-controls="primary-nav"
+          aria-expanded="false"
+        >
+          {l(locale, 'Menü', 'Menu')}
+        </button>
+        <nav id="primary-nav" aria-label={l(locale, 'Ana gezinme', 'Main navigation')}>
+          {nav.map((item) => (
+            <a href={url(locale, item)} aria-current={section === item ? 'page' : undefined}>
+              {copy[item]}
+            </a>
+          ))}
+        </nav>
+        <div class="header-actions">
+          <div class="languages" aria-label={l(locale, 'Dil seçimi', 'Language selection')}>
+            <span aria-current="true">{locale.toUpperCase()}</span>
+            <span class="language-divider">/</span>
+            {alternate ? (
+              <a href={alternate} lang={otherLocale(locale)} hreflang={otherLocale(locale)}>
+                {otherLocale(locale).toUpperCase()}
+              </a>
+            ) : (
+              <a href={url(otherLocale(locale))} lang={otherLocale(locale)}>
+                {otherLocale(locale).toUpperCase()}
+              </a>
+            )}
+          </div>
+          <a class="button button-small header-quote" href={url(locale, 'contact')}>
+            {copy.quote}
+          </a>
+        </div>
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('#menu-toggle');
+      const nav = document.querySelector<HTMLElement>('#primary-nav');
+      const close = () => {
+        toggle?.setAttribute('aria-expanded', 'false');
+        nav?.classList.remove('is-open');
+      };
+      toggle?.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') !== 'true';
+        toggle.setAttribute('aria-expanded', String(open));
+        nav?.classList.toggle('is-open', open);
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+          close();
+          toggle.focus();
+        }
+      });
+      document.addEventListener('click', (event) => {
+        if (
+          event.target instanceof Node &&
+          !nav?.contains(event.target) &&
+          !toggle?.contains(event.target)
+        )
+          close();
+      });
+      const alternateLink = document.querySelector<HTMLAnchorElement>('.languages a');
+      if (alternateLink && location.search) {
+        const target = new URL(alternateLink.href);
+        const allowed = /\/(contact|iletisim)\//.test(location.pathname)
+          ? ['machine']
+          : ['q', 'kind', 'category', 'brand', 'year', 'hours'];
+        const current = new URLSearchParams(location.search);
+        allowed.forEach((key) => {
+          const value = current.get(key);
+          if (value) target.searchParams.set(key, value);
+        });
+        alternateLink.href = target.href;
+      }
+      if (location.search && /\/(machines|makineler)\/$/.test(location.pathname))
+        document.querySelector('meta[name="robots"]')?.setAttribute('content', 'noindex,follow');
+    </script>
+  </body>
+</html>

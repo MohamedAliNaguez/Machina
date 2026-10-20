@@ -1,0 +1,38 @@
+---
+interface Props {
+  name?: string;
+  size?: number;
+  class?: string;
+}
+const { name = 'plus', size = 24, class: className } = Astro.props;
+const drawings: Record<string, string> = {
+  search: 'm20 20-4.5-4.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0',
+  plus: 'M12 4v16M4 12h16',
+  check: 'm5 12 4 4L19 6',
+  pin: 'M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0ZM15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0',
+  menu: 'M3 6h18M3 12h18M3 18h18',
+  mail: 'M3 5h18v14H3ZM3 5l9 8 9-8',
+  download: 'M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4',
+  excavator: 'M2 18h12v3H2ZM5 18v-6h7v6M6 12V8h5l3 5 3-9 3 1-1 10 3 3h-5l-3-5',
+  loader:
+    'M3 16V9h6v7M4 9V5h5l3 7h3l4-5 1 1-1 9h4M6 19a3 3 0 1 1 0-6 3 3 0 0 1 0 6ZM15 19a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z',
+  roller: 'M2 16h4V8h7v9M7 8V4h5v4M16 12h6v8h-6ZM8 20a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z',
+  crane: 'M8 22V3h4v19M2 5h20l-5-4H8L2 5ZM18 5v9m-2 0a2 2 0 1 0 4 0M6 22h8',
+  bucket: 'M4 5h13l4 12-5 4H6L3 9ZM7 5v9l4 4h8M4 21l-1-4m6 4v-3m5 3v-3',
+};
+---
+
+<svg
+  class={className}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  <path d={drawings[name] || drawings.plus} />
+</svg>

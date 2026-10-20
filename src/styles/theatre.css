@@ -1,0 +1,590 @@
+/* Machine Theatre is the expressive home variant. Catalogue and contact stay light. */
+:root {
+  --hero-display: 'Anton', 'Arial Narrow', sans-serif;
+  --stage: #11171c;
+  --stage-ink: #edf0f2;
+  --stage-muted: #bdc6cf;
+  --stage-silver: #d1d5d8;
+  --stage-border: #454e59;
+  --stage-menu: #29323b;
+  --stage-focus: #a9c2ff;
+  --stage-accent: #88aaff;
+  --stage-paper: #f5f7f9;
+  --stage-mobile: #111518;
+}
+.theatre-page .preview-strip {
+  background: var(--stage);
+  border-color: var(--stage-border);
+}
+.theatre-page .preview-inner {
+  color: var(--stage-muted);
+}
+.theatre-page .site-header {
+  background: var(--stage);
+  color: var(--stage-ink);
+  border-bottom-color: transparent;
+}
+.theatre-page .header-quote {
+  min-width: 166px;
+  font-size: 15px;
+}
+.theatre-page .wordmark:hover,
+.theatre-page #primary-nav a:hover {
+  color: white;
+}
+.theatre-page #primary-nav a:hover {
+  text-decoration: underline;
+  text-underline-offset: 7px;
+}
+.theatre-page .languages a {
+  color: var(--stage-muted);
+}
+.theatre-page .languages > span:first-child {
+  color: var(--stage-accent);
+}
+.theatre-page .menu-toggle {
+  background: var(--stage-menu);
+  color: var(--stage-ink);
+}
+.theatre-page .site-header :focus-visible,
+.theatre-hero :focus-visible {
+  outline-color: var(--stage-focus);
+}
+.theatre-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  height: clamp(550px, 42.5vw, 690px);
+  background: var(--stage);
+  color: var(--stage-ink);
+}
+.theatre-scene {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  inset: -10px;
+  transform: translate3d(var(--stage-x, 0px), var(--stage-y, 0px), 0);
+  filter: brightness(var(--stage-light, 1));
+  transition:
+    transform 650ms ease-out,
+    filter 900ms ease-out;
+  animation: stage-light-arrives 3.5s ease-out;
+}
+.theatre-composited .theatre-scene {
+  z-index: 2;
+}
+.theatre-scene picture,
+.theatre-scene img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.theatre-scene img {
+  object-fit: cover;
+  object-position: center 55%;
+}
+.theatre-content {
+  height: 100%;
+  position: relative;
+  padding-top: 4px;
+}
+.theatre-content h1 {
+  position: relative;
+  top: 0;
+  width: max-content;
+  padding-right: 0.04em;
+  z-index: 1;
+  transform: scaleY(1.3);
+  transform-origin: left top;
+  font-family: var(--hero-display);
+  font-weight: 400;
+  font-size: clamp(76px, 12.85vw, 190px);
+  margin-left: 16px;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+  color: var(--stage-silver);
+  text-shadow: none;
+}
+@supports (background-clip: text) {
+  .theatre-content h1 {
+    background-image: url('/images/theatre/title-metal.webp');
+    background-color: var(--stage-silver);
+    background-size: 100% 150%;
+    background-position: center top;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+}
+/* Leave paint space for Turkish dots/umlauts above the Anton capitals. */
+html:lang(tr) .theatre-content h1 {
+  padding-top: 0.18em;
+  margin-top: -0.19em;
+}
+.theatre-copy {
+  position: absolute;
+  z-index: 3;
+  top: 43%;
+  left: 0;
+  max-width: 34%;
+}
+.theatre-copy .theatre-lead {
+  font-family: var(--display);
+  color: var(--stage-ink);
+  font-size: clamp(26px, 3vw, 44px);
+  font-weight: 600;
+  line-height: 1.12;
+  margin-bottom: 12px;
+}
+.theatre-copy > p {
+  font-size: clamp(18px, 1.75vw, 26px);
+  color: var(--stage-muted);
+}
+.theatre-actions {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-top: 28px;
+}
+.theatre-actions .button {
+  min-width: 190px;
+  font-size: 16px;
+  white-space: nowrap;
+}
+.theatre-actions .text-link {
+  font-size: 16px;
+  white-space: nowrap;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  color: var(--stage-ink);
+}
+.theatre-actions .text-link:hover {
+  color: var(--stage-focus);
+}
+.theatre-caption {
+  position: absolute;
+  z-index: 3;
+  bottom: 24px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  color: var(--stage-ink);
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  line-height: 1.5;
+}
+.theatre-caption-notice > span {
+  display: block;
+}
+.theatre-caption > span:last-child {
+  text-align: right;
+  max-width: 290px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.theatre-categories {
+  padding-top: 17px;
+}
+.theatre-section-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 44px;
+}
+.theatre-section-label h2 {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--primary);
+  line-height: 1.5;
+}
+.theatre-section-label h2::before {
+  content: '';
+  width: 28px;
+  height: 2px;
+  background: currentColor;
+}
+.theatre-section-label .text-link {
+  font-size: 12px;
+}
+.theatre-category-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  padding-block: 10px 20px;
+}
+.theatre-category {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid var(--border);
+  padding: 0 17px 7px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.theatre-category:last-child {
+  border-right: 0;
+}
+.theatre-category img,
+.theatre-category-space {
+  display: block;
+  width: 100%;
+  height: clamp(105px, 9.25vw, 140px);
+  object-fit: contain;
+  margin-bottom: 12px;
+  transition: transform 220ms ease-out;
+}
+.theatre-category:hover img,
+.theatre-category:focus-visible img {
+  transform: translateY(-4px);
+}
+.theatre-category:hover > span,
+.theatre-category:focus-visible > span {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.theatre-paths {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  padding-block: 8px 65px;
+}
+.theatre-path {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  background: var(--stage-paper);
+  overflow: hidden;
+}
+.theatre-path-copy {
+  padding: 28px 25px;
+  align-self: center;
+}
+.theatre-path .eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+.theatre-path h2 {
+  font-size: clamp(32px, 3vw, 45px);
+  margin-block: 15px 8px;
+}
+.theatre-path p {
+  font-size: 19px;
+  line-height: 1.35;
+}
+.theatre-path .button {
+  font-size: 14px;
+  padding: 12px 17px;
+  margin-top: 23px;
+  min-height: 46px;
+}
+.theatre-path > img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 52.5%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  transition: transform 400ms ease-out;
+}
+.theatre-path:hover {
+  color: var(--graphite);
+}
+.theatre-path:hover h2 {
+  color: var(--primary);
+}
+.theatre-path:hover > img {
+  transform: scale(1.025);
+}
+@keyframes stage-light-arrives {
+  from {
+    filter: brightness(0.8);
+  }
+  to {
+    filter: brightness(1);
+  }
+}
+@media (min-width: 1700px) {
+  .theatre-content h1 {
+    font-size: 190px;
+  }
+}
+@media (max-width: 1100px) {
+  .theatre-copy {
+    max-width: 39%;
+    top: 38%;
+  }
+  .theatre-actions {
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .theatre-actions .button {
+    padding-inline: 17px;
+  }
+  .theatre-path-copy {
+    padding: 22px 19px;
+  }
+  .theatre-path .button {
+    padding-inline: 11px;
+    font-size: 13px;
+  }
+  .theatre-category {
+    font-size: 16px;
+    padding-inline: 10px;
+  }
+}
+@media (max-width: 900px) {
+  .theatre-page #primary-nav {
+    background: var(--stage);
+    border-color: var(--stage-border);
+  }
+  .theatre-page #primary-nav a {
+    border-color: var(--stage-border);
+  }
+  .theatre-hero {
+    height: 530px;
+  }
+  .theatre-content {
+    padding-top: 24px;
+  }
+  .theatre-content h1 {
+    font-size: 12.85vw;
+  }
+  .theatre-scene img {
+    object-position: 64% center;
+  }
+  .theatre-copy {
+    top: 31%;
+    max-width: 40%;
+  }
+  .theatre-copy .theatre-lead {
+    font-size: 30px;
+  }
+  .theatre-copy > p {
+    font-size: 19px;
+  }
+  .theatre-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 22px;
+  }
+  .theatre-caption {
+    font-size: 9px;
+    bottom: 20px;
+  }
+  .theatre-category-grid {
+    padding-bottom: 24px;
+  }
+  .theatre-category img {
+    height: 95px;
+  }
+  .theatre-paths {
+    gap: 18px;
+    padding-bottom: 45px;
+  }
+  .theatre-path {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .theatre-path-copy {
+    padding: 25px;
+  }
+  .theatre-path p {
+    min-height: 0;
+  }
+  .theatre-path > img {
+    position: static;
+    width: 100%;
+    height: 170px;
+    min-height: 0;
+    grid-row: 1;
+  }
+}
+@media (max-width: 900px) {
+  .theatre-hero {
+    height: 620px;
+    background: var(--stage-mobile);
+  }
+  .theatre-content {
+    padding-top: 23px;
+  }
+  .theatre-content h1 {
+    margin-left: 0;
+    width: auto;
+    top: 0;
+    transform: none;
+    white-space: normal;
+    max-width: 100%;
+    font-size: clamp(60px, 16.5vw, 90px);
+    line-height: 0.95;
+  }
+  .theatre-scene {
+    inset: 300px -10px -4px;
+  }
+  .theatre-scene img {
+    object-position: center 65%;
+  }
+  .theatre-scene picture {
+    /* Blend the supplied photograph edge; the scene itself is raster artwork. */
+    mask-image: linear-gradient(transparent, black 15%);
+  }
+  .theatre-copy {
+    position: relative;
+    top: auto;
+    max-width: 100%;
+    margin-top: 25px;
+  }
+  .theatre-copy .theatre-lead {
+    font-size: 27px;
+    margin-bottom: 6px;
+  }
+  .theatre-copy > p {
+    font-size: 17px;
+  }
+  .theatre-actions {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 18px;
+  }
+  .theatre-actions .button {
+    min-width: 0;
+    font-size: 15px;
+    min-height: 48px;
+    padding: 12px 17px;
+  }
+  .theatre-caption {
+    bottom: 17px;
+    font-size: 8px;
+    gap: 15px;
+  }
+  .theatre-caption > span:first-child {
+    max-width: 140px;
+  }
+  .theatre-caption > span:last-child {
+    max-width: 170px;
+  }
+  .theatre-categories {
+    padding-top: 15px;
+  }
+  .theatre-section-label {
+    align-items: flex-start;
+  }
+  .theatre-section-label h2 {
+    font-size: 11px;
+    padding-top: 12px;
+  }
+  .theatre-section-label .text-link {
+    font-size: 11px;
+  }
+  .theatre-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-block: 5px 18px;
+  }
+  .theatre-category {
+    padding: 15px 12px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .theatre-category:nth-child(even) {
+    border-right: 0;
+  }
+  .theatre-category:last-child {
+    grid-column: 1 / -1;
+    border-bottom: 0;
+  }
+  .theatre-category img {
+    height: 105px;
+    margin-bottom: 8px;
+  }
+  .theatre-paths {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .theatre-path {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  }
+  .theatre-path-copy {
+    padding: 25px 18px;
+  }
+  .theatre-path > img {
+    position: absolute;
+    width: 46%;
+    height: 100%;
+    grid-row: auto;
+  }
+  .theatre-path h2 {
+    font-size: 32px;
+  }
+  .theatre-path p {
+    font-size: 16px;
+  }
+  .theatre-path .button {
+    margin-top: 20px;
+    font-size: 12px;
+    padding: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theatre-scene {
+    animation: none;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+  .theatre-category:hover img,
+  .theatre-category:focus-visible img,
+  .theatre-path:hover > img {
+    transform: none;
+  }
+}
+@media (max-width: 900px) {
+  html:lang(tr) .theatre-content h1 {
+    margin-top: -0.18em;
+    line-height: 1.16;
+  }
+  html:lang(tr) .theatre-hero {
+    height: 650px;
+  }
+  html:lang(tr) .theatre-scene {
+    top: 330px;
+  }
+}
+@media (forced-colors: active) {
+  .theatre-hero,
+  .theatre-page .site-header {
+    background: Canvas;
+    color: CanvasText;
+  }
+  .theatre-copy > p,
+  .theatre-copy .theatre-lead,
+  .theatre-content h1,
+  .theatre-caption {
+    color: CanvasText;
+  }
+  .theatre-content h1 {
+    background: none;
+  }
+  .theatre-scene {
+    opacity: 0.15;
+  }
+}

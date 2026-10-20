@@ -1,0 +1,23 @@
+---
+import { l, url } from '../lib/i18n';
+import type { Locale } from '../lib/types';
+interface Props {
+  locale: Locale;
+  items: { name: string; href?: string }[];
+}
+const { locale, items } = Astro.props;
+---
+
+<nav class="steel-breadcrumbs" aria-label={l(locale, 'Sayfa yolu', 'Breadcrumb')}>
+  <a href={url(locale)}>{l(locale, 'Ana sayfa', 'Home')}</a>
+  {items.map((item, index) => (
+    <>
+      <span aria-hidden="true">/</span>
+      {item.href && index < items.length - 1 ? (
+        <a href={item.href}>{item.name}</a>
+      ) : (
+        <span aria-current="page">{item.name}</span>
+      )}
+    </>
+  ))}
+</nav>

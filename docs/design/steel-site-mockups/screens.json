@@ -1,0 +1,152 @@
+[
+  {
+    "id": "01-catalogue",
+    "title": "Machine catalogue",
+    "format": "Desktop",
+    "description": "Search and filter new models and used equipment",
+    "number": "01",
+    "file": "01-catalogue.png",
+    "preview": "01-catalogue.jpg",
+    "source": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-ce6b266f-997a-4376-b680-ce4ca2167732.png",
+    "previousSource": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-ff173a7d-9b68-457a-81fb-7e20ece0cbe1.png",
+    "revision": "footer-cleanup"
+  },
+  {
+    "id": "02-category",
+    "title": "Category landing",
+    "format": "Desktop",
+    "description": "Focused equipment browsing with a related buying guide",
+    "number": "02",
+    "file": "02-category.png",
+    "preview": "02-category.jpg",
+    "source": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-69a43734-aeaf-4900-b87c-82658bc65a89.png",
+    "previousSource": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-5b1e90e5-8f5b-44c9-ae36-78dddee35ecd.png",
+    "revision": "footer-cleanup"
+  },
+  {
+    "id": "03-new-model",
+    "title": "New model",
+    "format": "Desktop",
+    "description": "Configurations, applications and sample specifications",
+    "number": "03",
+    "file": "03-new-model.png",
+    "preview": "03-new-model.jpg",
+    "source": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-cf7b8f8e-b3dc-4021-b0c8-67fea003dedf.png",
+    "previousSource": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-faef0d22-758c-4e5f-b26e-724f1c4d674f.png",
+    "revision": "footer-cleanup"
+  },
+  {
+    "id": "04-used-machine",
+    "title": "Used machine",
+    "format": "Desktop",
+    "description": "Individual unit facts, condition, status and gallery",
+    "number": "04",
+    "file": "04-used-machine.png",
+    "preview": "04-used-machine.jpg",
+    "source": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-4c5457ec-1b9e-4738-b5a3-cdff85f6371e.png",
+    "previousSource": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-f9c592f8-5c94-498c-af63-ec26f0bd497f.png",
+    "revision": "footer-cleanup"
+  },
+  {
+    "id": "05-guides",
+    "title": "Guides index",
+    "format": "Desktop",
+    "description": "Featured buying guide and practical advice",
+    "number": "05",
+    "file": "05-guides.png",
+    "preview": "05-guides.jpg",
+    "source": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-47ee6ac0-7946-44d1-b84d-fed79c0a7ae1.png",
+    "previousSource": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-a7bfeda6-a42e-4b92-b25c-4fb69eedb2c5.png",
+    "revision": "footer-cleanup"
+  },
+  {
+    "id": "06-article",
+    "title": "Guide article",
+    "format": "Desktop",
+    "description": "Direct answer, reading column and related equipment",
+    "number": "06",
+    "file": "06-article.png",
+    "preview": "06-article.jpg",
+    "source": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-84b68357-10f6-4705-8bf5-1752e1a43992.png",
+    "previousSource": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-711a998d-0a79-481c-9419-daf6693ede0b.png",
+    "revision": "footer-cleanup"
+  },
+  {
+    "id": "07-about",
+    "title": "About the company",
+    "format": "Desktop",
+    "description": "Company introduction and equal new / used routes",
+    "number": "07",
+    "file": "07-about.png",
+    "preview": "07-about.jpg",
+    "source": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-56e6dd9c-23c2-479f-a525-3b97e827e488.png",
+    "previousSource": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-85f03f3e-458a-4584-bd34-9683d6d6818b.png",
+    "revision": "footer-cleanup"
+  },
+  {
+    "id": "08-contact",
+    "title": "Contact and quote",
+    "format": "Desktop",
+    "description": "Selected machine context and a clear enquiry form",
+    "number": "08",
+    "file": "08-contact.png",
+    "preview": "08-contact.jpg",
+    "source": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-ce9f02a6-9aa6-4a07-81a6-2118f3d1a485.png",
+    "previousSource": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-a90c5ede-2fe0-454b-ba8c-dc38a59cc205.png",
+    "revision": "footer-cleanup"
+  },
+  {
+    "id": "09-privacy",
+    "title": "Privacy notice",
+    "format": "Desktop",
+    "description": "A restrained reading layout with draft content",
+    "number": "09",
+    "file": "09-privacy.png",
+    "preview": "09-privacy.jpg",
+    "source": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-498385a2-b0b6-436d-b8bf-05e723e2365b.png",
+    "previousSource": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-42c94cf6-63ae-4680-9fc7-8a736e0e2778.png",
+    "revision": "footer-cleanup"
+  },
+  {
+    "id": "10-not-found",
+    "title": "Missing page",
+    "format": "Desktop",
+    "description": "A clear route back to the catalogue or homepage",
+    "number": "10",
+    "file": "10-not-found.png",
+    "preview": "10-not-found.jpg",
+    "source": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-c1f20014-6b6d-4ba8-9378-d36dd857c3d4.png",
+    "previousSource": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-cf42cb76-31d2-4065-b519-07072a914dff.png",
+    "revision": "footer-cleanup"
+  },
+  {
+    "id": "11-mobile-catalogue",
+    "title": "Mobile catalogue",
+    "format": "Mobile",
+    "description": "Single-column equipment results and compact filters",
+    "number": "11",
+    "file": "11-mobile-catalogue.png",
+    "preview": "11-mobile-catalogue.jpg",
+    "source": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-12929cab-9f77-4771-8cf0-b672220dd441.png"
+  },
+  {
+    "id": "12-mobile-used-machine",
+    "title": "Mobile machine",
+    "format": "Mobile",
+    "description": "Unit details, photographs and an accessible enquiry action",
+    "number": "12",
+    "file": "12-mobile-used-machine.png",
+    "preview": "12-mobile-used-machine.jpg",
+    "source": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-a5efb6de-4f5d-4cc4-ba93-f64135a2c26a.png"
+  },
+  {
+    "id": "13-mobile-contact-tr",
+    "title": "Mobile enquiry · Türkçe",
+    "format": "Mobile",
+    "description": "Stacked form fields and Turkish typography",
+    "number": "13",
+    "file": "13-mobile-contact-tr.png",
+    "preview": "13-mobile-contact-tr.jpg",
+    "source": "C:\\Users\\moham\\.codex\\generated_images\\01a15574-bfef-7b00-9553-6c1bab7791c4\\exec-a6e97c4a-a80b-477c-9aa6-4e72fda1e6e0.png"
+  }
+]

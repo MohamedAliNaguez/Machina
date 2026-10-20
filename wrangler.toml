@@ -1,0 +1,14 @@
+name = "precision-machinery"
+compatibility_date = "2026-10-19"
+pages_build_output_dir = "./dist"
+
+[vars]
+ENVIRONMENT = "preview"
+# Set SITE_ORIGIN to the exact origin of the production site when enabling production.
+
+[[d1_databases]]
+binding = "DB"
+database_name = "machinery-enquiries"
+# Replace with your own free-tier D1 ID before deployment. Local use needs no account.
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
