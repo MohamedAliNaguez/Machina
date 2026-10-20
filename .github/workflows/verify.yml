@@ -30,6 +30,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            studio/package-lock.json
+      # Sanity's Vite resolver reads the parent Astro tsconfig during its build.
+      - run: npm ci
       - run: npm --prefix studio ci
       - run: npm --prefix studio run check
       - run: npm --prefix studio run build

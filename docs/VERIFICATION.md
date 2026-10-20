@@ -12,7 +12,7 @@ Verified on 2026-10-20. The public GitHub Pages preview is published from [Moham
 - Hosted personal-data inputs and Send action are disabled with explicit preview-only copy; there is no outgoing form request. Local development retains its working sample enquiry API.
 - Static preview remains noindex. A project-scoped robots.txt does not govern the github.io root; native per-page metadata is retained.
 - Existing steel-design accessibility scans and visual comparison history are documented in [design-qa.md](../design-qa.md). This is automated/manual coverage, not formal assistive-technology certification.
-- Sanity Studio has its own explicit Node type dependency for clean standalone installation. Its type check passes locally, and the verification workflow separately installs, checks and builds it. No real Sanity project is connected or deployed.
+- Sanity Studio has its own explicit Node type dependency for clean standalone installation. Its type check passes locally, and the verification workflow separately installs both package manifests, checks and builds it. Sanity's Vite resolver also reads the parent Astro tsconfig, so the root build dependencies are installed in the editor job. No real Sanity project is connected or deployed.
 - Private environment files, local databases, exports and generated workspace folders are ignored by Git. A credential-pattern scan of the initial published source found no credential matches.
 
 ## Dependency maintenance
