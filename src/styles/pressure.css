@@ -30,15 +30,14 @@
 }
 .pressure-hero {
   position: relative;
-  background: var(--stage);
+  background: #061c14;
   color: var(--stage-ink);
   overflow: hidden;
   border-bottom: 3px solid var(--accent);
 }
 .pressure-hero-inner {
   position: relative;
-  min-height: 635px;
-  padding-top: 27px;
+  padding-block: 29px 25px;
 }
 .pressure-kicker {
   position: relative;
@@ -49,34 +48,56 @@
   letter-spacing: 0.16em;
   color: var(--stage-muted);
 }
-.pressure-hero h1.metal-title {
+.pressure-heading {
   position: relative;
-  z-index: 2;
-  font-size: clamp(140px, 17vw, 245px);
-  padding-block: 0.04em;
-  margin-top: 4px;
-  line-height: 1.03;
-  max-width: 100%;
+  margin: 16px -2% 0;
+  line-height: 1;
+}
+.pressure-heading-art {
+  position: relative;
+  display: block;
+  aspect-ratio: 1774 / 550;
+  overflow: hidden;
+  /* Frame the approved artwork without its concept label or raster slogan.
+     The complete word is preserved; the signature below remains live text. */
+  mask-image:
+    linear-gradient(to right, transparent, #000 1%, #000 99%, transparent),
+    linear-gradient(to bottom, transparent, #000 4%, #000 92%, transparent);
+  mask-composite: intersect;
+}
+.pressure-heading-art img {
+  position: absolute;
+  top: -28.181818%;
+  left: 0;
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
 }
 .pressure-hero-copy {
   position: relative;
-  z-index: 2;
-  width: 48%;
-  max-width: 560px;
-  padding-top: 18px;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: start;
+  gap: 0 55px;
+  padding-top: 13px;
 }
 .pressure-signature {
   font-family: var(--display);
-  font-size: clamp(31px, 3.3vw, 48px);
+  font-size: clamp(31px, 3vw, 44px);
   font-weight: 600;
   line-height: 1.1;
   color: var(--stage-ink);
 }
 .pressure-hero-description {
   color: var(--stage-muted);
-  max-width: 430px;
+  max-width: 490px;
   font-size: 21px;
-  margin-top: 18px;
+  margin: 0;
+}
+.pressure-hero-copy .pressure-actions {
+  grid-column: 1 / -1;
+  margin-top: 25px;
 }
 .pressure-actions {
   display: flex;
@@ -121,16 +142,13 @@
   letter-spacing: 0.16em;
 }
 .pressure-scene-caption {
-  position: absolute;
-  bottom: 23px;
-  left: 0;
-  right: 0;
   display: flex;
   justify-content: space-between;
   gap: 20px;
   font-size: 10px;
   letter-spacing: 0.13em;
   color: var(--stage-muted);
+  margin-top: 39px;
 }
 .pressure-families {
   padding-block: 65px;
@@ -571,8 +589,8 @@
   }
 }
 @media (max-width: 1100px) {
-  .pressure-hero-inner {
-    min-height: 590px;
+  .pressure-hero-copy {
+    gap: 0 30px;
   }
   .pressure-family {
     padding-inline: 12px;
@@ -587,16 +605,15 @@
 }
 @media (max-width: 900px) {
   .pressure-hero-inner {
-    min-height: 760px;
     padding-top: 23px;
   }
-  .pressure-hero h1.metal-title {
-    font-size: clamp(84px, 19vw, 170px);
-    margin-top: 14px;
-  }
   .pressure-hero-copy {
-    width: 100%;
+    grid-template-columns: 1fr;
+    gap: 17px;
     padding-top: 15px;
+  }
+  .pressure-hero-copy .pressure-actions {
+    margin-top: 2px;
   }
   .pressure-signature {
     font-size: 36px;
@@ -604,13 +621,6 @@
   .pressure-hero-description {
     font-size: 19px;
     max-width: 430px;
-  }
-  .pressure-hero .pressure-artwork {
-    width: 360px;
-    top: auto;
-    bottom: 62px;
-    right: 6%;
-    opacity: 0.85;
   }
   .pressure-artwork-label {
     font-size: 7px;
@@ -676,23 +686,19 @@
     font-size: 23px;
   }
   .pressure-hero-inner {
-    min-height: 755px;
+    padding-block: 23px 22px;
   }
   .pressure-kicker {
     font-size: 10px;
   }
-  .pressure-hero h1.metal-title {
-    font-size: 19.5vw;
-    letter-spacing: -0.02em;
-  }
-  html:lang(tr) .pressure-hero h1.metal-title {
-    font-size: 24vw;
+  .pressure-heading {
+    margin: 25px -5.5% 0;
   }
   .pressure-signature {
     font-size: 31px;
   }
   .pressure-hero-copy {
-    padding-top: 24px;
+    padding-top: 25px;
   }
   .pressure-hero-description {
     font-size: 18px;
@@ -710,14 +716,9 @@
     display: inline-flex;
     align-items: center;
   }
-  .pressure-hero .pressure-artwork {
-    width: 315px;
-    bottom: 65px;
-    right: calc(50% - 157px);
-  }
   .pressure-scene-caption {
     font-size: 8px;
-    bottom: 22px;
+    margin-top: 31px;
   }
   .pressure-family-grid {
     gap: 25px 15px;
@@ -798,10 +799,20 @@
   }
 }
 @media (forced-colors: active) {
-  .pressure-hero h1.metal-title {
+  .pressure-heading-art {
+    display: none;
+  }
+  .pressure-heading-text {
+    position: static;
+    display: block;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    font-family: var(--display);
+    font-size: clamp(65px, 15vw, 180px);
     color: CanvasText;
-    background: none;
-    -webkit-text-fill-color: CanvasText;
   }
   .pressure-family,
   .pressure-data-pending {

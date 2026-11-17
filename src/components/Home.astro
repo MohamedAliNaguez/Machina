@@ -1,8 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import PressureArtwork from './PressureArtwork.astro';
 import ProductVisual from './ProductVisual.astro';
 import ArticleCard from './ArticleCard.astro';
+import PressureWordmark from './PressureWordmark.astro';
 import { getContent } from '../lib/content';
 import { labels, l, url, otherLocale } from '../lib/i18n';
 import type { Locale } from '../lib/types';
@@ -33,8 +33,9 @@ const copy = labels(locale);
   <section class="pressure-hero" aria-labelledby="pressure-title">
     <div class="container pressure-hero-inner">
       <span class="pressure-kicker">TECHNICSAN / {l(locale, 'ÜRÜN DÜNYASI', 'PRODUCT WORLD')}</span>
-      <h1 id="pressure-title" class="metal-title">
-        {l(locale, 'BASINÇ', 'PRESSURE')}
+      <h1 id="pressure-title" class="pressure-heading">
+        <span class="sr-only pressure-heading-text">{l(locale, 'BASINÇ', 'PRESSURE')}</span>
+        <PressureWordmark />
       </h1>
       <div class="pressure-hero-copy">
         <p class="pressure-signature" lang="en">
@@ -57,9 +58,13 @@ const copy = labels(locale);
           </a>
         </div>
       </div>
-      <PressureArtwork id="home-pressure" />
       <div class="pressure-scene-caption">
         <span>ANKARA / TÜRKİYE</span>
+        <span class="pressure-motion-control">
+          <button class="pressure-motion-replay" data-pressure-replay type="button" hidden>
+            {l(locale, 'Animasyonu tekrar oynat', 'Replay motion')}
+          </button>
+        </span>
         <span>05 {l(locale, 'ÜRÜN GRUBU', 'PRODUCT TYPES')} / 01 TECHNICSAN</span>
       </div>
     </div>

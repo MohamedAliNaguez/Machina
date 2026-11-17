@@ -1,0 +1,154 @@
+---
+import { withBase } from '../lib/paths';
+import '../styles/pressure-motion.css';
+---
+
+<span
+  class="pressure-heading-art"
+  lang="en"
+  aria-hidden="true"
+  data-pressure-art
+  data-motion="static"
+>
+  <span class="pressure-machine-stage" data-pressure-stage>
+    <img
+      src={withBase('/images/brand/pressure-lime-1774.webp')}
+      srcset={`${withBase('/images/brand/pressure-lime-800.webp')} 800w, ${withBase('/images/brand/pressure-lime-1400.webp')} 1400w, ${withBase('/images/brand/pressure-lime-1774.webp')} 1774w`}
+      sizes="(max-width: 700px) 100vw, (max-width: 1400px) 92vw, 1320px"
+      width="1774"
+      height="887"
+      alt=""
+      loading="eager"
+      fetchpriority="high"
+    />
+    <svg class="pressure-motion-rig" viewBox="0 155 1774 550" fill="none" focusable="false">
+      <defs>
+        <!-- Every raster patch shares the already-decoded responsive image. -->
+        <image id="pressure-motion-source" data-pressure-source width="1774" height="887" />
+        <linearGradient id="pressure-cylinder-shade">
+          <stop stop-color="#071b13" />
+          <stop offset=".48" stop-color="#1c3426" />
+          <stop offset="1" stop-color="#04180f" />
+        </linearGradient>
+        <linearGradient id="pressure-piston-shade">
+          <stop stop-color="#263e2e" />
+          <stop offset=".48" stop-color="#7a9380" />
+          <stop offset="1" stop-color="#1a3425" />
+        </linearGradient>
+        <linearGradient
+          id="pressure-vane-shade"
+          x1="-50"
+          y1="-50"
+          x2="50"
+          y2="50"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stop-color="#6b836d" />
+          <stop offset=".6" stop-color="#304b32" />
+          <stop offset="1" stop-color="#9bc900" />
+        </linearGradient>
+        <linearGradient id="pressure-surface-light">
+          <stop stop-color="#f4ffd7" stop-opacity="0" />
+          <stop offset=".5" stop-color="#f4ffd7" stop-opacity=".62" />
+          <stop offset="1" stop-color="#f4ffd7" stop-opacity="0" />
+        </linearGradient>
+        <clipPath id="pressure-cylinder-left">
+          <path d="M1112 445H1178L1173 519H1107Z" />
+        </clipPath>
+        <clipPath id="pressure-cylinder-right">
+          <path d="M1267 445H1334L1330 519H1262Z" />
+        </clipPath>
+        <clipPath id="pressure-head-left">
+          <path d="M1112 446H1176L1174 464H1110Z" />
+        </clipPath>
+        <clipPath id="pressure-head-right">
+          <path d="M1267 446H1332L1331 464H1265Z" />
+        </clipPath>
+        <clipPath id="pressure-mixer-opening">
+          <ellipse cx="503" cy="356" rx="35" ry="68" transform="rotate(16 503 356)" />
+        </clipPath>
+        <filter id="pressure-letter-luminance" color-interpolation-filters="sRGB">
+          <feColorMatrix type="luminanceToAlpha" />
+          <feComponentTransfer>
+            <feFuncA type="discrete" tableValues="0 0 1 1 1" />
+          </feComponentTransfer>
+        </filter>
+        <mask
+          id="pressure-letter-faces"
+          mask-type="alpha"
+          x="0"
+          y="155"
+          width="1774"
+          height="550"
+          maskUnits="userSpaceOnUse"
+        >
+          <use href="#pressure-motion-source" filter="url(#pressure-letter-luminance)" />
+        </mask>
+      </defs>
+
+      <g data-pressure-mechanics>
+        <g clip-path="url(#pressure-cylinder-left)">
+          <path d="M1106 443H1180V521H1106Z" fill="url(#pressure-cylinder-shade)" />
+          <g data-pressure-piston="left">
+            <path d="M1140 457H1149V522H1140Z" fill="url(#pressure-piston-shade)" />
+            <g clip-path="url(#pressure-head-left)">
+              <use href="#pressure-motion-source" />
+            </g>
+          </g>
+          <path d="M1125 514Q1143 507 1162 514V520H1125Z" fill="url(#pressure-piston-shade)" />
+        </g>
+        <g clip-path="url(#pressure-cylinder-right)">
+          <path d="M1260 443H1336V521H1260Z" fill="url(#pressure-cylinder-shade)" />
+          <g data-pressure-piston="right">
+            <path d="M1296 457H1305V522H1296Z" fill="url(#pressure-piston-shade)" />
+            <g clip-path="url(#pressure-head-right)">
+              <use href="#pressure-motion-source" />
+            </g>
+          </g>
+          <path d="M1281 514Q1299 507 1318 514V520H1281Z" fill="url(#pressure-piston-shade)" />
+        </g>
+      </g>
+
+      <g clip-path="url(#pressure-mixer-opening)" data-pressure-mixer>
+        <g transform="translate(503 356) rotate(16) scale(.5 1)">
+          <g class="pressure-mixer-rotor" data-pressure-rotor>
+            <circle r="63" fill="transparent" />
+            {[0, 120, 240].map((angle) => (
+              <path
+                d="M0 0C4-24 24-48 51-48C38-27 20-7 0 0Z"
+                fill="url(#pressure-vane-shade)"
+                transform={`rotate(${angle})`}
+              />
+            ))}
+            <circle r="6" fill="#435c43" />
+          </g>
+        </g>
+      </g>
+
+      <path
+        data-pressure-transfer
+        d="M1224 674H232Q192 674 192 634V581"
+        stroke="#9bc900"
+        stroke-width="2.5"
+        stroke-linecap="round"
+      />
+      <g data-pressure-discharge>
+        <ellipse cx="192" cy="564" rx="16" ry="4" fill="#c5df53" />
+        <path
+          d="M186 577V588M192 577V600M198 577V588"
+          stroke="#9bc900"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+      </g>
+      <g mask="url(#pressure-letter-faces)">
+        <path
+          data-pressure-sheen
+          d="M-220 155H-40L-150 705H-330Z"
+          fill="url(#pressure-surface-light)"
+        />
+      </g>
+    </svg>
+  </span>
+</span>
+<script src="../scripts/pressure-motion.ts"></script>

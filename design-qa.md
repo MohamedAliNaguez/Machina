@@ -107,3 +107,19 @@ Verification completed: 19 unit/backend tests; all six browser scenarios, includ
 - Original source records, source credits, all imported image pixels and the public-to-original mapping are preserved in ignored `.local/catalogue-provenance/`, outside version control and the public build. Restoring source-image optimization writes only into that private archive.
 - Kept 80 inspected images without visible company names; 76 entries use labelled image placeholders for branded, uncertain or unavailable source images. No manufacturer marks were relabelled as TECHNICSAN. All 155 entries and the exact five-category structure remain.
 - Passed 22 functional/backend checks, 8 browser checks, Studio checks and a 663-page build (including legacy redirects). Verified 14,647 internal references, reciprocal language links and valid JSON-LD. A full HTML audit, including redirect bodies, found no source-company names. Public source image directory and private archive are absent from the build.
+
+## Lime Signature homepage — 17 November 2026
+
+- Installed the owner-selected product alphabet in the homepage hero, using the approved original with responsive WebP encoding (largest source about 83 KB). The concept label and raster slogan are framed out; a single live slogan appears underneath. Removed the competing large ring from this hero.
+- Preserved localized semantic H1s and supporting copy, high-contrast heading text, no-JavaScript rendering, high image fetch priority and reserved artwork proportions. The English brand illustration is shared by both locales.
+- Passed all 8 browser checks, including axe scans and the existing enquiry/catalogue journeys; the 663-page build verifies 14,649 internal references. Formatting checks pass.
+- Inspected desktop and mobile screenshots. Both locales have a single correct H1, loaded artwork and no horizontal overflow at 1440, 390 and 320px. Forced-colours text fallback and the no-JavaScript artwork check pass. Screenshots: `test-results/preview-desktop.png`, `test-results/lime-hero-en-mobile.png`, `test-results/lime-hero-tr-mobile.png`.
+- Changes are available in the local preview. No external deployment performed for this selection.
+
+## Mechanical pressure entrance — 17 November 2026
+
+- Added one 3.8-second sequence to the selected alphabet: reciprocating compressor pistons, inset mixer vanes, a brief pressure-transfer/discharge cue, elastic compression and a restrained surface highlight. The approved original returns unchanged at rest.
+- Playback waits for the intro, decoded image and visibility. Bilingual replay is explicit. Reduced motion, forced colours, background tabs, offscreen artwork and history restoration all preserve or restore the still. Text and navigation remain usable without JavaScript.
+- Passed all 10 browser checks, including two new motion scenarios for intro ordering, real piston movement, replay, stable action positions, cancelling on reduced-motion changes, Turkish headings and high-contrast fallback. Existing catalogue/enquiry/accessibility scenarios pass.
+- Static build passes for 663 pages and 14,649 internal references, with no TypeScript/Astro diagnostics. Inspected desktop frames at four animation times and the settled state; no browser errors. Normal-motion phone review has no horizontal overflow, working replay and an observed initial-load layout-shift total of approximately 0.011 in that local run (not field data).
+- Motion uses native SVG and Web Animations over the cached responsive image; no video, new service or animation dependency. Local preview remains on port 4332.
