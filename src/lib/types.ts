@@ -7,6 +7,7 @@ export interface Category {
   name: Localized;
   description: Localized;
   icon: string;
+  requirements?: Localized<string[]>;
 }
 export interface Brand {
   id: string;
@@ -30,10 +31,32 @@ export interface Machine {
   condition?: Localized;
   applications: Localized<string[]>;
   specs: { label: Localized; value: string }[];
-  images: { src: string; alt: Localized; illustrative: boolean }[];
+  images: {
+    src: string;
+    alt: Localized;
+    illustrative: boolean;
+    placeholder?: boolean;
+    sourceUrl?: string;
+    credit?: string;
+    rightsStatus?: 'pending' | 'approved';
+  }[];
+  reference?: {
+    publisher: string;
+    url: string;
+    retrievedAt: string;
+    reviewStatus: 'pending' | 'approved';
+    notes?: Localized;
+    section?: string;
+    originalLabel?: string;
+  };
+  specificationTable?: {
+    columns: string[];
+    rows: { label: Localized; values: string[] }[];
+  };
   brochure?: { url: string; label: Localized };
   source: string;
   sample: boolean;
+  technicalReview?: 'pending' | 'approved';
   published: Locale[];
 }
 export interface Article {

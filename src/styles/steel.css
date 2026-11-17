@@ -30,25 +30,25 @@
   margin-top: 9px;
 }
 .steel-page .site-header {
-  background: var(--stage);
-  color: var(--stage-ink);
-  border-bottom: 1px solid #30383f;
+  background: var(--background);
+  color: var(--primary);
+  border-bottom: 1px solid var(--border);
 }
 .steel-page:not(.theatre-page) .header-inner {
-  min-height: 77px;
+  min-height: 88px;
 }
 .steel-page .site-header .wordmark:hover,
 .steel-page #primary-nav a:hover {
-  color: white;
+  color: var(--primary-hover);
 }
 .steel-page .languages a {
-  color: var(--stage-muted);
+  color: var(--muted);
 }
 .steel-page .languages > span:first-child {
-  color: #88aaff;
+  color: var(--primary);
 }
 .steel-page #primary-nav a[aria-current='page'] {
-  color: var(--stage-ink);
+  color: var(--primary);
 }
 .steel-page #primary-nav a[aria-current='page']::after {
   display: none;
@@ -72,7 +72,7 @@
   transform: none;
 }
 .steel-page .site-header :focus-visible {
-  outline-color: var(--stage-focus);
+  outline-color: var(--primary);
 }
 .steel-intro {
   position: relative;
@@ -494,9 +494,9 @@ html:lang(tr) .metal-title {
     top: 100%;
     left: -5.56%;
     right: -5.56%;
-    background: var(--stage);
+    background: var(--background);
     padding: 15px 5%;
-    border-bottom: 1px solid var(--stage-border);
+    border-bottom: 1px solid var(--border);
   }
   .steel-page #primary-nav.is-open {
     display: flex;
@@ -513,7 +513,7 @@ html:lang(tr) .metal-title {
     order: 3;
     padding: 8px 0 8px 8px;
     background: transparent;
-    color: white;
+    color: var(--primary);
     font-weight: 600;
     min-height: 44px;
   }
@@ -810,7 +810,7 @@ html:lang(tr) .metal-title {
   overflow: hidden;
 }
 .steel-page .gallery-thumbnails button[aria-pressed='true'] {
-  border-color: var(--primary);
+  border-color: var(--accent);
 }
 .steel-page .gallery-thumbnails img {
   width: 100%;
@@ -1364,7 +1364,7 @@ html:lang(tr) .metal-title {
 }
 @media (max-width: 700px) {
   .steel-page:not(.theatre-page) .header-inner {
-    min-height: 56px !important;
+    min-height: 64px !important;
   }
   .catalogue-search,
   .mobile-filter-row {

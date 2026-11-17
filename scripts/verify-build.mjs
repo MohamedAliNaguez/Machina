@@ -23,8 +23,29 @@ const stripBase = (path) =>
 let checkedLinks = 0;
 for (const [file, html] of documents) {
   assert.match(html, /<title>.+<\/title>/, `Title missing: ${file}`);
-  assert.match(html, /name="description"/, `Description missing: ${file}`);
   if (file === 'dist/index.html') continue;
+  const redirect = html.match(/http-equiv="refresh" content="0;url=([^\"]+)"/);
+  if (redirect) {
+    const target = new URL(redirect[1], origin);
+    const pathname = stripBase(target.pathname);
+    const destination = `dist${pathname.endsWith('/') ? pathname : pathname + '/'}index.html`;
+    assert.equal(target.origin, new URL(origin).origin, `External redirect: ${file}`);
+    assert.ok(documents.has(destination), `Missing redirect destination: ${file}`);
+    assert.notEqual(destination, file, `Self redirect: ${file}`);
+    assert.ok(
+      html.includes(`rel="canonical" href="${target.href}"`),
+      `Redirect canonical missing: ${file}`,
+    );
+    assert.match(html, /name="robots" content="noindex"/, `Redirect is indexable: ${file}`);
+    checkedLinks++;
+    continue;
+  }
+  assert.match(html, /name="description"/, `Description missing: ${file}`);
+  assert.doesNotMatch(
+    html,
+    /tedsan|confidence|ünal|unal-|nt[ -]?makin|gaslin|tricon|blackmer/i,
+    `Third-party company name in public page: ${file}`,
+  );
   const canonical = html.match(/rel="canonical" href="([^"]+)"/)?.[1];
   assert.ok(canonical, `Canonical missing: ${file}`);
   for (const script of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g))

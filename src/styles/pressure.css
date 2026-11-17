@@ -1,0 +1,909 @@
+/* Pressure is the brand idea. Abstract artwork is never a substitute for product photography. */
+.pressure-site .steel-intro {
+  background: var(--stage);
+}
+.pressure-site .steel-intro::after {
+  content: '';
+  position: absolute;
+  width: 430px;
+  height: 430px;
+  border: 24px solid #344d3e;
+  outline: 1px solid #617b69;
+  border-radius: 50%;
+  top: -130px;
+  right: -90px;
+  z-index: -1;
+  opacity: 0.55;
+}
+.pressure-site .steel-intro-content {
+  z-index: 1;
+}
+.pressure-site .steel-intro-art {
+  opacity: 0.5;
+}
+.pressure-site .category-intro {
+  background-image: none;
+}
+.pressure-site .category-intro .metal-title {
+  font-size: clamp(64px, 8.8vw, 126px);
+  max-width: 92%;
+}
+.pressure-hero {
+  position: relative;
+  background: var(--stage);
+  color: var(--stage-ink);
+  overflow: hidden;
+  border-bottom: 3px solid var(--accent);
+}
+.pressure-hero-inner {
+  position: relative;
+  min-height: 635px;
+  padding-top: 27px;
+}
+.pressure-kicker {
+  position: relative;
+  z-index: 2;
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--stage-muted);
+}
+.pressure-hero h1.metal-title {
+  position: relative;
+  z-index: 2;
+  font-size: clamp(140px, 17vw, 245px);
+  padding-block: 0.04em;
+  margin-top: 4px;
+  line-height: 1.03;
+  max-width: 100%;
+}
+.pressure-hero-copy {
+  position: relative;
+  z-index: 2;
+  width: 48%;
+  max-width: 560px;
+  padding-top: 18px;
+}
+.pressure-signature {
+  font-family: var(--display);
+  font-size: clamp(31px, 3.3vw, 48px);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--stage-ink);
+}
+.pressure-hero-description {
+  color: var(--stage-muted);
+  max-width: 430px;
+  font-size: 21px;
+  margin-top: 18px;
+}
+.pressure-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 23px;
+  margin-top: 29px;
+}
+.pressure-hero .text-link,
+.pressure-product-hero .text-link {
+  color: var(--stage-ink);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  font-size: 16px;
+}
+.pressure-hero .text-link:hover,
+.pressure-product-hero .text-link:hover {
+  color: var(--stage-accent);
+}
+.pressure-artwork {
+  position: absolute;
+  width: min(51vw, 650px);
+  right: -2%;
+  top: 38px;
+  color: var(--stage-muted);
+  pointer-events: none;
+}
+.pressure-artwork svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.pressure-rotor {
+  transform-origin: 320px 320px;
+  animation: pressure-settle 2.8s cubic-bezier(0.2, 0.65, 0.3, 1) both;
+}
+.pressure-artwork-label {
+  display: block;
+  margin-top: 12px;
+  text-align: center;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+}
+.pressure-scene-caption {
+  position: absolute;
+  bottom: 23px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  color: var(--stage-muted);
+}
+.pressure-families {
+  padding-block: 65px;
+}
+.pressure-family-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-top: 27px;
+}
+.pressure-family {
+  min-width: 0;
+  padding: 0 18px 14px;
+  border-right: 1px solid var(--border);
+}
+.pressure-family:first-child {
+  padding-left: 0;
+}
+.pressure-family:last-child {
+  border-right: 0;
+  padding-right: 0;
+}
+.pressure-family-number {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  margin-bottom: 13px;
+}
+.pressure-family h3 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 29px;
+  line-height: 1.05;
+  margin-block: 19px 9px;
+  color: var(--primary);
+}
+.pressure-family > p {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.4;
+  min-height: 68px;
+}
+.pressure-family-link {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.pressure-family:hover h3 {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.product-visual {
+  position: relative;
+  overflow: hidden;
+  background: var(--steel);
+  width: 100%;
+}
+.product-visual img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 900 / 560;
+  object-fit: contain;
+}
+.photography-pending {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  right: 12px;
+  color: var(--primary);
+  font-size: 11px;
+  line-height: 1.3;
+}
+.pressure-family .photography-pending {
+  font-size: 9px;
+  bottom: 7px;
+  left: 8px;
+}
+.pressure-brand-section {
+  padding-block: 66px;
+  background: var(--brand-soft);
+  border-block: 1px solid var(--border);
+}
+.pressure-brand-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: center;
+}
+.pressure-brand-grid h2 {
+  font-family: var(--hero-display);
+  font-weight: 400;
+  font-size: clamp(44px, 5vw, 72px);
+  line-height: 1.05;
+  margin-top: 18px;
+}
+.pressure-brand-copy p {
+  font-size: 21px;
+  line-height: 1.5;
+  margin-bottom: 17px;
+}
+.pressure-contact-band {
+  background: var(--brand-soft);
+  padding-block: 40px;
+  border-top: 3px solid var(--accent);
+}
+.pressure-contact-band > div,
+.pressure-guide-callout > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 35px;
+}
+.pressure-contact-band h2 {
+  font-size: 38px;
+  margin-top: 8px;
+}
+.pressure-type-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.pressure-type-nav .eyebrow {
+  margin-bottom: 14px;
+}
+.pressure-type-nav a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  font-size: 16px;
+}
+.pressure-type-nav a[aria-current='page'] {
+  background: var(--brand-soft);
+  box-shadow: inset 3px 0 var(--accent);
+  color: var(--primary);
+}
+.pressure-filter-note {
+  font-family: var(--display);
+  font-size: 24px;
+  color: var(--primary);
+  line-height: 1.15;
+  margin-top: 30px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+}
+.pressure-product-type {
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+.pressure-site .pressure-product-card .machine-image {
+  background: transparent;
+  height: auto;
+  aspect-ratio: auto;
+}
+.pressure-site .pressure-product-card .machine-image img {
+  height: auto;
+  aspect-ratio: 900 / 560;
+}
+.pressure-site .pressure-product-card h3 {
+  font-family: var(--display);
+  font-size: 31px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-block: 8px;
+}
+.pressure-site .pressure-product-card .machine-category {
+  display: block;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--muted);
+  min-height: 48px;
+}
+.pressure-site .pressure-product-card .sample-tag {
+  display: inline;
+}
+.pressure-site .pressure-product-card .machine-card-body {
+  padding-top: 13px;
+}
+.pressure-guide-callout {
+  padding-block: 40px;
+  background: var(--brand-soft);
+  border-top: 1px solid var(--border);
+}
+.pressure-guide-callout h2 {
+  margin-block: 6px 8px;
+}
+.pressure-guide-callout .button {
+  flex-shrink: 0;
+}
+.pressure-product-hero {
+  background: var(--stage);
+  color: var(--stage-ink);
+  padding-block: 12px 45px;
+  border-bottom: 3px solid var(--accent);
+}
+.pressure-product-hero .breadcrumbs {
+  color: var(--stage-muted);
+}
+.pressure-product-overview {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 55px;
+  padding-top: 20px;
+  align-items: center;
+}
+.pressure-product-media {
+  min-width: 0;
+}
+.pressure-product-summary .pressure-product-type {
+  color: var(--stage-accent);
+}
+.pressure-product-summary h1 {
+  font-family: var(--hero-display);
+  font-weight: 400;
+  font-size: clamp(45px, 5.2vw, 76px);
+  line-height: 1.08;
+  margin-block: 20px 15px;
+}
+.pressure-product-lead {
+  color: var(--stage-ink);
+  font-size: 25px;
+  line-height: 1.3;
+}
+.pressure-product-description {
+  color: var(--stage-muted);
+  margin-top: 22px;
+}
+.pressure-preview-note,
+.pressure-availability {
+  font-size: 13px;
+  color: var(--stage-muted);
+  margin-top: 22px;
+}
+.pressure-product-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.pressure-product-gallery button {
+  padding: 0;
+  border: 2px solid var(--stage-border);
+  background: var(--stage);
+  min-height: 44px;
+}
+.pressure-product-gallery button[aria-pressed='true'] {
+  border-color: var(--accent);
+}
+.pressure-product-gallery button img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 900 / 560;
+  object-fit: contain;
+}
+.pressure-product-information {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  padding-block: 55px;
+}
+.pressure-product-information h2 {
+  margin-block: 10px 22px;
+}
+.pressure-requirements {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pressure-requirements li {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  border-top: 1px solid var(--border);
+  padding-block: 15px;
+  font-size: 18px;
+}
+.pressure-requirements li span {
+  font-size: 11px;
+  color: var(--primary);
+}
+.pressure-data-pending {
+  padding: 22px;
+  border-left: 3px solid var(--accent);
+  background: var(--brand-soft);
+}
+.pressure-data-pending p {
+  margin-top: 10px;
+  color: var(--muted);
+}
+.pressure-other-products {
+  padding-block: 15px 55px;
+}
+.pressure-related-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 25px;
+}
+.pressure-site .pressure-related-grid .machine-card-compact {
+  display: block;
+}
+.pressure-site .pressure-related-grid .machine-card-compact .machine-image {
+  width: 100%;
+}
+.pressure-about-types {
+  display: flex;
+  flex-direction: column;
+}
+.pressure-about-types a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 62px;
+  padding-block: 15px;
+  border-bottom: 1px solid var(--border);
+}
+.pressure-about-types span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.pressure-about-types strong {
+  font-size: 24px;
+  font-family: var(--display);
+}
+.pressure-site .steel-reading .article-inline-image {
+  object-fit: contain;
+  background: var(--steel);
+}
+.pressure-site .about-callout {
+  background: var(--primary);
+}
+.pressure-not-found {
+  background: var(--stage);
+  color: var(--stage-ink);
+  overflow: hidden;
+}
+.pressure-not-found > .container {
+  position: relative;
+  min-height: 650px;
+  padding-block: 70px;
+}
+.pressure-not-found .eyebrow {
+  color: var(--stage-accent);
+}
+.pressure-not-found h1 {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(72px, 9vw, 130px);
+  margin-block: 25px;
+}
+.pressure-not-found p,
+.pressure-not-found .pressure-actions {
+  position: relative;
+  z-index: 2;
+}
+.pressure-not-found .text-link {
+  color: var(--stage-ink);
+}
+.pressure-not-found .pressure-artwork {
+  opacity: 0.4;
+  right: -8%;
+  top: 80px;
+}
+.pressure-review {
+  background: var(--stage);
+  color: var(--stage-ink);
+}
+.pressure-review-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  padding-block: 25px;
+  border-bottom: 1px solid var(--stage-border);
+}
+.pressure-review .text-link {
+  color: var(--stage-ink);
+}
+.pressure-review main {
+  padding-block: 40px;
+}
+.pressure-review .eyebrow {
+  color: var(--stage-accent);
+}
+.pressure-review h1 {
+  font-family: var(--hero-display);
+  font-weight: 400;
+  font-size: clamp(38px, 6vw, 75px);
+  margin-block: 15px;
+}
+.pressure-review main > p {
+  max-width: 760px;
+  color: var(--stage-muted);
+  margin-block: 15px;
+}
+.pressure-review-stage {
+  position: relative;
+  margin-top: 30px;
+  aspect-ratio: 16 / 8;
+  overflow: hidden;
+  border: 1px solid var(--stage-border);
+}
+.pressure-review-stage .metal-headline {
+  z-index: 2;
+  top: 36%;
+}
+.pressure-review-stage .pressure-artwork {
+  width: 60%;
+  top: 1%;
+  right: 2%;
+  opacity: 0.6;
+}
+.pressure-site .steel-loader .pressure-artwork {
+  width: min(70vw, 72vh);
+  top: 10%;
+  right: 5%;
+  opacity: 0.7;
+}
+.pressure-site .steel-loader .metal-headline {
+  z-index: 2;
+  top: 33%;
+}
+.pressure-site .steel-loader-status {
+  width: 35%;
+}
+@keyframes pressure-settle {
+  from {
+    transform: rotate(-38deg);
+    opacity: 0.3;
+  }
+  to {
+    transform: rotate(0);
+    opacity: 1;
+  }
+}
+@media (max-width: 1100px) {
+  .pressure-hero-inner {
+    min-height: 590px;
+  }
+  .pressure-family {
+    padding-inline: 12px;
+  }
+  .pressure-family h3 {
+    font-size: 26px;
+  }
+  .pressure-family > p {
+    font-size: 15px;
+    min-height: 85px;
+  }
+}
+@media (max-width: 900px) {
+  .pressure-hero-inner {
+    min-height: 760px;
+    padding-top: 23px;
+  }
+  .pressure-hero h1.metal-title {
+    font-size: clamp(84px, 19vw, 170px);
+    margin-top: 14px;
+  }
+  .pressure-hero-copy {
+    width: 100%;
+    padding-top: 15px;
+  }
+  .pressure-signature {
+    font-size: 36px;
+  }
+  .pressure-hero-description {
+    font-size: 19px;
+    max-width: 430px;
+  }
+  .pressure-hero .pressure-artwork {
+    width: 360px;
+    top: auto;
+    bottom: 62px;
+    right: 6%;
+    opacity: 0.85;
+  }
+  .pressure-artwork-label {
+    font-size: 7px;
+  }
+  .pressure-family-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px 20px;
+  }
+  .pressure-family {
+    padding: 0 0 20px;
+    border: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .pressure-family:last-child {
+    grid-column: 1 / -1;
+    max-width: calc(50% - 10px);
+  }
+  .pressure-family > p {
+    min-height: 46px;
+  }
+  .pressure-family .photography-pending {
+    font-size: 11px;
+  }
+  .pressure-family h3 {
+    font-size: 30px;
+  }
+  .pressure-brand-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .pressure-brand-copy p {
+    font-size: 19px;
+  }
+  .pressure-families,
+  .pressure-brand-section {
+    padding-block: 40px;
+  }
+  .pressure-product-overview {
+    gap: 28px;
+  }
+  .pressure-product-summary h1 {
+    font-size: 45px;
+  }
+  .pressure-product-lead {
+    font-size: 21px;
+  }
+  .pressure-product-information {
+    gap: 30px;
+  }
+  .pressure-related-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 700px) {
+  .pressure-site .steel-intro {
+    min-height: 240px;
+  }
+  .pressure-site .steel-intro .metal-title {
+    font-size: clamp(51px, 13vw, 84px);
+  }
+  .pressure-site .steel-intro-subtitle {
+    max-width: 100%;
+    font-size: 23px;
+  }
+  .pressure-hero-inner {
+    min-height: 755px;
+  }
+  .pressure-kicker {
+    font-size: 10px;
+  }
+  .pressure-hero h1.metal-title {
+    font-size: 19.5vw;
+    letter-spacing: -0.02em;
+  }
+  html:lang(tr) .pressure-hero h1.metal-title {
+    font-size: 24vw;
+  }
+  .pressure-signature {
+    font-size: 31px;
+  }
+  .pressure-hero-copy {
+    padding-top: 24px;
+  }
+  .pressure-hero-description {
+    font-size: 18px;
+  }
+  .pressure-actions {
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .pressure-actions .button {
+    min-height: 48px;
+    padding: 12px 17px;
+  }
+  .pressure-actions .text-link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .pressure-hero .pressure-artwork {
+    width: 315px;
+    bottom: 65px;
+    right: calc(50% - 157px);
+  }
+  .pressure-scene-caption {
+    font-size: 8px;
+    bottom: 22px;
+  }
+  .pressure-family-grid {
+    gap: 25px 15px;
+  }
+  .pressure-family h3 {
+    font-size: 27px;
+  }
+  .pressure-family > p {
+    font-size: 15px;
+    min-height: 64px;
+  }
+  .pressure-family-number {
+    font-size: 9px;
+  }
+  .pressure-family-link {
+    font-size: 13px;
+  }
+  .pressure-family .photography-pending {
+    font-size: 9px;
+  }
+  .pressure-contact-band > div,
+  .pressure-guide-callout > div {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .pressure-contact-band h2 {
+    font-size: 32px;
+  }
+  .pressure-product-overview {
+    grid-template-columns: 1fr;
+    gap: 29px;
+  }
+  .pressure-product-summary h1 {
+    font-size: 49px;
+  }
+  .pressure-product-hero {
+    padding-bottom: 32px;
+  }
+  .pressure-product-information {
+    grid-template-columns: 1fr;
+    gap: 38px;
+    padding-block: 35px;
+  }
+  .pressure-product-summary .pressure-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .pressure-product-summary .button {
+    width: 100%;
+  }
+  .pressure-related-grid {
+    gap: 24px 15px;
+  }
+  .pressure-site .pressure-product-card h3 {
+    font-size: 27px;
+  }
+  .pressure-site .pressure-related-grid .photography-pending {
+    font-size: 9px;
+  }
+  .pressure-site .steel-loader .pressure-artwork {
+    width: 85%;
+    top: 35%;
+    right: 7.5%;
+  }
+  .pressure-site .steel-loader .metal-headline {
+    top: 25%;
+  }
+  .pressure-site .steel-loader-status {
+    width: 65%;
+    bottom: 20%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pressure-rotor {
+    animation: none;
+  }
+}
+@media (forced-colors: active) {
+  .pressure-hero h1.metal-title {
+    color: CanvasText;
+    background: none;
+    -webkit-text-fill-color: CanvasText;
+  }
+  .pressure-family,
+  .pressure-data-pending {
+    border: 1px solid CanvasText;
+  }
+}
+.product-source-label {
+  color: var(--primary);
+  font-size: 13px;
+  margin-top: 9px;
+}
+.product-photo-credit {
+  color: var(--stage-muted);
+  font-size: 12px;
+  margin-top: 12px;
+}
+.product-more-photos {
+  margin-top: 15px;
+  color: var(--stage-ink);
+}
+.product-more-photos summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding-block: 10px;
+}
+.product-reference,
+.product-configuration-table {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.product-reference {
+  padding: 25px;
+  background: var(--brand-soft);
+  border-left: 3px solid var(--primary);
+}
+.pressure-site .product-reference h2 {
+  color: var(--primary);
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+.product-reference p + p {
+  margin-top: 12px;
+}
+.product-reference a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.product-configuration-table table {
+  min-width: 650px;
+}
+.product-configuration-table th {
+  white-space: normal;
+}
+.pressure-product-summary h1,
+.pressure-site .pressure-product-card h3 {
+  overflow-wrap: anywhere;
+}
+.pressure-site .pressure-product-card .machine-card-labels {
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.pressure-site .pressure-product-card .sample-tag {
+  margin-left: 0;
+}
+.catalogue-results {
+  scroll-margin-top: 110px;
+  min-width: 0;
+}
+.catalogue-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-block: 32px;
+}
+.catalogue-pagination[hidden] {
+  display: none;
+}
+.catalogue-pagination button {
+  min-height: 44px;
+}
+.catalogue-pagination button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.catalogue-pagination span {
+  text-align: center;
+  font-size: 14px;
+}
+@media (max-width: 700px) {
+  .catalogue-pagination {
+    gap: 8px;
+  }
+  .catalogue-pagination .button {
+    padding: 10px;
+    font-size: 13px;
+  }
+  .catalogue-pagination span {
+    font-size: 12px;
+  }
+  .product-reference {
+    padding: 20px;
+  }
+}

@@ -26,18 +26,8 @@
   top: 7%;
   display: flex;
   align-items: center;
-  gap: 1cqw;
   z-index: 5;
-  font: 400 clamp(20px, 2cqw, 32px)/1 var(--hero-display);
-  letter-spacing: 0.025em;
-}
-.steel-loader-brand span {
-  width: 1.5cqw;
-  min-width: 15px;
-  height: 1.8cqw;
-  min-height: 20px;
-  background: currentColor;
-  clip-path: polygon(38% 0, 100% 0, 62% 100%, 0 100%);
+  width: clamp(190px, 21cqw, 310px);
 }
 .steel-loader-corner {
   position: absolute;

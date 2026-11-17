@@ -1,16 +1,16 @@
 /* Machine Theatre is the expressive home variant. Catalogue and contact stay light. */
 :root {
   --hero-display: 'Anton', 'Arial Narrow', sans-serif;
-  --stage: #11171c;
-  --stage-ink: #edf0f2;
-  --stage-muted: #bdc6cf;
-  --stage-silver: #d1d5d8;
-  --stage-border: #454e59;
-  --stage-menu: #29323b;
-  --stage-focus: #a9c2ff;
-  --stage-accent: #88aaff;
-  --stage-paper: #f5f7f9;
-  --stage-mobile: #111518;
+  --stage: #101c17;
+  --stage-ink: #f2f5f0;
+  --stage-muted: #bdcbc2;
+  --stage-silver: #dce3de;
+  --stage-border: #42594b;
+  --stage-menu: #1d3428;
+  --stage-focus: #b7df3b;
+  --stage-accent: #9bc900;
+  --stage-paper: #f6f8f5;
+  --stage-mobile: #101815;
 }
 .theatre-page .preview-strip {
   background: var(--stage);
@@ -20,9 +20,9 @@
   color: var(--stage-muted);
 }
 .theatre-page .site-header {
-  background: var(--stage);
-  color: var(--stage-ink);
-  border-bottom-color: transparent;
+  background: var(--background);
+  color: var(--primary);
+  border-bottom-color: var(--border);
 }
 .theatre-page .header-quote {
   min-width: 166px;
@@ -30,23 +30,25 @@
 }
 .theatre-page .wordmark:hover,
 .theatre-page #primary-nav a:hover {
-  color: white;
+  color: var(--primary-hover);
 }
 .theatre-page #primary-nav a:hover {
   text-decoration: underline;
   text-underline-offset: 7px;
 }
 .theatre-page .languages a {
-  color: var(--stage-muted);
+  color: var(--muted);
 }
 .theatre-page .languages > span:first-child {
-  color: var(--stage-accent);
+  color: var(--primary);
 }
 .theatre-page .menu-toggle {
-  background: var(--stage-menu);
-  color: var(--stage-ink);
+  background: var(--brand-soft);
+  color: var(--primary);
 }
-.theatre-page .site-header :focus-visible,
+.theatre-page .site-header :focus-visible {
+  outline-color: var(--primary);
+}
 .theatre-hero :focus-visible {
   outline-color: var(--stage-focus);
 }
@@ -354,11 +356,11 @@ html:lang(tr) .theatre-content h1 {
 }
 @media (max-width: 900px) {
   .theatre-page #primary-nav {
-    background: var(--stage);
-    border-color: var(--stage-border);
+    background: var(--background);
+    border-color: var(--border);
   }
   .theatre-page #primary-nav a {
-    border-color: var(--stage-border);
+    border-color: var(--border);
   }
   .theatre-hero {
     height: 530px;

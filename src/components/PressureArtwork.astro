@@ -1,0 +1,61 @@
+---
+import brand from '../data/brand.json';
+interface Props {
+  id: string;
+  compact?: boolean;
+}
+const { id, compact = false } = Astro.props;
+const ticks = Array.from({ length: 48 }, (_, index) => index * 7.5);
+---
+
+<div class:list={['pressure-artwork', { 'pressure-artwork-compact': compact }]} aria-hidden="true">
+  <svg viewBox="0 0 640 640" fill="none" focusable="false">
+    <defs>
+      <linearGradient
+        id={`${id}-metal`}
+        x1="100"
+        y1="80"
+        x2="535"
+        y2="560"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#edf2ed" />
+        <stop offset=".24" stop-color="#586e60" />
+        <stop offset=".49" stop-color="#dce3de" />
+        <stop offset=".51" stop-color="#304c3d" />
+        <stop offset=".8" stop-color="#a6b5ab" />
+        <stop offset="1" stop-color="#526c5d" />
+      </linearGradient>
+    </defs>
+    <circle cx="320" cy="320" r="294" stroke="#526d5c" stroke-width="1" />
+    <circle cx="320" cy="320" r="268" stroke={`url(#${id}-metal)`} stroke-width="24" />
+    <circle cx="320" cy="320" r="244" stroke="#213e2e" stroke-width="1" />
+    <g class="pressure-rotor">
+      {ticks.map((angle) => (
+        <path
+          d="M320 92V104"
+          stroke="#8eaa98"
+          stroke-width="2"
+          transform={`rotate(${angle} 320 320)`}
+        />
+      ))}
+      <circle
+        cx="320"
+        cy="320"
+        r="228"
+        stroke="#9bc900"
+        stroke-width="4"
+        stroke-dasharray="260 1173"
+        transform="rotate(-92 320 320)"
+      />
+    </g>
+    <circle cx="320" cy="320" r="195" stroke="#466552" stroke-width="1" />
+    <circle cx="320" cy="320" r="185" stroke="#223e2d" stroke-width="16" />
+    <path d="M320 13V49M320 591V627M13 320H49M591 320H627" stroke="#6a8774" />
+    <g transform="translate(193 230) scale(.78)">
+      <path d="M48 0H327L284 64H0ZM74 154H221L178 218H33Z" fill={`url(#${id}-metal)`} />
+      <path d="M122 78H270L228 140H83Z" fill="#9bc900" />
+    </g>
+  </svg>
+  <span class="pressure-artwork-label">TECHNICSAN / {brand.slogan}</span>
+</div>

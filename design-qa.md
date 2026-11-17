@@ -76,3 +76,34 @@ Company details, approved actual stock imagery/specifications, reviewed bilingua
 ## Subsequent GitHub Pages preview
 
 The owner later authorized a public `Machina` repository and GitHub-only hosting. That preview is now deployed; the earlier launch-boundary statement above describes the initial implementation review. Native route/public image helpers and Astro's base setting preserve `/Machina/` paths. The hosted form clearly disables sending and contact-data inputs, while local development keeps its sample storage flow. All 18 unit tests, the repository-prefixed build and GitHub's six website browser workflows passed. The source and deployed preview remain distinct from the unconfigured full company launch. See `docs/VERIFICATION.md` for deployment scope and editor dependency maintenance.
+
+## TECHNICSAN rebrand — 17 November 2026
+
+Replaced the provisional identity with the owner's TECHNICSAN logo and its fixed English slogan. Vector lockups preserve the supplied letterforms; a white header, forest-green controls, lime accents and subtle emblem-derived diagonal rules extend across the bilingual page templates and opening animation. The approved steel title composition, sample labels, working catalogue and launch boundaries remain in place. No repeated black footer was introduced.
+
+Local verification: Astro/TypeScript reports zero errors, warnings or hints; all 18 unit/backend tests pass. The six existing browser scenarios pass using the installed Microsoft Edge, including enquiry validation/storage, retry behavior, catalogue filters, language switching, mobile navigation and WCAG A/AA axe scans. The build produces 57 pages and verifies 1,604 internal link/asset references, JSON-LD and reciprocal language links. Manual in-app browser review covered the desktop homepage, catalogue and new-model detail, plus the Turkish mobile homepage, mobile navigation and selected steel intro. No horizontal overflow was observed at the reviewed 390px viewport. The screenshot scenario now waits for the first-visit intro to close so its homepage evidence shows the page itself.
+
+Branding work was performed in the local repository. Hosting, DNS and public deployment were not changed.
+
+## Approved five-type catalogue — 17 November 2026
+
+The owner fixed the product scope to Cement bulker, LPG catalog, Compressors, Mixers and Silos, in that order, and requested a pressure-centred identity. These types now replace all rendered construction-equipment examples and the new/used discovery split. The shared taxonomy drives the homepage, product/category pages, filters, bilingual routes, enquiry selection and editor choices. Validation rejects an additional or missing category.
+
+The homepage and selected steel intro now use the silver TECHNICSAN lettering and abstract pressure/emblem artwork. All five image areas are explicitly marked as photography placeholders. No real models, technical figures, prices or stock availability were invented. Empty specification arrays are accepted only for sample previews; verified models require actual technical data. Product image arrays support the next photography stage and working gallery controls. Product enquiries use the public `product` URL parameter while retaining the existing private API/database field for compatibility.
+
+Verification completed: 19 unit/backend tests; all six browser scenarios, including five-type filters, Turkish/English product equivalents, enquiry context removal and submission, mobile navigation, image loading and WCAG A/AA axe scans. The scan's placeholder-link accessible-name mismatch was corrected. Manual review covered the desktop homepage/catalogue and compressor detail, the 390px product view, and all five Turkish family labels at 320px without horizontal overflow or missing eager images. TypeScript checks pass for both website and Studio. The final build contains 43 pages and 1,113 verified internal link/asset references, valid JSON-LD, reciprocal language links and preview indexing exclusion. No production deployment or service/account changes were made.
+
+## Manufacturer reference catalogue — 17 November 2026
+
+- Imported 155 source-referenced entries across exactly five categories, with 416 optimized source images (about 19.6 MiB total). Preserved manufacturer identity, source links, image credits and pending review/permission states.
+- Added bilingual product galleries, an NTK configuration matrix, product enquiry grouping, source-code/manufacturer search and 24-item pagination with language/filter state preservation. Earlier product-family URLs redirect to the matching category pages.
+- Source exceptions and excluded rows are recorded in docs/REFERENCE-IMPORT.md and docs/reference-import.json. One unavailable source image has a labelled placeholder. Five repeated NTK matrices are withheld from unrelated mixer families.
+- Passed 21 functional/backend checks, 8 browser checks, Studio type checks and the static build. Build verified 353 generated pages and 14,899 internal link/asset references. Extended accessibility checks cover NTK's table and Turkish component pages, with no reported violations.
+- Inspected the final desktop catalogue and homepage; mobile product tables and navigation checked at 390px. Final screenshot: test-results/catalogue-desktop.png. Local preview remains available on port 4332. No external deployment or Sanity document publication performed.
+
+## TECHNICSAN-only presentation — 17 November 2026
+
+- Removed displayed supplier names/credits, external supplier brochures and source panels. Neutral product IDs, URLs and image filenames replace source-company prefixes; 310 former bilingual product URLs redirect to their matching neutral pages.
+- Original source records, source credits, all imported image pixels and the public-to-original mapping are preserved in ignored `.local/catalogue-provenance/`, outside version control and the public build. Restoring source-image optimization writes only into that private archive.
+- Kept 80 inspected images without visible company names; 76 entries use labelled image placeholders for branded, uncertain or unavailable source images. No manufacturer marks were relabelled as TECHNICSAN. All 155 entries and the exact five-category structure remain.
+- Passed 22 functional/backend checks, 8 browser checks, Studio checks and a 663-page build (including legacy redirects). Verified 14,647 internal references, reciprocal language links and valid JSON-LD. A full HTML audit, including redirect bodies, found no source-company names. Public source image directory and private archive are absent from the build.

@@ -1,4 +1,5 @@
 import { defineType, defineField, defineArrayMember } from 'sanity';
+import { productTypes } from '../src/data/product-types';
 const required = (rule: any) => rule.required();
 const localeFields = (type: string) =>
   ['tr', 'en'].map((code) =>
@@ -88,7 +89,7 @@ const spec = defineType({
 });
 const machineImage = defineType({
   name: 'machineImage',
-  title: 'Machine photograph',
+  title: 'Product photograph',
   type: 'image',
   options: { hotspot: true },
   fields: [
@@ -101,9 +102,24 @@ const machineImage = defineType({
     defineField({
       name: 'illustrative',
       type: 'boolean',
-      title: 'Illustrative image (not the actual unit)',
+      title: 'Illustrative or placeholder image',
       initialValue: true,
       validation: required,
+    }),
+    defineField({
+      name: 'placeholder',
+      title: 'Temporary photography placeholder',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({ name: 'sourceUrl', title: 'Original photograph URL', type: 'url' }),
+    defineField({ name: 'credit', title: 'Photograph credit', type: 'string' }),
+    defineField({
+      name: 'rightsStatus',
+      title: 'Photograph reuse permission',
+      type: 'string',
+      options: { list: ['pending', 'approved'] },
+      initialValue: 'pending',
     }),
   ],
 });
@@ -153,7 +169,14 @@ const machineFields = (used: boolean) => [
     name: 'specs',
     type: 'array',
     of: [{ type: 'spec' }],
-    validation: (rule) => rule.required().min(1),
+    validation: (rule) =>
+      rule
+        .required()
+        .custom((items, context) =>
+          context.document?.sample || (Array.isArray(items) && items.length > 0)
+            ? true
+            : 'Add verified product specifications before publishing',
+        ),
   }),
   defineField({
     name: 'images',
@@ -169,43 +192,117 @@ const machineFields = (used: boolean) => [
   }),
   defineField({
     name: 'source',
-    title: 'Public source / manufacturer reference',
-    description: 'Shown on the website. Never enter private notes or personal information.',
+    title: 'Internal technical reference',
+    description:
+      'Not displayed on product pages. Keep restricted documentation in the private archive, outside the public dataset.',
     type: 'string',
     validation: required,
   }),
+  defineField({
+    name: 'reference',
+    title: 'Manufacturer source and review',
+    type: 'object',
+    fields: [
+      defineField({ name: 'publisher', type: 'string', validation: required }),
+      defineField({ name: 'url', type: 'url', validation: required }),
+      defineField({ name: 'retrievedAt', type: 'date', validation: required }),
+      defineField({
+        name: 'reviewStatus',
+        type: 'string',
+        options: { list: ['pending', 'approved'] },
+        initialValue: 'pending',
+        validation: required,
+      }),
+      defineField({ name: 'notes', type: 'localeText' }),
+      defineField({ name: 'section', title: 'Source catalogue row', type: 'string' }),
+      defineField({ name: 'originalLabel', title: 'Original source label', type: 'string' }),
+    ],
+  }),
+  defineField({
+    name: 'specificationTable',
+    title: 'Configuration comparison table',
+    type: 'object',
+    fields: [
+      defineField({
+        name: 'columns',
+        type: 'array',
+        of: [{ type: 'string' }],
+        validation: (rule) => rule.required().min(1),
+      }),
+      defineField({
+        name: 'rows',
+        type: 'array',
+        of: [
+          {
+            type: 'object',
+            fields: [
+              defineField({ name: 'label', type: 'localeString', validation: required }),
+              defineField({
+                name: 'values',
+                type: 'array',
+                of: [{ type: 'string' }],
+                validation: required,
+              }),
+            ],
+          },
+        ],
+        validation: (rule) => rule.required().min(1),
+      }),
+    ],
+  }),
   sample(),
+  defineField({
+    name: 'technicalReview',
+    title: 'Technical review',
+    type: 'string',
+    options: { list: ['pending', 'approved'] },
+    initialValue: 'pending',
+  }),
   published(),
 ];
 const preview = { select: { title: 'name.en', subtitle: 'model', media: 'images.0' } };
 const newModel = defineType({
   name: 'newModel',
-  title: 'New machine models',
+  title: 'Products',
   type: 'document',
   fields: machineFields(false),
   preview,
 });
 const usedMachine = defineType({
   name: 'usedMachine',
-  title: 'Used machine listings',
+  title: 'Legacy used-product records',
   type: 'document',
   fields: machineFields(true),
   preview,
 });
 const category = defineType({
   name: 'category',
-  title: 'Categories',
+  title: 'Product types (fixed five)',
   type: 'document',
   fields: [
-    id(),
+    defineField({
+      name: 'id',
+      title: 'Approved product type',
+      type: 'string',
+      options: { list: productTypes.map((type) => ({ title: type.name.en, value: type.id })) },
+      validation: (rule) =>
+        rule
+          .required()
+          .regex(new RegExp('^(' + productTypes.map((type) => type.id).join('|') + ')$')),
+    }),
     slug(),
     defineField({ name: 'name', type: 'localeString', validation: required }),
     defineField({ name: 'description', type: 'localeText', validation: required }),
     defineField({
+      name: 'requirements',
+      title: 'Information to discuss with the buyer',
+      type: 'localizedList',
+    }),
+    defineField({
       name: 'icon',
       type: 'string',
-      options: { list: ['excavator', 'loader', 'roller', 'crane', 'bucket'] },
-      initialValue: 'excavator',
+      options: { list: productTypes.map((type) => type.id) },
+      initialValue: 'cement-bulker',
       validation: required,
     }),
   ],
@@ -298,7 +395,13 @@ const siteSettings = defineType({
   title: 'Company & launch settings',
   type: 'document',
   fields: [
-    defineField({ name: 'name', title: 'Display name', type: 'string', validation: required }),
+    defineField({
+      name: 'name',
+      title: 'Display name',
+      type: 'string',
+      initialValue: 'TECHNICSAN',
+      validation: required,
+    }),
     defineField({ name: 'legalName', title: 'Verified company name', type: 'string' }),
     defineField({ name: 'about', title: 'Approved company description', type: 'localeText' }),
     defineField({ name: 'privacyNotice', title: 'Approved privacy notice', type: 'localeText' }),

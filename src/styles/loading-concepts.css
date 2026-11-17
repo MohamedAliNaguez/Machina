@@ -407,24 +407,24 @@
   top: 19%;
 }
 .technical {
-  color: #2156d9;
+  color: var(--primary);
 }
 .technical .construction-lines {
   display: block;
   stroke: #b8c5d2;
 }
 .technical .machine-geometry {
-  stroke: #2156d9;
+  stroke: var(--primary);
   stroke-width: 1.8;
 }
 .technical .machine-geometry path,
 .technical .machine-geometry circle {
   fill: transparent;
-  stroke: #2156d9;
+  stroke: var(--primary);
   stroke-width: 1.8;
 }
 .technical .tread-detail {
-  color: #2156d9;
+  color: var(--primary);
 }
 .technical .rig-hose,
 .technical .rig-window {

@@ -4,7 +4,7 @@ export const onRequest: PagesFunction<{ ENVIRONMENT?: string }> = async (context
   const headers = new Headers(response.headers);
   if (
     context.env.ENVIRONMENT !== 'production' ||
-    (url.search && /\/(machines|makineler|categories|kategoriler)\//.test(url.pathname))
+    (url.search && /\/(products|urunler|categories|kategoriler)\//.test(url.pathname))
   )
     headers.set('X-Robots-Tag', 'noindex, follow');
   headers.set('X-Content-Type-Options', 'nosniff');

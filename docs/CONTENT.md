@@ -1,40 +1,39 @@
 # Content and launch requirements
 
-## Ownership
+## Approved product scope
 
-The current company identity is provisional. Ankara is confirmed; no street address, represented brands, dealership authorisation, customer names, credentials or performance claims have been supplied. Do not infer them from reference websites. All 12 supplied machine listings are fabricated design fixtures, not stock. Their technical values must never be used in an actual quotation.
+TECHNICSAN has exactly five product types, in this order:
 
-## Product collection checklist
+| Stable ID     | English       | Turkish          | English product route       |
+| ------------- | ------------- | ---------------- | --------------------------- |
+| cement-bulker | Cement bulker | Çimento silobası | /en/products/cement-bulker/ |
+| lpg-catalog   | LPG catalog   | LPG kataloğu     | /en/products/lpg-catalog/   |
+| compressors   | Compressors   | Kompresörler     | /en/products/compressors/   |
+| mixers        | Mixers        | Mikserler        | /en/products/mixers/        |
+| silos         | Silos         | Silolar          | /en/products/silos/         |
 
-For every new model: stable reference, actual brand/model, category, approved model photographs and image descriptions, configurations, manufacturer-supported specifications, intended applications, source reference, brochure if licensed, and reviewed Turkish/English descriptions.
+`src/data/product-types.ts` owns these types and their buyer-requirement prompts. Content validation rejects a sixth or missing type. Sanity's category picker uses the same approved IDs. The reference catalogue contains 155 imported entries in `src/data/catalogue-products.json`. Original source publishers, URLs, retrieval dates and image credits are retained privately under `.local/catalogue-provenance/`. The public catalogue uses neutral product URLs and image filenames. These are manufacturer-reference entries, not confirmed TECHNICSAN stock listings. See REFERENCE-IMPORT.md for import coverage and exceptions. The English label **LPG catalog** is retained exactly as requested by the owner.
 
-For every used unit: all relevant model facts plus unique listing reference, manufacturing year, actual operating hours, current photographs of the specific machine, inspection/condition information, available maintenance records and available/reserved/sold status. Do not substitute generic brand photographs for actual unit photography.
+## Approve imported products and replace source photographs
 
-The source field is publicly displayed. Put public manufacturer/reference information there, never internal notes or personal information. Keep private inspections or documents outside the public dataset unless approved for publication.
+For each actual product, supply its approved bilingual name, genuine model reference, one of the five category references, current model photographs, bilingual image descriptions, private source reference, applications, verified specifications and a brochure if approved for public use. Document image rights and whether a photograph shows the exact product or an illustrative configuration.
 
-## Editorial workflow
+Replace `images` with the approved files or Sanity image assets. Set `placeholder: false`; set `illustrative: false` only for genuine approved product photography. Product galleries render from the image array. Do not substitute old excavator/loader images or generated product renderings for real photos.
 
-Use the Sanity draft state and Bilingual preview. A content owner checks facts, technical terminology, photograph rights and translations before publishing. Each article needs an actual author/reviewer and a review date for live builds. Reference technical claims through the sources list. Do not create fictitious reviews, ratings or generic city landing pages.
+Only publish technical details supported by the actual model documentation. Relevant fields can include pressure, capacity, dimensions, material, drive and interfaces, depending on the product. Do not assume every mixer or silo is pressurised. The requirement prompts are enquiry questions, not specifications or engineering instructions. Leave specifications empty in labelled previews rather than inventing numbers. Verified product records must include real specifications.
 
-Machine facts are shared across languages; names, descriptions, image descriptions, article text and slugs are translated. The `published` field selects public locales. The build rejects missing content for enabled locales. Categories currently require both languages because the launch navigation is bilingual.
+Product and category pages use `/en/products/`, `/tr/urunler/`, `/en/categories/` and `/tr/kategoriler/`. General catalogue filters use product type and text search. The former construction categories and new/used split are retired. Do not redirect former excavator pages to unrelated pressure products.
 
-## Search strategy
+## Ownership and editorial review
 
-Category pages own broad equipment intent. Model pages own brand/model intent. Individual used listings own unit-specific information. Guides answer actual buyer questions and link to those categories. Gather search vocabulary from real customer enquiries and Search Console after launch.
+The TECHNICSAN name/logo, Ankara location and five product types were supplied by the owner. Legal company details, exact address, contact channels, represented brands, certifications, history, customer names and business claims remain unverified. Do not infer these from reference sites.
 
-Search/filter URLs canonicalise to the base page and receive `noindex` metadata; Cloudflare middleware also adds `X-Robots-Tag` on filtered catalogue/category requests. Curated category pages have independent URLs and descriptions. No schema includes invented prices, reviews or offers. Basic Product markup describes real equipment but does not guarantee Google product rich-result eligibility.
+The three buyer guides are labelled drafts about preparing enquiries, compressor requirements, and storage/mixing requirements. They do not contain operating pressures, safety procedures or technical settings. Before publication, add the actual author/reviewer, review date and sources supporting any technical claims. Review Turkish and English terminology and image rights. Do not invent reviews, prices or endorsements.
 
-Preserve useful sold-listing pages with a sold label and relevant alternatives. When retiring a page, use a directly relevant replacement or an intentional 404/410. Never redirect all retired products to the homepage. Record old slugs in Cloudflare redirect rules before changing published URLs.
+## Search and publishing
 
-## Launch gates
+Keep both language journeys complete, with reciprocal alternates, truthful descriptions, internal links and canonical URLs. Category pages own product-family intent; actual model pages own model intent. Filter combinations remain `noindex`. Unverified reference pages do not emit Product schema or prices; genuine verified products may emit truthful Product metadata.
 
-- Verified display/legal name, contact address/channels, company description and brand relationships.
-- Genuine hero photograph and individual product photographs with approved rights.
-- No `sample` documents or illustrative machine images in a live dataset.
-- Reviewed Turkish/English company and privacy copy in site settings; `privacyReviewed` set after company review.
-- Working enquiries, challenge keys, company-owned sender domain and sales destination.
-- Preview hosting access restriction for draft material. `noindex` is not access control.
-- Actual domain and canonical URL. Enable indexing only for the approved production build.
-- Search Console verification and sitemap submission by the domain owner.
+The pressure-centred brand hero uses abstract artwork, not a product photograph or a technical instrument reading. Public launch requires verified identity/contact/privacy copy, actual product content and photographs, working enquiry storage/notifications, challenge keys and the approved production domain. `noindex` is not access control. Authentication is required for private editorial drafts.
 
-Analytics is intentionally not installed. A local `enquiry:accepted` browser event exposes only language and machine ID, allowing an approved analytics integration later. Do not attach form values or personal information.
+The existing enquiry storage/API field `machineId` remains a compatibility detail. Visitor links use the `product` query parameter; legacy `machine` parameters are accepted. Never send personal form values to analytics.

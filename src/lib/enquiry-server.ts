@@ -182,8 +182,8 @@ export async function deliverEnquiry(id: string, env: EnquiryEnv, fetcher: typeo
         from: env.FROM_EMAIL,
         to: [env.SALES_EMAIL],
         ...(claimed.email ? { reply_to: claimed.email } : {}),
-        subject: `Machinery enquiry · ${claimed.machineId || 'General'} · ${claimed.language.toUpperCase()}`,
-        text: `Reference: ${id}\nName / company: ${claimed.name}\nEmail: ${claimed.email || 'Not supplied'}\nPhone: ${claimed.phone || 'Not supplied'}\nMachine: ${claimed.machineId || 'General'}\nLanguage: ${claimed.language}\n\n${claimed.message}`,
+        subject: `TECHNICSAN product enquiry · ${claimed.machineId || 'General'} · ${claimed.language.toUpperCase()}`,
+        text: `Reference: ${id}\nName / company: ${claimed.name}\nEmail: ${claimed.email || 'Not supplied'}\nPhone: ${claimed.phone || 'Not supplied'}\nProduct: ${claimed.machineId || 'General'}\nLanguage: ${claimed.language}\n\n${claimed.message}`,
       }),
       signal: AbortSignal.timeout(8000),
     });

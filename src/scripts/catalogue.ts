@@ -4,7 +4,7 @@ export function initCatalogue() {
   const tr = root.dataset.locale === 'tr';
   const search = root.querySelector<HTMLInputElement>('#machine-search')!;
   const clear = root.querySelector<HTMLButtonElement>('[data-clear-search]')!;
-  const filters = [...root.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-filter]')];
+  const filters = [...root.querySelectorAll<HTMLInputElement>('[data-filter="category"]')];
   const cards = [...root.querySelectorAll<HTMLElement>('[data-machine-card]')];
   const toggle = root.querySelector<HTMLButtonElement>('[data-filter-toggle]');
   const panel = root.querySelector<HTMLElement>('.filter-panel');
@@ -14,86 +14,54 @@ export function initCatalogue() {
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/ı/g, 'i');
-  const selectedValues = (key: string) =>
-    filters
-      .filter((f) => f.dataset.filter === key && (!(f instanceof HTMLInputElement) || f.checked))
-      .map((f) => f.value)
-      .filter(Boolean);
-  const get = (key: string) => selectedValues(key)[0] || '';
   let composing = false;
+  const pageSize = 24;
+  let currentPage = 1;
+  const pagination = root.querySelector<HTMLElement>('[data-pagination]')!;
+  const previous = root.querySelector<HTMLButtonElement>('[data-page-previous]')!;
+  const next = root.querySelector<HTMLButtonElement>('[data-page-next]')!;
   function readUrl() {
     const params = new URLSearchParams(location.search);
     search.value = (params.get('q') || '').slice(0, 100);
-    filters.forEach((f) => {
-      const candidate = params.get(f.dataset.filter!) || '';
-      if (f instanceof HTMLInputElement) f.checked = candidate.split(',').includes(f.value);
-      else f.value = [...f.options].some((o) => o.value === candidate) ? candidate : '';
-    });
+    const selected = (params.get('category') || '').split(',');
+    filters.forEach((filter) => (filter.checked = selected.includes(filter.value)));
+    const requestedPage = Number(params.get('page') || 1);
+    currentPage = Number.isSafeInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
   }
-  function apply(persist = true) {
-    const used = get('kind') === 'used';
-    root!
-      .querySelectorAll<HTMLElement>('[data-used-filter]')
-      .forEach((field) => (field.hidden = !used));
-    if (!used)
-      filters
-        .filter((f) => ['year', 'hours'].includes(f.dataset.filter!))
-        .forEach((f) => (f.value = ''));
-    const query = fold(search.value.trim()),
-      category = selectedValues('category');
-    let count = 0;
-    cards.forEach((card) => {
-      const d = card.dataset;
-      const matches =
-        (!query || fold(d.search || '').includes(query)) &&
-        (!get('kind') || d.kind === get('kind')) &&
-        (!category.length || category.includes(d.category || '')) &&
-        (!get('brand') || d.brand === get('brand')) &&
-        (!get('year') || Number(d.year) >= Number(get('year'))) &&
-        (!get('hours') || Number(d.hours) <= Number(get('hours')));
-      card.hidden = !matches;
-      if (matches) count++;
-    });
+  function apply(persist = true, resetPage = true) {
+    if (resetPage) currentPage = 1;
+    const query = fold(search.value.trim());
+    const categories = filters.filter((filter) => filter.checked).map((filter) => filter.value);
+    const matching = cards.filter(
+      (card) =>
+        (!query || fold(card.dataset.search || '').includes(query)) &&
+        (!categories.length || categories.includes(card.dataset.category || '')),
+    );
+    const count = matching.length;
+    const pageCount = Math.max(1, Math.ceil(count / pageSize));
+    currentPage = Math.min(currentPage, pageCount);
+    const displayed = new Set(matching.slice((currentPage - 1) * pageSize, currentPage * pageSize));
+    cards.forEach((card) => (card.hidden = !displayed.has(card)));
+    pagination.hidden = pageCount === 1;
+    previous.disabled = currentPage === 1;
+    next.disabled = currentPage === pageCount;
+    root!.querySelector('[data-page-status]')!.textContent = tr
+      ? `Sayfa ${currentPage} / ${pageCount}`
+      : `Page ${currentPage} of ${pageCount}`;
     root!.querySelector('[data-results-count]')!.textContent =
-      count +
-      ' ' +
-      (root!.dataset.samples === 'true'
-        ? tr
-          ? 'örnek ilan'
-          : 'sample listings'
-        : tr
-          ? 'makine'
-          : count === 1
-            ? 'machine'
-            : 'machines');
+      count + (tr ? ' sonuç' : count === 1 ? ' result' : ' results');
     root!.querySelector<HTMLElement>('[data-empty]')!.hidden = count !== 0;
     const current = root!.querySelector('[data-filter-current]');
     if (current)
-      current.textContent =
-        get('kind') === 'new'
-          ? tr
-            ? 'Yeni modeller'
-            : 'New models'
-          : used
-            ? tr
-              ? 'İkinci el makineler'
-              : 'Used machines'
-            : tr
-              ? 'Tüm makineler'
-              : 'All equipment';
-    root!
-      .querySelectorAll<HTMLButtonElement>('[data-kind-route]')
-      .forEach((button) =>
-        button.setAttribute('aria-pressed', String(button.dataset.kindRoute === get('kind'))),
-      );
+      current.textContent = categories.length
+        ? `${categories.length} ${tr ? 'ürün grubu seçildi' : 'product types selected'}`
+        : root!.dataset.fixedCategoryName || (tr ? 'Tüm ürünler' : 'All products');
     clear.hidden = !search.value;
     if (persist) {
       const params = new URLSearchParams();
       if (search.value.trim()) params.set('q', search.value.trim());
-      ['kind', 'category', 'brand', 'year', 'hours'].forEach((key) => {
-        const values = selectedValues(key);
-        if (values.length) params.set(key, values.join(','));
-      });
+      if (categories.length) params.set('category', categories.join(','));
+      if (currentPage > 1) params.set('page', String(currentPage));
       history.replaceState(null, '', location.pathname + (params.size ? '?' + params : ''));
       document
         .querySelector('meta[name="robots"]')
@@ -111,6 +79,15 @@ export function initCatalogue() {
       }
     }
   }
+  function changePage(delta: number) {
+    currentPage += delta;
+    apply(true, false);
+    const heading = root!.querySelector<HTMLElement>('.catalogue-results h2');
+    heading?.focus({ preventScroll: true });
+    root!.querySelector('.catalogue-results')?.scrollIntoView({ block: 'start' });
+  }
+  previous.addEventListener('click', () => changePage(-1));
+  next.addEventListener('click', () => changePage(1));
   const close = () => {
     toggle?.setAttribute('aria-expanded', 'false');
     panel?.classList.remove('is-open');
@@ -140,7 +117,7 @@ export function initCatalogue() {
       apply();
     }
   });
-  filters.forEach((f) => f.addEventListener('change', () => apply()));
+  filters.forEach((filter) => filter.addEventListener('change', () => apply()));
   clear.addEventListener('click', () => {
     search.value = '';
     apply();
@@ -148,28 +125,16 @@ export function initCatalogue() {
   });
   root.querySelectorAll('[data-reset]').forEach((button) =>
     button.addEventListener('click', () => {
-      filters.forEach((f) => {
-        if (f instanceof HTMLInputElement)
-          f.checked = f.dataset.filter === 'kind' && f.value === '';
-        else f.value = '';
-      });
+      filters.forEach((filter) => (filter.checked = false));
       search.value = '';
       apply();
       search.focus();
     }),
   );
-  root.querySelectorAll<HTMLButtonElement>('[data-kind-route]').forEach((button) =>
-    button.addEventListener('click', () => {
-      filters
-        .filter((f) => f.dataset.filter === 'kind' && f instanceof HTMLInputElement)
-        .forEach((f) => ((f as HTMLInputElement).checked = f.value === button.dataset.kindRoute));
-      apply();
-    }),
-  );
   window.addEventListener('popstate', () => {
     readUrl();
-    apply(false);
+    apply(false, false);
   });
   readUrl();
-  apply(false);
+  apply(false, false);
 }

@@ -1,0 +1,20 @@
+---
+import { withBase } from '../lib/paths';
+import brand from '../data/brand.json';
+interface Props {
+  variant?: 'default' | 'light';
+  class?: string;
+  decorative?: boolean;
+}
+const { variant = 'default', class: className, decorative = false } = Astro.props;
+---
+
+<img
+  class:list={['brand-logo', className]}
+  src={withBase(`/brand/technicsan${variant === 'light' ? '-light' : ''}.svg`)}
+  alt={decorative ? '' : 'TECHNICSAN — ' + brand.slogan}
+  width="1382"
+  height="231"
+  decoding="async"
+  fetchpriority="high"
+/>

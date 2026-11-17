@@ -29,8 +29,21 @@ async function walk(dir) {
 }
 const files = await walk('dist');
 const urls = [];
+const redirects = [];
 for (const file of files.filter((f) => f.endsWith('.html'))) {
-  const html = await readFile(file, 'utf8');
+  let html = await readFile(file, 'utf8');
+  const redirect = html.match(/http-equiv="refresh" content="0;url=([^\"]+)"/);
+  if (redirect && file !== 'dist/index.html') {
+    // Legacy route names remain technical aliases; never repeat retired supplier names in the page body.
+    html = html.replace(
+      /<body>[\s\S]*<\/body>/,
+      `<body><a href="${redirect[1]}">Continue to TECHNICSAN</a></body>`,
+    );
+    await writeFile(file, html);
+    const from =
+      (base === '/' ? '' : base) + '/' + file.replace(/^dist\//, '').replace(/index\.html$/, '');
+    redirects.push(`${from} ${redirect[1]} 301`);
+  }
   if (html.includes('content="index,follow"')) {
     const canonical = html.match(/rel="canonical" href="([^"]+)"/)?.[1];
     if (canonical) {
@@ -55,7 +68,10 @@ await writeFile(
   'dist/_headers',
   `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  Content-Security-Policy: default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://cdn.sanity.io; font-src 'self'; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'\n${live ? '' : '  X-Robots-Tag: noindex, follow\n'}`,
 );
-await writeFile('dist/_redirects', '/ ' + (base === '/' ? '' : base) + '/tr/ 302\n');
+await writeFile(
+  'dist/_redirects',
+  '/ ' + (base === '/' ? '' : base) + '/tr/ 302\n' + redirects.join('\n') + '\n',
+);
 if (hostedOnGitHub) {
   await writeFile('dist/.nojekyll', '');
   const { unlink } = await import('node:fs/promises');

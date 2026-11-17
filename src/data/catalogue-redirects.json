@@ -1,0 +1,1552 @@
+[
+  {
+    "locale": "tr",
+    "slug": "tedsan-v-type-silobas",
+    "productId": "v-type-silobas"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-v-type-silobas",
+    "productId": "v-type-silobas"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-semi-trailer",
+    "productId": "lpg-semi-trailer"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-semi-trailer",
+    "productId": "lpg-semi-trailer"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-bobtail",
+    "productId": "lpg-bobtail"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-bobtail",
+    "productId": "lpg-bobtail"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-dispenser-skid-system",
+    "productId": "lpg-dispenser-skid-system"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-dispenser-skid-system",
+    "productId": "lpg-dispenser-skid-system"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-scale-skid-system",
+    "productId": "lpg-scale-skid-system"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-scale-skid-system",
+    "productId": "lpg-scale-skid-system"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-bulk-storage-tank",
+    "productId": "lpg-bulk-storage-tank"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-bulk-storage-tank",
+    "productId": "lpg-bulk-storage-tank"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-domestic-tank",
+    "productId": "lpg-domestic-tank"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-domestic-tank",
+    "productId": "lpg-domestic-tank"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-vaporiser",
+    "productId": "lpg-vaporiser"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-vaporiser",
+    "productId": "lpg-vaporiser"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-silo-tank",
+    "productId": "silo-tank"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-silo-tank",
+    "productId": "silo-tank"
+  },
+  {
+    "locale": "tr",
+    "slug": "confidence-bnb-72-e",
+    "productId": "bnb-72-e"
+  },
+  {
+    "locale": "en",
+    "slug": "confidence-bnb-72-e",
+    "productId": "bnb-72-e"
+  },
+  {
+    "locale": "tr",
+    "slug": "confidence-bnb-72-d",
+    "productId": "bnb-72-d"
+  },
+  {
+    "locale": "en",
+    "slug": "confidence-bnb-72-d",
+    "productId": "bnb-72-d"
+  },
+  {
+    "locale": "tr",
+    "slug": "confidence-bnb-102-e",
+    "productId": "bnb-102-e"
+  },
+  {
+    "locale": "en",
+    "slug": "confidence-bnb-102-e",
+    "productId": "bnb-102-e"
+  },
+  {
+    "locale": "tr",
+    "slug": "confidence-bnb-102-d",
+    "productId": "bnb-102-d"
+  },
+  {
+    "locale": "en",
+    "slug": "confidence-bnb-102-d",
+    "productId": "bnb-102-d"
+  },
+  {
+    "locale": "tr",
+    "slug": "nt-yas-sistem-transmikser",
+    "productId": "wet-system"
+  },
+  {
+    "locale": "en",
+    "slug": "nt-wet-system",
+    "productId": "wet-system"
+  },
+  {
+    "locale": "tr",
+    "slug": "nt-hafifletilmis-transmikser",
+    "productId": "lightweight"
+  },
+  {
+    "locale": "en",
+    "slug": "nt-lightweight",
+    "productId": "lightweight"
+  },
+  {
+    "locale": "tr",
+    "slug": "nt-normed-mikser",
+    "productId": "normed-mixer"
+  },
+  {
+    "locale": "en",
+    "slug": "nt-normed-mixer",
+    "productId": "normed-mixer"
+  },
+  {
+    "locale": "tr",
+    "slug": "nt-semi-treyler-transmikser",
+    "productId": "semi-trailer"
+  },
+  {
+    "locale": "en",
+    "slug": "nt-semi-trailer",
+    "productId": "semi-trailer"
+  },
+  {
+    "locale": "tr",
+    "slug": "nt-tunel-tip-transmikser",
+    "productId": "tunnel-type"
+  },
+  {
+    "locale": "en",
+    "slug": "nt-tunnel-type",
+    "productId": "tunnel-type"
+  },
+  {
+    "locale": "tr",
+    "slug": "nt-ozel-uretim-transmikser",
+    "productId": "custom-production"
+  },
+  {
+    "locale": "en",
+    "slug": "nt-custom-production",
+    "productId": "custom-production"
+  },
+  {
+    "locale": "tr",
+    "slug": "unal-silos-25-30-50",
+    "productId": "silos-25-30-50"
+  },
+  {
+    "locale": "en",
+    "slug": "unal-silos-25-30-50",
+    "productId": "silos-25-30-50"
+  },
+  {
+    "locale": "tr",
+    "slug": "unal-silos-75-100-125",
+    "productId": "silos-75-100-125"
+  },
+  {
+    "locale": "en",
+    "slug": "unal-silos-75-100-125",
+    "productId": "silos-75-100-125"
+  },
+  {
+    "locale": "tr",
+    "slug": "unal-silos-150-200-250",
+    "productId": "silos-150-200-250"
+  },
+  {
+    "locale": "en",
+    "slug": "unal-silos-150-200-250",
+    "productId": "silos-150-200-250"
+  },
+  {
+    "locale": "tr",
+    "slug": "unal-silos-300-500",
+    "productId": "silos-300-500"
+  },
+  {
+    "locale": "en",
+    "slug": "unal-silos-300-500",
+    "productId": "silos-300-500"
+  },
+  {
+    "locale": "tr",
+    "slug": "unal-silos-500-1000",
+    "productId": "silos-500-1000"
+  },
+  {
+    "locale": "en",
+    "slug": "unal-silos-500-1000",
+    "productId": "silos-500-1000"
+  },
+  {
+    "locale": "tr",
+    "slug": "unal-silos-1000-2000",
+    "productId": "silos-1000-2000"
+  },
+  {
+    "locale": "en",
+    "slug": "unal-silos-1000-2000",
+    "productId": "silos-1000-2000"
+  },
+  {
+    "locale": "tr",
+    "slug": "unal-silos-2000-2500-3000",
+    "productId": "silos-2000-2500-3000"
+  },
+  {
+    "locale": "en",
+    "slug": "unal-silos-2000-2500-3000",
+    "productId": "silos-2000-2500-3000"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-1",
+    "productId": "lpg-part-1"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-1",
+    "productId": "lpg-part-1"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-2",
+    "productId": "lpg-part-2"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-2",
+    "productId": "lpg-part-2"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-3",
+    "productId": "lpg-part-3"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-3",
+    "productId": "lpg-part-3"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-4",
+    "productId": "lpg-part-4"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-4",
+    "productId": "lpg-part-4"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-5",
+    "productId": "lpg-part-5"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-5",
+    "productId": "lpg-part-5"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-6",
+    "productId": "lpg-part-6"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-6",
+    "productId": "lpg-part-6"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-7",
+    "productId": "lpg-part-7"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-7",
+    "productId": "lpg-part-7"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-9",
+    "productId": "lpg-part-9"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-9",
+    "productId": "lpg-part-9"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-10",
+    "productId": "lpg-part-10"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-10",
+    "productId": "lpg-part-10"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-11",
+    "productId": "lpg-part-11"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-11",
+    "productId": "lpg-part-11"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-12",
+    "productId": "lpg-part-12"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-12",
+    "productId": "lpg-part-12"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-13",
+    "productId": "lpg-part-13"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-13",
+    "productId": "lpg-part-13"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-14",
+    "productId": "lpg-part-14"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-14",
+    "productId": "lpg-part-14"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-15",
+    "productId": "lpg-part-15"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-15",
+    "productId": "lpg-part-15"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-16",
+    "productId": "lpg-part-16"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-16",
+    "productId": "lpg-part-16"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-17",
+    "productId": "lpg-part-17"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-17",
+    "productId": "lpg-part-17"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-18",
+    "productId": "lpg-part-18"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-18",
+    "productId": "lpg-part-18"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-19",
+    "productId": "lpg-part-19"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-19",
+    "productId": "lpg-part-19"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-20",
+    "productId": "lpg-part-20"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-20",
+    "productId": "lpg-part-20"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-21",
+    "productId": "lpg-part-21"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-21",
+    "productId": "lpg-part-21"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-22",
+    "productId": "lpg-part-22"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-22",
+    "productId": "lpg-part-22"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-23",
+    "productId": "lpg-part-23"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-23",
+    "productId": "lpg-part-23"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-24",
+    "productId": "lpg-part-24"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-24",
+    "productId": "lpg-part-24"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-25",
+    "productId": "lpg-part-25"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-25",
+    "productId": "lpg-part-25"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-26",
+    "productId": "lpg-part-26"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-26",
+    "productId": "lpg-part-26"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-27",
+    "productId": "lpg-part-27"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-27",
+    "productId": "lpg-part-27"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-28",
+    "productId": "lpg-part-28"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-28",
+    "productId": "lpg-part-28"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-29",
+    "productId": "lpg-part-29"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-29",
+    "productId": "lpg-part-29"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-30",
+    "productId": "lpg-part-30"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-30",
+    "productId": "lpg-part-30"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-31",
+    "productId": "lpg-part-31"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-31",
+    "productId": "lpg-part-31"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-32",
+    "productId": "lpg-part-32"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-32",
+    "productId": "lpg-part-32"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-33",
+    "productId": "lpg-part-33"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-33",
+    "productId": "lpg-part-33"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-34",
+    "productId": "lpg-part-34"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-34",
+    "productId": "lpg-part-34"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-35",
+    "productId": "lpg-part-35"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-35",
+    "productId": "lpg-part-35"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-36",
+    "productId": "lpg-part-36"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-36",
+    "productId": "lpg-part-36"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-37",
+    "productId": "lpg-part-37"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-37",
+    "productId": "lpg-part-37"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-38",
+    "productId": "lpg-part-38"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-38",
+    "productId": "lpg-part-38"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-39",
+    "productId": "lpg-part-39"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-39",
+    "productId": "lpg-part-39"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-40",
+    "productId": "lpg-part-40"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-40",
+    "productId": "lpg-part-40"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-41",
+    "productId": "lpg-part-41"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-41",
+    "productId": "lpg-part-41"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-42",
+    "productId": "lpg-part-42"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-42",
+    "productId": "lpg-part-42"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-43",
+    "productId": "lpg-part-43"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-43",
+    "productId": "lpg-part-43"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-44",
+    "productId": "lpg-part-44"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-44",
+    "productId": "lpg-part-44"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-45",
+    "productId": "lpg-part-45"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-45",
+    "productId": "lpg-part-45"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-46",
+    "productId": "lpg-part-46"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-46",
+    "productId": "lpg-part-46"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-47",
+    "productId": "lpg-part-47"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-47",
+    "productId": "lpg-part-47"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-48",
+    "productId": "lpg-part-48"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-48",
+    "productId": "lpg-part-48"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-49",
+    "productId": "lpg-part-49"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-49",
+    "productId": "lpg-part-49"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-50",
+    "productId": "lpg-part-50"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-50",
+    "productId": "lpg-part-50"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-51",
+    "productId": "lpg-part-51"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-51",
+    "productId": "lpg-part-51"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-52",
+    "productId": "lpg-part-52"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-52",
+    "productId": "lpg-part-52"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-53",
+    "productId": "lpg-part-53"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-53",
+    "productId": "lpg-part-53"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-54",
+    "productId": "lpg-part-54"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-54",
+    "productId": "lpg-part-54"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-55",
+    "productId": "lpg-part-55"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-55",
+    "productId": "lpg-part-55"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-56",
+    "productId": "lpg-part-56"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-56",
+    "productId": "lpg-part-56"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-57",
+    "productId": "lpg-part-57"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-57",
+    "productId": "lpg-part-57"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-58",
+    "productId": "lpg-part-58"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-58",
+    "productId": "lpg-part-58"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-59",
+    "productId": "lpg-part-59"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-59",
+    "productId": "lpg-part-59"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-60",
+    "productId": "lpg-part-60"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-60",
+    "productId": "lpg-part-60"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-61",
+    "productId": "lpg-part-61"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-61",
+    "productId": "lpg-part-61"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-65",
+    "productId": "lpg-part-65"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-65",
+    "productId": "lpg-part-65"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-66",
+    "productId": "lpg-part-66"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-66",
+    "productId": "lpg-part-66"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-67",
+    "productId": "lpg-part-67"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-67",
+    "productId": "lpg-part-67"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-68",
+    "productId": "lpg-part-68"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-68",
+    "productId": "lpg-part-68"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-69",
+    "productId": "lpg-part-69"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-69",
+    "productId": "lpg-part-69"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-70",
+    "productId": "lpg-part-70"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-70",
+    "productId": "lpg-part-70"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-71",
+    "productId": "lpg-part-71"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-71",
+    "productId": "lpg-part-71"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-72",
+    "productId": "lpg-part-72"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-72",
+    "productId": "lpg-part-72"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-73",
+    "productId": "lpg-part-73"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-73",
+    "productId": "lpg-part-73"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-74",
+    "productId": "lpg-part-74"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-74",
+    "productId": "lpg-part-74"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-75",
+    "productId": "lpg-part-75"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-75",
+    "productId": "lpg-part-75"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-76",
+    "productId": "lpg-part-76"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-76",
+    "productId": "lpg-part-76"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-77",
+    "productId": "lpg-part-77"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-77",
+    "productId": "lpg-part-77"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-78",
+    "productId": "lpg-part-78"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-78",
+    "productId": "lpg-part-78"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-79",
+    "productId": "lpg-part-79"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-79",
+    "productId": "lpg-part-79"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-80",
+    "productId": "lpg-part-80"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-80",
+    "productId": "lpg-part-80"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-81",
+    "productId": "lpg-part-81"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-81",
+    "productId": "lpg-part-81"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-82",
+    "productId": "lpg-part-82"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-82",
+    "productId": "lpg-part-82"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-83",
+    "productId": "lpg-part-83"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-83",
+    "productId": "lpg-part-83"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-84",
+    "productId": "lpg-part-84"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-84",
+    "productId": "lpg-part-84"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-85",
+    "productId": "lpg-part-85"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-85",
+    "productId": "lpg-part-85"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-86",
+    "productId": "lpg-part-86"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-86",
+    "productId": "lpg-part-86"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-87",
+    "productId": "lpg-part-87"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-87",
+    "productId": "lpg-part-87"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-88",
+    "productId": "lpg-part-88"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-88",
+    "productId": "lpg-part-88"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-89",
+    "productId": "lpg-part-89"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-89",
+    "productId": "lpg-part-89"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-90",
+    "productId": "lpg-part-90"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-90",
+    "productId": "lpg-part-90"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-91",
+    "productId": "lpg-part-91"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-91",
+    "productId": "lpg-part-91"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-92",
+    "productId": "lpg-part-92"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-92",
+    "productId": "lpg-part-92"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-95",
+    "productId": "lpg-part-95"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-95",
+    "productId": "lpg-part-95"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-96",
+    "productId": "lpg-part-96"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-96",
+    "productId": "lpg-part-96"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-97",
+    "productId": "lpg-part-97"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-97",
+    "productId": "lpg-part-97"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-98",
+    "productId": "lpg-part-98"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-98",
+    "productId": "lpg-part-98"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-99",
+    "productId": "lpg-part-99"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-99",
+    "productId": "lpg-part-99"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-100",
+    "productId": "lpg-part-100"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-100",
+    "productId": "lpg-part-100"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-101",
+    "productId": "lpg-part-101"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-101",
+    "productId": "lpg-part-101"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-102",
+    "productId": "lpg-part-102"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-102",
+    "productId": "lpg-part-102"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-103",
+    "productId": "lpg-part-103"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-103",
+    "productId": "lpg-part-103"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-104",
+    "productId": "lpg-part-104"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-104",
+    "productId": "lpg-part-104"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-105",
+    "productId": "lpg-part-105"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-105",
+    "productId": "lpg-part-105"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-106",
+    "productId": "lpg-part-106"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-106",
+    "productId": "lpg-part-106"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-107",
+    "productId": "lpg-part-107"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-107",
+    "productId": "lpg-part-107"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-108",
+    "productId": "lpg-part-108"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-108",
+    "productId": "lpg-part-108"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-109",
+    "productId": "lpg-part-109"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-109",
+    "productId": "lpg-part-109"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-110",
+    "productId": "lpg-part-110"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-110",
+    "productId": "lpg-part-110"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-111",
+    "productId": "lpg-part-111"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-111",
+    "productId": "lpg-part-111"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-112",
+    "productId": "lpg-part-112"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-112",
+    "productId": "lpg-part-112"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-113",
+    "productId": "lpg-part-113"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-113",
+    "productId": "lpg-part-113"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-114",
+    "productId": "lpg-part-114"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-114",
+    "productId": "lpg-part-114"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-115",
+    "productId": "lpg-part-115"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-115",
+    "productId": "lpg-part-115"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-116",
+    "productId": "lpg-part-116"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-116",
+    "productId": "lpg-part-116"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-117",
+    "productId": "lpg-part-117"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-117",
+    "productId": "lpg-part-117"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-118",
+    "productId": "lpg-part-118"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-118",
+    "productId": "lpg-part-118"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-119",
+    "productId": "lpg-part-119"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-119",
+    "productId": "lpg-part-119"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-120",
+    "productId": "lpg-part-120"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-120",
+    "productId": "lpg-part-120"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-121",
+    "productId": "lpg-part-121"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-121",
+    "productId": "lpg-part-121"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-122",
+    "productId": "lpg-part-122"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-122",
+    "productId": "lpg-part-122"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-123",
+    "productId": "lpg-part-123"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-123",
+    "productId": "lpg-part-123"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-124",
+    "productId": "lpg-part-124"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-124",
+    "productId": "lpg-part-124"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-125",
+    "productId": "lpg-part-125"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-125",
+    "productId": "lpg-part-125"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-126",
+    "productId": "lpg-part-126"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-126",
+    "productId": "lpg-part-126"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-127",
+    "productId": "lpg-part-127"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-127",
+    "productId": "lpg-part-127"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-128",
+    "productId": "lpg-part-128"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-128",
+    "productId": "lpg-part-128"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-129",
+    "productId": "lpg-part-129"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-129",
+    "productId": "lpg-part-129"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-130",
+    "productId": "lpg-part-130"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-130",
+    "productId": "lpg-part-130"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-131",
+    "productId": "lpg-part-131"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-131",
+    "productId": "lpg-part-131"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-132",
+    "productId": "lpg-part-132"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-132",
+    "productId": "lpg-part-132"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-133",
+    "productId": "lpg-part-133"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-133",
+    "productId": "lpg-part-133"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-134",
+    "productId": "lpg-part-134"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-134",
+    "productId": "lpg-part-134"
+  },
+  {
+    "locale": "tr",
+    "slug": "tedsan-lpg-part-135",
+    "productId": "lpg-part-135"
+  },
+  {
+    "locale": "en",
+    "slug": "tedsan-lpg-part-135",
+    "productId": "lpg-part-135"
+  }
+]

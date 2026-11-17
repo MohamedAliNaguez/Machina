@@ -2,7 +2,7 @@
 const loader = document.querySelector<HTMLElement>('[data-site-loader]');
 if (loader) {
   const root = loader;
-  const sessionKey = 'machina:steel-loader:v3';
+  const sessionKey = 'technicsan:pressure-intro:v1';
   const introDuration = 3500;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const previewTrigger = document.querySelector<HTMLButtonElement>('[data-preview-steel-loader]');

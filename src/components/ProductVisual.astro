@@ -1,0 +1,39 @@
+---
+import { withBase } from '../lib/paths';
+import { l } from '../lib/i18n';
+import type { Locale } from '../lib/types';
+interface Props {
+  id?: string;
+  src: string;
+  alt: string;
+  locale: Locale;
+  placeholder?: boolean;
+  priority?: boolean;
+  class?: string;
+}
+const {
+  id,
+  src,
+  alt,
+  locale,
+  placeholder = false,
+  priority = false,
+  class: className,
+} = Astro.props;
+---
+
+<div class:list={['product-visual', className, { 'product-visual-pending': placeholder }]}>
+  <img
+    id={id}
+    src={withBase(src)}
+    alt={alt}
+    width="900"
+    height="560"
+    loading={priority ? 'eager' : 'lazy'}
+    decoding="async"
+    fetchpriority={priority ? 'high' : 'auto'}
+  />
+  <span class="photography-pending" hidden={!placeholder}>
+    {l(locale, 'Ürün fotoğrafı eklenecek', 'Product photography pending')}
+  </span>
+</div>

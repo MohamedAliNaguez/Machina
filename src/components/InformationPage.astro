@@ -1,4 +1,5 @@
 ---
+import brand from '../data/brand.json';
 import { withBase } from '../lib/paths';
 import Layout from '../layouts/Layout.astro';
 import SteelIntro from './SteelIntro.astro';
@@ -11,13 +12,13 @@ interface Props {
   section: Section;
 }
 const { locale, section } = Astro.props;
-const { settings, articles, brands } = await getContent();
+const { settings, articles, brands, categories } = await getContent();
 const copy = labels(locale),
   visibleArticles = articles.filter((a) => a.published.includes(locale));
 const featured = visibleArticles[0];
 const titles: Record<Section, string> = {
   guides: l(locale, 'REHBERLER', 'GUIDES'),
-  about: l(locale, 'İŞİNİZ İÇİN\nBİR ADIM ÖNDE', 'FOR THE\nWORK AHEAD'),
+  about: l(locale, 'BASINÇ\nODAĞIMIZDA', 'PRESSURE\nAT THE CORE'),
   contact: l(locale, 'İLETİŞİM', "LET'S TALK"),
   privacy: l(locale, 'GİZLİLİK', 'PRIVACY'),
   brands: l(locale, 'MARKALAR', 'BRANDS'),
@@ -27,14 +28,14 @@ const titles: Record<Section, string> = {
 const descriptions: Record<Section, string> = {
   guides: l(
     locale,
-    'Bir sonraki işiniz için pratik bilgiler',
-    'Practical knowledge for the work ahead',
+    'Ürün ihtiyaçlarınız için görüşme notları',
+    'Conversation notes for your product requirements',
   ),
-  about: l(locale, 'İş makineleri · Ankara, Türkiye', 'Construction machinery · Ankara, Türkiye'),
+  about: l(locale, 'Beş ürün grubu · Tek TECHNICSAN', 'Five product types · One TECHNICSAN'),
   contact: l(
     locale,
-    'İşiniz ve makine ihtiyacınız hakkında konuşalım',
-    'Tell us about the machine and the work ahead',
+    'Uygulamanız ve ürün ihtiyacınız hakkında konuşalım',
+    'Tell us about your application and product requirements',
   ),
   privacy: l(locale, 'Gizlilik bildirimi', 'Privacy notice'),
   brands: l(locale, 'Doğrulanmış marka bilgileri', 'Verified brand information'),
@@ -102,19 +103,14 @@ const privacySections = [
     locale={locale}
     title={title}
     subtitle={descriptions[section]}
-    image={
-      section === 'privacy'
-        ? '/images/steel/header-panels.webp'
-        : section === 'guides' || section === 'about'
-          ? '/images/steel/header-hydraulics.webp'
-          : section === 'contact'
-            ? '/images/steel/header-contact.webp'
-            : '/images/steel/header-bucket.webp'
-    }
     variant={'information-intro ' + section + '-intro'}
     eyebrow={
       section === 'about' && !settings.identityVerified
-        ? l(locale, 'MACHINA HAKKINDA · ÖRNEK KİMLİK', 'ABOUT MACHINA · SAMPLE IDENTITY')
+        ? l(
+            locale,
+            `${settings.name} HAKKINDA · TASARIM ÖNİZLEMESİ`,
+            `ABOUT ${settings.name} · DESIGN PREVIEW`,
+          )
         : undefined
     }
     note={
@@ -131,11 +127,7 @@ const privacySections = [
             <a href={url(locale, 'guides', featured.slug[locale])}>
               <img
                 src={withBase(featured.image)}
-                alt={l(
-                  locale,
-                  'Temsili iş makinesi ayrıntısı',
-                  'Illustrative construction equipment detail',
-                )}
+                alt={l(locale, 'Ürün fotoğrafı için yer tutucu', 'Product photography placeholder')}
                 width="1200"
                 height="500"
                 loading="eager"
@@ -186,15 +178,12 @@ const privacySections = [
         <p>
           {l(
             locale,
-            'Bir sonraki işiniz için makine seçeneklerini inceleyin',
-            'Explore excavators and other machines for your upcoming work',
+            'Beş TECHNICSAN ürün grubunu inceleyin',
+            'Explore the five TECHNICSAN product types',
           )}
         </p>
-        <a
-          class="button"
-          href={url(locale, 'categories', locale === 'tr' ? 'ekskavatorler' : 'excavators')}
-        >
-          {l(locale, 'Ekskavatörleri inceleyin', 'Browse excavators')}
+        <a class="button" href={url(locale, 'machines')}>
+          {l(locale, 'Ürünleri inceleyin', 'Browse products')}
         </a>
       </div>
     </section>
@@ -204,14 +193,16 @@ const privacySections = [
       <section class="container steel-about">
         <div class="about-copy">
           <h2>
-            {l(locale, 'Bir sonraki makinenize net bir bakış', 'A clear view of your next machine')}
+            {l(locale, 'Beş ürün grubu, net bir odak', 'Five product types, one clear focus')}
           </h2>
           <p>
             {settings.about?.[locale] ||
               l(
                 locale,
-                'Yeni modelleri ve ikinci el makineleri inceleyebileceğiniz, yararlı bir görüşmeye başlamak için ihtiyaç duyduğunuz bilgileri sunan bir katalog.',
-                'A catalogue for exploring new models and individual used machines, with the information you need to start a useful conversation',
+                brand.slogan +
+                  ' TECHNICSAN kimliğinin merkezinde basınç yer alır. Kataloğumuz çimento silobası, LPG kataloğu, kompresörler, mikserler ve silolardan oluşur.',
+                brand.slogan +
+                  ' Pressure sits at the heart of the TECHNICSAN identity. Our catalogue consists of Cement bulker, LPG catalog, Compressors, Mixers and Silos.',
               )}
           </p>
           {!settings.identityVerified && (
@@ -224,61 +215,22 @@ const privacySections = [
             </p>
           )}
         </div>
-        <div class="about-routes">
-          <a href={url(locale, 'machines') + '?kind=new'}>
-            <img
-              src={withBase('/images/steel/catalogue-excavator.webp')}
-              alt=""
-              width="500"
-              height="250"
-              loading="lazy"
-            />
-            <div>
-              <h2>{l(locale, 'Yeni modeller', 'New models')}</h2>
-              <p>
-                {l(
-                  locale,
-                  'Konfigürasyonlar ve uygulamalar, net bir şekilde',
-                  'Configurations and applications, presented clearly',
-                )}
-              </p>
-            </div>
-          </a>
-          <a href={url(locale, 'machines') + '?kind=used'}>
-            <img
-              src={withBase('/images/steel/catalogue-loader.webp')}
-              alt=""
-              width="500"
-              height="250"
-              loading="lazy"
-            />
-            <div>
-              <h2>{l(locale, 'İkinci el makineler', 'Used machines')}</h2>
-              <p>
-                {l(
-                  locale,
-                  'Yıl, saat ve kondisyon bilgileriyle bireysel ilanlar',
-                  'Individual listings with year, hours and condition information',
-                )}
-              </p>
-            </div>
-          </a>
+        <div class="pressure-about-types">
+          {categories.map((category, index) => (
+            <a href={url(locale, 'categories', category.slug[locale])}>
+              <span>0{index + 1}</span>
+              <strong>{category.name[locale]}</strong>
+            </a>
+          ))}
         </div>
       </section>
       <section class="photo-callout about-callout">
-        <img
-          src={withBase('/images/steel/callout-tracks.webp')}
-          alt=""
-          width="1440"
-          height="240"
-          loading="lazy"
-        />
         <div class="container">
           <div>
             <h2>{l(locale, 'Doğru bilgilerle başlayın', 'Start with the right information')}</h2>
             <div class="callout-actions">
               <a class="button" href={url(locale, 'machines')}>
-                {l(locale, 'Makineleri inceleyin', 'Browse machines')}
+                {l(locale, 'Ürünleri inceleyin', 'Browse products')}
               </a>
               <a href={url(locale, 'contact')}>
                 {l(locale, 'Satış ekibiyle görüşün', 'Contact sales')}
@@ -288,8 +240,8 @@ const privacySections = [
               <p class="callout-note">
                 {l(
                   locale,
-                  'Örnek kimlik · Şirket bilgileri doğrulanmayı bekliyor',
-                  'Sample identity · Business details pending verification',
+                  'Şirket bilgileri doğrulanmayı bekliyor',
+                  'Business details pending verification',
                 )}
               </p>
             )}

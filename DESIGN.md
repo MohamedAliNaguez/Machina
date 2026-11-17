@@ -1,25 +1,29 @@
 ---
 version: alpha
-name: Machine Theatre / Precision workshop
-description: A sculptural steel-stage homepage with a restrained bilingual machinery catalogue.
+name: TECHNICSAN / Pressure
+description: A pressure-centred industrial product catalogue in forest green, lime and steel
 colors:
   background: '#FFFFFF'
-  steel: '#EEF2F5'
-  graphite: '#202830'
-  primary: '#2156D9'
+  steel: '#EDF1EE'
+  graphite: '#1E2D26'
+  primary: '#003B27'
+  primary-hover: '#0B563D'
+  accent: '#9BC900'
+  accent-hover: '#B1DC20'
+  brand-soft: '#E8EEE9'
   amber: '#D99A24'
-  muted: '#5B6671'
-  border: '#D4DCE3'
-  stage: '#11171C'
-  stage-ink: '#EDF0F2'
-  stage-muted: '#BDC6CF'
-  stage-silver: '#D1D5D8'
-  stage-border: '#454E59'
-  stage-menu: '#29323B'
-  stage-focus: '#A9C2FF'
-  stage-accent: '#88AAFF'
-  stage-paper: '#F5F7F9'
-  stage-mobile: '#111518'
+  muted: '#5B6961'
+  border: '#D6DFD8'
+  stage: '#101C17'
+  stage-ink: '#F2F5F0'
+  stage-muted: '#BDCBC2'
+  stage-silver: '#DCE3DE'
+  stage-border: '#42594B'
+  stage-menu: '#1D3428'
+  stage-focus: '#B7DF3B'
+  stage-accent: '#9BC900'
+  stage-paper: '#F6F8F5'
+  stage-mobile: '#101815'
 typography:
   hero:
     fontFamily: 'Anton, Arial Narrow, sans-serif'
@@ -39,82 +43,54 @@ components:
     rounded: '3px'
 ---
 
-# Machine Theatre / Precision workshop
+# TECHNICSAN / Pressure
 
-## Overview
+## Approved identity and scope
 
-Professional machinery buyers in Turkey and export markets need to find equipment, assess it, and reach sales. Turkish and English have equivalent interfaces. The brand/home is expressive; catalogue, specifications, and enquiry pages are restrained. Sanity supplies the administration UI; no bespoke admin styling.
+The owner supplied the TECHNICSAN logo and the fixed signature **OUR PRESSURE. YOUR TREASURE.**. Preserve the actual wordmark letterforms and three diagonal bars. The full lockup includes the English slogan in both language versions. Use `Brand.astro` and the scalable exports in `public/brand/`; never stretch or replace the lettering with a similar font. Keep clear space and use the light lockup on dark surfaces. The browser icon uses the emblem.
 
-Homepage signature: the user-selected Machine Theatre concept (option 2, 2026-10-20). A full-width sculptural steel stage presents illustrative machinery in front of oversized, textured silver condensed typography. Preserve true photographic foreground silhouettes so the title sits behind the excavator and steel blades. A bright category strip immediately follows, then two equally prominent new/used editorial routes. Extend the steel title and photography system to catalogue, guide, product, company and contact pages, with readable light working surfaces. No fictitious measurements.
+There are exactly five product types, in this order: **Cement bulker · LPG catalog · Compressors · Mixers · Silos**. Turkish equivalents are Çimento silobası, LPG kataloğu, Kompresörler, Mikserler and Silolar. `src/data/product-types.ts` is the shared taxonomy. Content validation rejects a sixth or missing type; Sanity uses the same approved IDs. The English wording LPG catalog follows the owner's explicit instruction.
 
-Anti-references: full-screen cinematic sliders that delay browsing, generic gradient SaaS cards, neon effects, decorative performance statistics, invented trust claims. The provisional wordmark is MACHINA, explicitly identified as a preview identity.
+The current scope replaces the earlier construction-machinery demonstration and new/used browsing split. Its original mockups remain historical design references. Excavators, loaders, road equipment, lifting and attachments are not live product types. The public language is Products / Ürünler; routes are `/en/products/` and `/tr/urunler/`. Preserve matching language links, product-specific enquiries and curated category routes.
 
-Token mapping: the common frontmatter tokens mirror `:root` in `src/styles/global.css`. The hero typography token maps to `--hero-display` in `src/styles/theatre.css`, consumed by the homepage H1. The stage tokens (including border, menu, focus, accent, paper and mobile tonal variants) map to `:root` in `src/styles/theatre.css`; their consumers are the approved homepage and all steel interior templates. Update documentation and the owning CSS together. The shared dark header and photographic title bands belong to the steel site family; practical content stays light. Forced colors preserve native control visibility.
+## Visual direction
 
-## Colors
+Retain the selected steel style: physical silver typography, strong proportions, dark industrial stages, pale working surfaces and restrained graphic details. Pressure is now the brand idea, expressed through an abstract machined ring and the supplied emblem. `PressureArtwork.astro` owns this vector artwork. Its marks are decorative, with no numbers or implied instrument readings. Do not use an excavator illustration as a pressure-product image or imply a rating, certification or performance figure through the artwork.
 
-White browsing surfaces, steel image mats, graphite text, cobalt links/actions. The home stage uses #11171C, silver #D1D5D8 headlines, #EDF0F2 primary text, and #BDC6CF secondary text. Tonal variants provide #454E59 borders, #29323B mobile menu controls, #A9C2FF focus/hover, #88AAFF language accents, #F5F7F9 editorial surfaces and #111518 to blend the mobile stage artwork. Amber marks preview context, never body text on white. Muted text stays readable. Selection and focus use cobalt. Borders encode real grouping.
+The header is white with the full green logo and a lime quote action. Dark surfaces use silver titles and pale text; practical browsing, forms and specifications use pale surfaces. Lime is an accent and control background, with dark-green text. Use green for links and small text on light surfaces. Never use lime body text on white. The small angled rules echo the emblem. Amber is reserved for contextual notices, not the brand's primary accent.
 
-## Typography
+## Components and layout
 
-Self-host Barlow Condensed 600/700 for section headings and Source Sans 3 400/600 for prose and UI, including Latin Extended subsets for Turkish. Hero, interior display titles and major editorial headings use self-hosted Anton 400, with its natural horizontal proportions and a restrained vertical display treatment to match the selected reference. Do not reintroduce the horizontally compressed Barlow title. Clip the supplied brushed-metal raster texture into real HTML text; preserve a solid silver fallback and forced-colors support. Body text starts at 17px; labels 12–14px. Tabular numerals for hours and years.
+`Layout.astro` owns navigation, language switching, metadata, structured-data assembly and the intro. Header height is 88px on desktop and at least 64px on phones. Mobile navigation starts at 900px. The site has no repeated black logo/navigation footer. Do not introduce decorative arrows or terminal full stops in titles.
 
-## Layout
+`Home.astro` owns the large silver PRESSURE / BASINÇ title, brand signature, catalogue/contact actions, five product-family links, brand story, buyer guides and one pale contact ending. The pressure emblem sits beside the title and moves through a short entrance. The five types appear together with equal prominence. Do not add generic SaaS cards, neon glows, particle fields, fake statistics or invented company strengths.
 
-1320px maximum, 5% gutters, 88px section rhythm. Desktop home uses a roughly 610px steel stage at 1440px width, five unboxed category thumbnails separated by rules, two equal new/used image-and-copy lanes, and three-column inventory. At 900px and below, the homepage uses its reflowing title, portrait artwork and stacked browsing layout; this includes a narrow in-app preview pane. The ordinary catalogue retains its existing tablet/phone breakpoints. Turkish title paint includes room for accents and extra interline space; do not clip dots, umlauts or cedillas. Keep images at a reserved aspect ratio. Native select popups intentionally use operating-system presentation.
+`Catalogue.astro` owns search, five category choices, fixed-category navigation and no-results/reset behavior. `catalogue.ts` preserves category/search state in the URL and in language links, supports Turkish folding and IME input, and excludes filter combinations from indexing. New/used condition, year and hours filters are absent from this product catalogue.
 
-## Elevation & Depth
+`ProductDetail.astro` owns the product overview, photographs, enquiry route, specifications, application questions, brochures and other product types. `ProductVisual.astro` reserves a consistent image aspect ratio and visibly labels placeholders. Actual image arrays populate the gallery; image controls update source, descriptions and pressed states. Approved brochures are real downloads; absent brochures show a note rather than a fake button.
 
-Flat cards and hairline boundaries. No hover lift or layered card shells; use hairline boundaries and a restrained image scale transition.
+The preview catalogue contains 155 entries collected from the four owner-specified manufacturer sites. Present TECHNICSAN only. Preserve source identity, image credits and supporting documentation in the ignored private archive. Do not invent model codes, technical figures, prices, ratings, certification claims or stock claims. Product images use contain sizing so labels and watermarks remain visible. Gallery photographs expand in native details elements; the main catalogue shows 24 entries per page with accessible text controls. Empty specification arrays are allowed only for labelled sample content; verified product records require actual specifications. The buyer prompts describe information to discuss, not technical instructions. Do not assume that all mixers or silos are pressurised.
 
-## Shapes
+`InformationPage.astro` and `ArticleDetail.astro` carry the same pressure identity through About, Contact, Guides, Privacy and draft articles. The form selects a product family and preserves its reference across language switching. Server storage, idempotency, spam protection and notification retry behavior remain the enquiry contract. Personal submissions never enter public content.
 
-3px functional radii. Preserve the existing diagonal MACHINA brand glyph. Machinery, sculptural stage and editorial photography are raster artwork, not approximate code drawings. Never imitate technical certification symbols.
+## Typography and accessibility
 
-## Components
+Self-host Anton 400 for silver display titles; Barlow Condensed 600/700 for product and section headings; Source Sans 3 400/600 for body and controls. Include Latin Extended subsets for Turkish. Keep titles real selectable HTML with the supplied brushed-steel text fill, a silver fallback and forced-colours support. Leave room for Turkish diacritics and wrapping; never clip the final letter or squeeze a long category title into a narrow image area.
 
-Shared Layout owns navigation, language switching and SEO. Breadcrumbs and SteelIntro own visible interior route context. There is no repeated bottom logo/navigation footer. Preview context appears beside the relevant sample content. MachineCard owns availability and sample labels. EnquiryForm owns validation and submission states. Catalogue owns URL filters and no-results feedback. Use native links, buttons, selects and tables, visible focus, 44px minimum control targets, and reduced-motion handling.
+Use visible focus, labelled native controls, keyboard navigation and at least 44px control targets. Reserve image dimensions and readable mobile text. Placeholder captions inside links must be included in the accessible name. Motion respects reduced-motion preferences, and all navigation/content remain usable without animation. Automated axe scans supplement manual checks; they do not constitute formal WCAG certification.
 
-## Do's and Don'ts
+## Motion and intro
 
-Do label sample equipment and illustrative photographs in both languages. Do hide unverified brands/contact channels. Do not claim production readiness, dealership status, live stock, or email delivery until verified. Functional hover transitions stay near 220ms. The homepage stage has one 3.5-second light entrance, then input-driven depth movement limited to a few pixels. Homepage art never loops or delays access to content; the optional loading treatment follows the readiness contract below. Disable movement for reduced-motion preferences, stop updating off-screen, and preserve the complete layout without JavaScript. Scrollbars remain visible and inherit the global steel/cobalt baseline.
+Keep the selected three-shutter steel reveal, now opening onto the TECHNICSAN wordmark and abstract pressure motif. There is no excavator photograph in the current intro. It uses the lightweight shared vector artwork and real logo assets. The review page at `/design/loaders/` previews this selected intro only.
 
-## Current owner preferences
+The owner requested a noticeable first-visit introduction: retain the 3,500ms hold and 160ms exit, with an independent four-second deadline and 4.3-second CSS escape hatch. Skip repeated session visits, history restoration and automatic reduced-motion playback. A visible Continue to website action, keyboard focus and scroll interaction dismiss it early. The session key is `technicsan:pressure-intro:v1`. Explicit review playback is separate, traps focus on its exit and restores the opener. Do not imply that an already-ready page is still loading.
 
-Headings and editorial titles have no terminal full stops in either language. Avoid decorative arrows in buttons, links, cards, and section navigation. Communicate actions with clear text, visible focus, underlines, and purposeful contrast. Preserve meaningful functional icons.
+The hero ring uses a single short settling rotation. Avoid continuous motion behind catalogue reading. Artwork has no effect on page readiness. Storage restrictions or disabled JavaScript must leave content usable.
 
-Selected direction: Machine Theatre, the second displayed proposal. Recreate its dark steel stage, silver display typography, actual machine thumbnail strip and paired image-led new/used routes. Preserve the MACHINA preview name rather than the mockup’s concept-name wordmark. Avoid generic neon gradients, particle fields, and interchangeable technology marketing motifs. Motion must respect reduced-motion preferences and leave browsing immediately available.
+## Implementation ownership
 
-## Fidelity correction after owner review
+Common tokens live in `global.css`; stage and display tokens live in `theatre.css`. `steel.css` and `steel-content.css` retain shared control/editorial foundations. `brand.css` owns the logo/header/green-lime identity. `pressure.css` owns the current pressure hero, product families, catalogue, details and responsive adaptations. Update the owning CSS and this document together.
 
-The owner rejected the earlier title approximation. Match the selected prototype's heavy letter shapes, silver material and foreground occlusion. The earlier flat title, broad header divider and separate top preview strip were not faithful enough. The homepage keeps sample identity and illustrative equipment labels in the scene caption instead. Interior pages carry contextual sample labels instead of a separate preview strip. Foreground compositing uses the original scene colors with an extracted alpha mask, rather than a rasterized headline or approximate drawn cutout. Keep the headline selectable, translated and crawlable.
+All internal routes and public assets use `withBase`/`url` for repository-prefixed builds. The historical GitHub repository name is a deployment setting, not visitor-facing identity. Static GitHub previews disable personal contact input/sending; local development keeps the sample enquiry flow. Live deployment still requires approved company/contact/privacy information and genuine product content/photos. The abstract brand hero does not require a fabricated product photograph.
 
-The desktop headline uses a max-content paint box with a small right ink allowance, so the metallic fill cannot clip the final letter. At narrow widths it returns to a normal wrapping block. Foreground art starts below the copy in the compact layout; avoid the old tablet treatment that placed sales controls over the excavator bucket.
-
-## Implemented interior screen family
-
-The owner requested full implementation of the footer-cleaned mockups on 2026-10-20. Canonical references are `docs/design/steel-site-mockups/01-catalogue.png` through `13-mobile-contact-tr.png`; the approved homepage remains the existing Machine Theatre composition. The ten desktop layouts and three mobile references now have working native interfaces. Do not restore the black bottom logo/navigation band or a second global contact band.
-
-`src/styles/steel.css` owns the common header, interior title bands, catalogue filters/cards, product stage, specifications, galleries and related equipment. `src/styles/steel-content.css` owns editorial, about, contact, privacy and recovery layouts. Both follow global.css and theatre.css. Keep component variants in these owners; do not change the approved homepage title composition to restyle an interior template.
-
-Interior desktop header is 77px, compact interior header 56px, with text Menu/Menü and language controls. Mobile menu starts at 900px. At 700px the catalogue becomes one column with a labelled filter disclosure; product details show photo, summary/quote, gallery thumbnails, then specification and related content. Contact shows the enquiry before the contact aside on phones. Reading outlines become a compact section list. Native forms keep readable 16px inputs and usable control targets.
-
-Catalogue search is local, IME-safe and stores filters in the URL. Multiple categories combine as alternatives; condition, brand, minimum year and maximum hours narrow the set. Escape closes filters and restores focus. Available, reserved and sold states remain clear; sold detail pages offer relevant alternatives. Product galleries update actual images, alt text and pressed state. Contact keeps the machine context across language switching and supports removal without losing entered enquiry data. Client validation and the existing server validation/storage/idempotency/retry contract remain the canonical enquiry behavior.
-
-Brand navigation/filtering only appears with verified brand content. Phone and WhatsApp destinations only become links when verified. Brochure placeholders are annotations, never fake download controls. Keep all actual records beyond the six cards visible in the raster reference. Articles retain complete reviewed content even when it extends below the reference frame. General pages and product pages in both languages share the same template owners.
-
-Metal titles remain selectable HTML with a physical material fill, not rasterized text. Self-hosted Latin Extended fonts preserve Turkish glyphs. The reference photographs are rebuilt as original illustrative WebP assets, with subject/composition matched to each screen. New model and individual used-unit information remain separate content types; artwork never supplies factual specifications. All sample inventory, example figures, editorial drafts and provisional identity stay labelled and excluded from public indexing until the launch gate is satisfied.
-
-Verification evidence and comparison history are maintained in `design-qa.md`. Production services and real company content are separate launch configuration work, not implied by local interface completion.
-
-## GitHub Pages preview behavior
-
-The public hosted preview is static. Keep the approved contact layout and selected-machine context, but label its disabled send action Preview only / Yalnızca önizleme and explain that contact details are not collected. Disable personal contact inputs there. Local development keeps its working sample enquiry flow. `PUBLIC_HOSTING=github-pages` owns this deployment-specific distinction; never imply a hosted enquiry was saved locally. All local asset and native route rendering goes through the common base-path helper for repository hosting.
-
-## Selected steel loading screen
-
-The owner selected option 2, The steel reveal, on 2026-10-20. `SteelRevealArt.astro` and `steel-reveal.css` own its photographic excavator, silver HTML wordmark and three steel shutters, shared with the comparison page. `SteelLoader.astro`, `steel-loader.css` and `steel-loader.ts` own the actual loading lifecycle in the shared bilingual Layout.
-
-After finding the shorter versions too easy to miss, the owner explicitly requested 3–4 seconds on the first visit. Show it immediately on the first eligible visit and retain it for 3,500ms, then use a 160ms opacity exit when critical page assets are ready. Open the steel shutters in 1.1 seconds with small offsets, leaving about two seconds to see the revealed composition. Use truthful brand copy, New and used machinery, rather than implying that an already-ready page is still loading. An independent four-second deadline and 4.3-second CSS escape hatch prevent missing media, fonts or interrupted scripts from trapping visitors. Failed media counts as settled. Skip repeat session visits, history restoration and automatic reduced-motion playback. A Continue to website control, keyboard focus and scroll interaction can dismiss it early. Storage restrictions and disabled JavaScript must leave content usable. Fetch the decorative loader photograph at low priority only when shown; never wait for that photograph to open the actual page. The v3 session key makes the revised intro visible once after this behavior change.
-
-The `/design/loaders/` comparison includes an explicit Try selected loader action. This labelled preview holds the selected design for inspection, traps focus on its exit and restores the opener. Its timing is separate from actual page loading. Reduced-motion preview uses a complete still composition. Keep titles without terminal full stops, avoid decorative arrows, and preserve the existing page layout and navigation.
+The next content stage replaces labelled brand placeholders with actual product images, then verified model specifications and reviewed copy. `docs/CONTENT.md` records the handoff. `design-qa.md` records verification and historical mockup comparisons.

@@ -1,6 +1,6 @@
-# Precision Machinery
+# TECHNICSAN
 
-A bilingual Astro catalogue for an Ankara-based heavy machinery reseller. Includes 12 explicitly labelled sample machines, 3 editorial drafts, catalogue filters, product/category pages, enquiries, Sanity schemas and Cloudflare deployment configuration. No external account or paid service is needed for the local preview.
+A bilingual Astro product catalogue for TECHNICSAN, focused on exactly five types: **Cement bulker, LPG catalog, Compressors, Mixers and Silos**. Includes 155 source-referenced product entries, manufacturer photographs and galleries, three draft buyer guides, paginated category/search filters, bilingual product pages, enquiries, Sanity schemas and Cloudflare deployment configuration. Entries remain preview content until supply availability, technical data and photograph permissions are approved. See docs/REFERENCE-IMPORT.md for coverage and exceptions. No external account or paid service is needed for the local preview. Shared branding is documented in `DESIGN.md`; scalable logo assets live in `public/brand/`.
 
 ## GitHub Pages preview
 

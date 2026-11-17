@@ -9,13 +9,12 @@
   position: absolute;
   top: 26%;
   left: 6%;
-  font: 400 20cqw/1.2 var(--hero-display);
-  letter-spacing: 0;
-  color: var(--stage-silver);
-  background: url('/images/theatre/title-metal.webp') center/cover;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  width: 88%;
+}
+.metal-headline img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 .reveal-machine {
   position: absolute;

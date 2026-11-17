@@ -1,0 +1,164 @@
+/* TECHNICSAN identity: approved logo geometry, forest green and pressure lime. */
+.brand-slogan-part {
+  display: inline-block;
+}
+.brand-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.steel-page .wordmark {
+  flex: 0 0 auto;
+  width: 272px;
+  padding-block: 9px;
+}
+.steel-page .header-inner {
+  min-height: 88px;
+}
+.steel-page #primary-nav a[aria-current='page']::after {
+  display: block;
+  height: 3px;
+  background: var(--accent);
+}
+.steel-page .header-quote,
+.button-accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--primary);
+}
+.steel-page .header-quote:hover,
+.button-accent:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: var(--primary);
+}
+.theatre-hero {
+  border-bottom: 3px solid var(--accent);
+}
+.theatre-scene::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, rgb(0 59 39 / 20%), transparent 65%);
+  pointer-events: none;
+}
+.theatre-copy .brand-promise {
+  color: var(--stage-muted);
+  font-size: clamp(17px, 1.55vw, 23px);
+  letter-spacing: 0.025em;
+}
+.theatre-section-label h2::before {
+  width: 31px;
+  height: 8px;
+  background: var(--accent);
+  transform: skewX(-35deg);
+}
+.theatre-path {
+  border-bottom: 3px solid var(--primary);
+}
+.theatre-path:hover {
+  border-bottom-color: var(--accent);
+}
+.steel-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 6px;
+  margin-right: 12px;
+  vertical-align: 0.15em;
+  background: var(--accent);
+  transform: skewX(-35deg);
+}
+.steel-intro {
+  border-bottom: 3px solid var(--accent);
+}
+.photo-callout {
+  border-block-end: 3px solid var(--accent);
+}
+.product-actions .button:not(.button-outline),
+.photo-callout .button {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--primary);
+}
+.product-actions .button:not(.button-outline):hover,
+.photo-callout .button:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.steel-page .machine-card .card-view {
+  border-color: var(--border);
+}
+.steel-loader .metal-headline {
+  top: 22%;
+}
+.review-brand {
+  width: 234px;
+  flex-shrink: 0;
+}
+.scene-brand {
+  width: 24%;
+}
+.scene-brand .brand-logo {
+  width: 100%;
+}
+@media (min-width: 901px) and (max-width: 1150px) {
+  .steel-page .wordmark {
+    width: 228px;
+  }
+  .steel-page #primary-nav {
+    gap: 18px;
+  }
+  .steel-page .header-actions {
+    gap: 15px;
+  }
+  .steel-page .header-quote {
+    min-width: 140px;
+    padding-inline: 12px;
+  }
+}
+@media (max-width: 900px) {
+  .steel-page .wordmark {
+    width: 222px;
+    padding-block: 10px;
+  }
+  .steel-page #primary-nav a[aria-current='page'] {
+    background: var(--brand-soft);
+    box-shadow: inset 3px 0 var(--accent);
+  }
+  .steel-page #primary-nav a[aria-current='page']::after {
+    display: none;
+  }
+  .steel-loader .metal-headline {
+    top: 31%;
+  }
+}
+@media (max-width: 480px) {
+  .steel-page .wordmark {
+    width: clamp(160px, 47vw, 215px);
+  }
+  .steel-page .header-inner {
+    gap: 10px;
+  }
+  .steel-page .header-actions {
+    gap: 0;
+  }
+  .review-header {
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  .review-brand {
+    width: 210px;
+  }
+}
+@media (forced-colors: active) {
+  .steel-page .header-quote,
+  .button-accent {
+    border: 1px solid ButtonText;
+    color: ButtonText;
+  }
+  .steel-page #primary-nav a[aria-current='page'] {
+    outline: 1px solid LinkText;
+  }
+}

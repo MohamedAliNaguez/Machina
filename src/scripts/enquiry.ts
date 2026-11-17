@@ -10,7 +10,8 @@ export function initEnquiryForm() {
   let key = crypto.randomUUID();
   let previousPayload = '';
   let busy = false;
-  const selected = new URLSearchParams(location.search).get('machine');
+  const params = new URLSearchParams(location.search);
+  const selected = params.get('product') || params.get('machine');
   const select = form.elements.namedItem('machineId') as HTMLSelectElement;
   if (selected && [...select.options].some((o) => o.value === selected)) select.value = selected;
   const textarea = form.elements.namedItem('message') as HTMLTextAreaElement;

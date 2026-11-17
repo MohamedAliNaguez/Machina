@@ -1,4 +1,5 @@
 import { sampleContent } from '../data/sample';
+import { productTypeIds } from '../data/product-types';
 import type { Content, Locale } from './types';
 
 const buildEnv = import.meta.env ?? {};
@@ -12,6 +13,7 @@ async function load(): Promise<Content> {
   if (buildEnv.CONTENT_SOURCE !== 'sanity') {
     if (launchReady)
       throw new Error('Launch blocked: sample content cannot be published as a live company.');
+    validateContent(sampleContent, false);
     return sampleContent;
   }
   const project = buildEnv.SANITY_PROJECT_ID;
@@ -43,6 +45,10 @@ async function load(): Promise<Content> {
     throw new Error(`Sanity content unavailable (${response.status}). No sample fallback used.`);
   const { result } = await response.json();
   validateContent(result, launchReady);
+  result.categories.sort(
+    (a: Content['categories'][number], b: Content['categories'][number]) =>
+      productTypeIds.indexOf(a.id) - productTypeIds.indexOf(b.id),
+  );
   return result;
 }
 export function validateContent(value: Content, live: boolean) {
@@ -54,6 +60,11 @@ export function validateContent(value: Content, live: boolean) {
     !Array.isArray(value.brands)
   )
     throw new Error('Content is incomplete.');
+  if (
+    value.categories.length !== productTypeIds.length ||
+    productTypeIds.some((id) => !value.categories.some((category) => category.id === id))
+  )
+    throw new Error('Catalogue must contain exactly the five approved TECHNICSAN product types.');
   if (
     live &&
     (!value.settings.identityVerified ||
@@ -68,12 +79,10 @@ export function validateContent(value: Content, live: boolean) {
       !value.settings.about?.en ||
       !value.settings.privacyNotice?.tr ||
       !value.settings.privacyNotice?.en ||
-      !value.settings.heroImage?.src ||
-      value.settings.heroImage.illustrative ||
       !value.settings.turnstileSiteKey)
   )
     throw new Error(
-      'Launch blocked: approved bilingual company/privacy copy and a genuine hero image are required.',
+      'Launch blocked: approved bilingual company/privacy copy and challenge configuration are required.',
     );
   const ids = new Set<string>();
   for (const item of [...value.machines, ...value.categories, ...value.articles]) {
@@ -87,7 +96,8 @@ export function validateContent(value: Content, live: boolean) {
     if (
       !machine.published?.length ||
       !machine.images?.length ||
-      !machine.specs?.length ||
+      !Array.isArray(machine.specs) ||
+      (!machine.sample && !machine.specs.length) ||
       !machine.source ||
       !machine.name?.tr ||
       !machine.name?.en ||
@@ -118,11 +128,51 @@ export function validateContent(value: Content, live: boolean) {
     }
     if (
       machine.images.some((i) => !safeMediaUrl(i.src)) ||
-      (machine.brochure && !safeMediaUrl(machine.brochure.url))
+      (machine.brochure &&
+        !safeMediaUrl(machine.brochure.url) &&
+        !safeExternalUrl(machine.brochure.url))
     )
       throw new Error(`Invalid media URL on ${machine.id}.`);
-    if (live && (machine.sample || machine.images.some((i) => i.illustrative)))
+    if (live && (machine.sample || machine.images.some((i) => i.illustrative || i.placeholder)))
       throw new Error(`Launch blocked: sample machine or illustrative image ${machine.id}.`);
+    if (
+      machine.reference &&
+      (!safeExternalUrl(machine.reference.url) ||
+        !machine.reference.publisher ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(machine.reference.retrievedAt) ||
+        !['pending', 'approved'].includes(machine.reference.reviewStatus))
+    )
+      throw new Error(`Invalid product reference ${machine.id}.`);
+    if (
+      machine.images.some(
+        (image) =>
+          image.sourceUrl &&
+          (!safeExternalUrl(image.sourceUrl) ||
+            !image.credit ||
+            !['pending', 'approved'].includes(image.rightsStatus || '')),
+      )
+    )
+      throw new Error(`Invalid image attribution ${machine.id}.`);
+    if (
+      machine.specificationTable &&
+      (!machine.specificationTable.columns.length ||
+        !machine.specificationTable.rows.length ||
+        machine.specificationTable.rows.some(
+          (row) =>
+            !row.label.tr ||
+            !row.label.en ||
+            row.values.length !== machine.specificationTable!.columns.length ||
+            row.values.some((cell) => !cell),
+        ))
+    )
+      throw new Error(`Invalid specification table ${machine.id}.`);
+    if (
+      live &&
+      (machine.technicalReview === 'pending' ||
+        machine.reference?.reviewStatus === 'pending' ||
+        machine.images.some((image) => image.rightsStatus === 'pending'))
+    )
+      throw new Error(`Launch blocked: unapproved source content ${machine.id}.`);
   }
   for (const article of value.articles) {
     if (!article.published?.length || !article.sections?.length || !safeMediaUrl(article.image))
@@ -148,4 +198,12 @@ function safeMediaUrl(value: string) {
     typeof value === 'string' &&
     (value.startsWith('/images/') || /^https:\/\/cdn\.sanity\.io\//.test(value))
   );
+}
+function safeExternalUrl(value: string) {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'https:' && !parsed.username && !parsed.password;
+  } catch {
+    return false;
+  }
 }

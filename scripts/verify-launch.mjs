@@ -29,7 +29,7 @@ if (
   result.machineCount < 1
 )
   throw new Error(
-    'Launch blocked: complete verified identity/contact/privacy, challenge setup and genuine machine content.',
+    'Launch blocked: complete verified identity/contact/privacy, challenge setup and genuine product content.',
   );
 console.log(
   'Published-content launch preflight passed. Also verify deployed enquiry secrets, notifications, translations and company approval before enabling production.',

@@ -1,37 +1,33 @@
 ---
 import { withBase } from '../lib/paths';
 import Layout from '../layouts/Layout.astro';
+import PressureArtwork from '../components/PressureArtwork.astro';
 ---
 
 <Layout
   locale="en"
   title="Page not found"
-  description="The page may have moved, or the address may be incorrect."
+  description="Find your way back to TECHNICSAN's five product types."
   noindex
 >
-  <section class="steel-not-found">
-    <img
-      src={withBase('/images/steel/not-found-stage.webp')}
-      alt=""
-      width="1440"
-      height="1000"
-      fetchpriority="high"
-    />
+  <section class="pressure-not-found">
     <div class="container">
-      <div class="metal-title" aria-hidden="true">
-        404
-      </div>
-      <h1>THIS PAGE IS OFF SITE</h1>
+      <span class="eyebrow">TECHNICSAN / 404</span>
+      <h1 class="metal-title">
+        OFF THE
+        <br />
+        PRESSURE LINE
+      </h1>
       <p>The page may have moved, or the address may be incorrect</p>
-      <div class="not-found-actions">
-        <a class="button" href={withBase('/en/machines/')}>
-          Browse machines
+      <div class="pressure-actions">
+        <a class="button button-accent" href={withBase('/en/products/')}>
+          Browse products
         </a>
         <a class="text-link" href={withBase('/en/')}>
           Go to homepage
         </a>
       </div>
+      <PressureArtwork id="not-found-pressure" />
     </div>
-    <span class="not-found-caption">SAMPLE IDENTITY · ILLUSTRATIVE EQUIPMENT</span>
   </section>
 </Layout>

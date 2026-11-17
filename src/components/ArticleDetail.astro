@@ -32,22 +32,9 @@ const schema = article.sample
         publisher: { '@type': 'Organization', name: settings.legalName || settings.name },
       },
     ];
-const title =
-  article.sample && article.id === 'choosing'
-    ? l(locale, 'İŞİNİZE UYGUN\nEKSKAVATÖRÜ SEÇİN', 'CHOOSING AN EXCAVATOR\nFOR YOUR WORK')
-    : article.title[locale].toLocaleUpperCase(locale === 'tr' ? 'tr-TR' : 'en-GB');
-const answerTitle =
-  article.sample && article.id === 'choosing'
-    ? l(locale, 'Modelden önce yapılacak işi düşünün', 'Start with the job, not the model')
-    : article.title[locale];
-const answer =
-  article.sample && article.id === 'choosing'
-    ? l(
-        locale,
-        'Makineleri karşılaştırmadan önce malzemeyi, erişim sınırlarını ve çalışma koşullarını tanımlayın',
-        'Define the material, access limits and working conditions before comparing machines',
-      )
-    : article.excerpt[locale];
+const title = article.title[locale].toLocaleUpperCase(locale === 'tr' ? 'tr-TR' : 'en-GB');
+const answerTitle = article.title[locale];
+const answer = article.excerpt[locale];
 ---
 
 <Layout
@@ -70,7 +57,6 @@ const answer =
   <SteelIntro
     locale={locale}
     title={title}
-    image="/images/steel/header-bucket.webp"
     variant="article-intro"
     breadcrumbs={[{ name: labels(locale).guides }]}
     eyebrow={article.tag[locale] + (article.sample ? l(locale, ' · TASLAK', ' · DRAFT') : '')}
@@ -119,14 +105,14 @@ const answer =
               <img
                 class="article-inline-image"
                 src={withBase(article.image)}
-                alt={l(locale, 'Makine ayrıntısı', 'Equipment detail')}
+                alt={l(locale, 'Ürün fotoğrafı için yer tutucu', 'Product photography placeholder')}
                 width="1200"
                 height="500"
                 loading="eager"
               />
               {article.sample && (
                 <p class="article-image-caption">
-                  {l(locale, 'Temsili ekipman', 'Illustrative equipment')}
+                  {l(locale, 'Ürün fotoğrafı eklenecek', 'Product photography pending')}
                 </p>
               )}
             </>
@@ -154,7 +140,7 @@ const answer =
       )}
       {category && (
         <a class="text-link" href={url(locale, 'categories', category.slug[locale])}>
-          {l(locale, 'İlgili makineleri inceleyin', 'Explore related equipment')}
+          {l(locale, 'İlgili ürünleri inceleyin', 'Explore related products')}
         </a>
       )}
     </article>

@@ -8,7 +8,7 @@ interface Props {
   machineId?: string;
 }
 const { locale, machineId } = Astro.props;
-const { machines, settings } = await getContent();
+const { machines, settings, categories } = await getContent();
 const selected = machines.find((machine) => machine.id === machineId);
 const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
 ---
@@ -37,30 +37,34 @@ const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
       <strong data-context-model>{selected?.model}</strong>
       <span data-context-sample>{selected?.sample ? labels(locale).sample : ''}</span>
       <button type="button" data-remove-machine>
-        {l(locale, 'Makineyi kaldır', 'Remove machine')}
+        {l(locale, 'Ürünü kaldır', 'Remove product')}
       </button>
     </div>
   </div>
   <div class="form-field machine-chooser" data-machine-chooser hidden={!!selected}>
     <label for="enquiry-machine">
-      {l(locale, 'İlgilendiğiniz makine', 'Machine of interest')}{' '}
+      {l(locale, 'İlgilendiğiniz ürün', 'Product of interest')}{' '}
       <span>{l(locale, '(isteğe bağlı)', '(optional)')}</span>
     </label>
     <select id="enquiry-machine" name="machineId">
       <option value="">{l(locale, 'Genel bilgi talebi', 'General enquiry')}</option>
-      {machines
-        .filter((m) => m.published.includes(locale))
-        .map((m) => (
-          <option
-            value={m.id}
-            selected={m.id === machineId}
-            data-model={m.model}
-            data-image={withBase(m.images[0].src)}
-            data-sample={m.sample}
-          >
-            {m.name[locale]}
-          </option>
-        ))}
+      {categories.map((category) => (
+        <optgroup label={category.name[locale]}>
+          {machines
+            .filter((m) => m.published.includes(locale) && m.categoryId === category.id)
+            .map((m) => (
+              <option
+                value={m.id}
+                selected={m.id === machineId}
+                data-model={m.model}
+                data-image={withBase(m.images[0].src)}
+                data-sample={m.sample}
+              >
+                {m.name[locale]}
+              </option>
+            ))}
+        </optgroup>
+      ))}
     </select>
   </div>
   <input type="hidden" name="language" value={locale} />
@@ -194,7 +198,7 @@ const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
         form.querySelector('[data-context-model]')!.textContent =
           option.dataset.model || option.textContent;
         form.querySelector('[data-context-sample]')!.textContent =
-          option.dataset.sample === 'true' ? (tr ? 'Örnek ilan' : 'Sample listing') : '';
+          option.dataset.sample === 'true' ? (tr ? 'İçerik önizlemesi' : 'Content preview') : '';
       }
     };
     select.addEventListener('change', update);
@@ -203,11 +207,13 @@ const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
       update();
       select.focus();
       const params = new URLSearchParams(location.search);
+      params.delete('product');
       params.delete('machine');
       history.replaceState(null, '', location.pathname + (params.size ? '?' + params : ''));
       const alternate = document.querySelector<HTMLAnchorElement>('.languages a');
       if (alternate) {
         const target = new URL(alternate.href);
+        target.searchParams.delete('product');
         target.searchParams.delete('machine');
         alternate.href = target.href;
       }

@@ -10,7 +10,7 @@ if (!projectId)
   );
 export default defineConfig({
   name: 'machinery',
-  title: 'Machinery · Content studio',
+  title: 'TECHNICSAN · Content studio',
   projectId,
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
   plugins: [
@@ -23,7 +23,9 @@ export default defineConfig({
               .title('Company & launch settings')
               .id('siteSettings')
               .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
-            ...S.documentTypeListItems().filter((item) => item.getId() !== 'siteSettings'),
+            ...S.documentTypeListItems().filter(
+              (item) => !['siteSettings', 'usedMachine'].includes(item.getId() || ''),
+            ),
           ]),
       defaultDocumentNode: (S) =>
         S.document().views([
@@ -34,6 +36,7 @@ export default defineConfig({
   ],
   schema: { types: schemaTypes },
   document: {
-    newDocumentOptions: (previous) => previous.filter((item) => item.templateId !== 'siteSettings'),
+    newDocumentOptions: (previous) =>
+      previous.filter((item) => !['siteSettings', 'usedMachine'].includes(item.templateId)),
   },
 });

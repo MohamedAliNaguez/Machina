@@ -10,7 +10,7 @@ const payload = {
   phone: '',
   message: 'Example equipment enquiry for a local test.',
   language: 'en',
-  machineId: 'ex210',
+  machineId: 'v-type-silobas',
 };
 function request(
   body: unknown = payload,

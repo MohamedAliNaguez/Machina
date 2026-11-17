@@ -1,7 +1,7 @@
 ---
 import type { Locale, Machine } from '../lib/types';
-import { labels, l, url, formatNumber } from '../lib/i18n';
-import Media from './Media.astro';
+import { labels, l, url } from '../lib/i18n';
+import ProductVisual from './ProductVisual.astro';
 import { getContent } from '../lib/content';
 interface Props {
   machine: Machine;
@@ -11,75 +11,54 @@ interface Props {
 }
 const { machine, locale, priority = false, compact = false } = Astro.props;
 const copy = labels(locale);
-const brandName =
-  (await getContent()).brands.find((brand) => brand.id === machine.brandId && brand.verified)
-    ?.name || '';
+const { categories } = await getContent();
+const category = categories.find((item) => item.id === machine.categoryId)!;
 const href = url(locale, 'machines', machine.slug[locale]);
-const categoryLabels: Record<string, string> = {
-  excavators: l(locale, 'Paletli ekskavatör', 'Crawler excavator'),
-  loaders: l(locale, 'Lastikli yükleyici', 'Wheel loader'),
-  road: l(locale, 'Zemin silindiri', 'Soil compactor'),
-  lifting: l(locale, 'Teleskopik yükleyici', 'Telescopic handler'),
-  attachments: l(locale, 'Ataşman', 'Attachment'),
-};
 ---
 
 <article
-  class:list={['machine-card', { 'machine-card-compact': compact }]}
+  class:list={['machine-card', 'pressure-product-card', { 'machine-card-compact': compact }]}
   data-machine-card
   data-id={machine.id}
-  data-search={brandName + ' ' + machine.model + ' ' + machine.name[locale]}
+  data-search={`${machine.model} ${machine.name[locale]} ${category.name[locale]} ${machine.summary[locale]}`}
   data-category={machine.categoryId}
-  data-brand={machine.brandId || ''}
-  data-kind={machine.kind}
-  data-year={machine.year || ''}
-  data-hours={machine.hours ?? ''}
 >
-  <a class="machine-image" href={href} aria-label={machine.name[locale]}>
-    <Media
+  <a
+    class="machine-image"
+    href={href}
+    aria-label={
+      machine.name[locale] +
+      (machine.images[0].placeholder
+        ? ' · ' + l(locale, 'Ürün fotoğrafı eklenecek', 'Product photography pending')
+        : '')
+    }
+  >
+    <ProductVisual
       src={machine.images[0].src}
       alt={machine.images[0].alt[locale]}
-      width="900"
-      height="450"
-      loading={priority ? 'eager' : 'lazy'}
-      decoding="async"
+      locale={locale}
+      placeholder={machine.images[0].placeholder}
+      priority={priority}
     />
   </a>
   <div class="machine-card-body">
     <div class="machine-card-labels">
-      <span class:list={['kind-tag', machine.kind]}>{copy[machine.kind]}</span>
-      {machine.sample && <span class="sample-tag">{copy.sample}</span>}
+      <span class="pressure-product-type">{category.name[locale]}</span>
+      {machine.sample && (
+        <span class="sample-tag">
+          {machine.reference ? l(locale, 'İnceleme bekliyor', 'Review pending') : copy.sample}
+        </span>
+      )}
     </div>
     <h3>
-      <a href={href}>{machine.model}</a>
+      <a href={href}>{machine.name[locale]}</a>
     </h3>
-    <p class="machine-category">
-      {machine.sample
-        ? categoryLabels[machine.categoryId]
-        : machine.name[locale].replace(machine.model + ' ', '')}
-    </p>
-    {machine.kind === 'used' && (
-      <p class="card-unit-facts">
-        {machine.year} · {formatNumber(machine.hours || 0, locale)} {l(locale, 'saat', 'h')}
-      </p>
+    <p class="machine-category">{machine.summary[locale]}</p>
+    {!machine.sample && machine.status !== 'available' && (
+      <span class:list={['card-stock', machine.status]}>{copy[machine.status]}</span>
     )}
-    {machine.status !== 'available' && (
-      <span class:list={['card-stock', machine.status]}>
-        {copy[machine.status]}
-        {machine.sample && l(locale, ' · Örnek durum', ' · Sample status')}
-      </span>
-    )}
-    <a
-      class="text-link card-view"
-      href={
-        compact && machine.status === 'sold'
-          ? url(locale, 'machines') + '?category=' + machine.categoryId
-          : href
-      }
-    >
-      {compact && machine.status === 'sold'
-        ? l(locale, 'Benzer makineleri inceleyin', 'View alternatives')
-        : copy.details}
+    <a class="text-link card-view" href={href}>
+      {copy.details}
     </a>
   </div>
 </article>

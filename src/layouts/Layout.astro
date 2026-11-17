@@ -1,6 +1,7 @@
 ---
 import { withBase } from '../lib/paths';
 import SteelLoader from '../components/loading/SteelLoader.astro';
+import Brand from '../components/Brand.astro';
 import '@fontsource/barlow-condensed/latin-600.css';
 import '@fontsource/barlow-condensed/latin-700.css';
 import '@fontsource/barlow-condensed/latin-ext-600.css';
@@ -13,6 +14,8 @@ import '../styles/global.css';
 import '../styles/theatre.css';
 import '../styles/steel.css';
 import '../styles/steel-content.css';
+import '../styles/brand.css';
+import '../styles/pressure.css';
 import '@fontsource/anton/latin-400.css';
 import '@fontsource/anton/latin-ext-400.css';
 import { getContent, launchReady, isDraftPreview } from '../lib/content';
@@ -61,6 +64,7 @@ const baseSchema = settings.identityVerified
         '@type': 'Organization',
         name: settings.legalName || settings.name,
         url: origin.href,
+        logo: new URL(withBase('/brand/technicsan.svg'), origin).href,
         email: settings.email,
         telephone: settings.phone,
         address: settings.address
@@ -98,7 +102,7 @@ const crumbSchema = breadcrumbs.length
     <title>{title} | {settings.name}</title>
     <meta name="description" content={description} />
     <meta name="robots" content={indexing ? 'index,follow' : 'noindex,follow'} />
-    <meta name="theme-color" content="#11171C" />
+    <meta name="theme-color" content="#003B27" />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang={locale} href={canonical} />
@@ -106,38 +110,38 @@ const crumbSchema = breadcrumbs.length
       <link rel="alternate" hreflang={otherLocale(locale)} href={new URL(alternate, origin).href} />
     )}
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={settings.name} />
     <meta property="og:title" content={`${title} | ${settings.name}`} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta
       property="og:image"
-      content={
-        new URL(withBase(socialImage || settings.heroImage?.src || '/images/excavator.jpg'), origin)
-          .href
-      }
+      content={new URL(withBase(socialImage || '/brand/technicsan-social.png'), origin).href}
     />
     <meta property="og:locale" content={locale === 'tr' ? 'tr_TR' : 'en_GB'} />
     {[...baseSchema, ...crumbSchema, ...schema].map((item) => (
       <script type="application/ld+json" set:html={JSON.stringify(item).replace(/</g, '\\u003c')} />
     ))}
   </head>
-  <body class:list={{ 'steel-page': true, 'theatre-page': appearance === 'theatre' }}>
+  <body
+    class:list={{
+      'steel-page': true,
+      'pressure-site': true,
+      'theatre-page': appearance === 'theatre',
+    }}
+  >
     <SteelLoader locale={locale} brand={settings.name} />
     <a class="skip-link" href="#main">
       {l(locale, 'İçeriğe geç', 'Skip to content')}
     </a>
     <header class="site-header">
       <div class="container header-inner">
-        <a class="wordmark" href={url(locale)}>
-          <span class="brand-mark" aria-hidden="true">
-            <i></i>
-            <i></i>
-            <i></i>
-          </span>
-          <span>
-            {settings.name}
-            <small>{l(locale, 'MAKİNE & EKİPMAN', 'MACHINERY & EQUIPMENT')}</small>
-          </span>
+        <a
+          class="wordmark"
+          href={url(locale)}
+          aria-label={l(locale, 'TECHNICSAN ana sayfa', 'TECHNICSAN homepage')}
+        >
+          <Brand />
         </a>
         <button
           id="menu-toggle"
@@ -208,8 +212,8 @@ const crumbSchema = breadcrumbs.length
       if (alternateLink && location.search) {
         const target = new URL(alternateLink.href);
         const allowed = /\/(contact|iletisim)\//.test(location.pathname)
-          ? ['machine']
-          : ['q', 'kind', 'category', 'brand', 'year', 'hours'];
+          ? ['product', 'machine']
+          : ['q', 'category', 'page'];
         const current = new URLSearchParams(location.search);
         allowed.forEach((key) => {
           const value = current.get(key);
@@ -217,7 +221,7 @@ const crumbSchema = breadcrumbs.length
         });
         alternateLink.href = target.href;
       }
-      if (location.search && /\/(machines|makineler)\/$/.test(location.pathname))
+      if (location.search && /\/(products|urunler)\/$/.test(location.pathname))
         document.querySelector('meta[name="robots"]')?.setAttribute('content', 'noindex,follow');
     </script>
   </body>

@@ -1,6 +1,7 @@
 ---
 import Excavator from './Excavator.astro';
 import SteelRevealArt from './SteelRevealArt.astro';
+import Brand from '../Brand.astro';
 interface Props {
   concept: 'hydraulic' | 'reveal' | 'blueprint';
   id: string;
@@ -10,7 +11,7 @@ const { concept, id } = Astro.props;
 
 <div class={`animation-surface ${concept}`} data-playing="false" data-concept={concept}>
   <div class="scene-brand" aria-hidden="true">
-    <span class="brand-cut"></span>MACHINA
+    <Brand variant="light" decorative />
   </div>
   <div class="scene-corner" aria-hidden="true">
     {concept === 'blueprint' ? 'ENGINEERED TO WORK' : 'BUILT FOR THE WORK AHEAD'}

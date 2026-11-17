@@ -1,13 +1,23 @@
 ---
 import Catalogue from '../../../components/Catalogue.astro';
-import MachineDetail from '../../../components/MachineDetail.astro';
+import ProductDetail from '../../../components/ProductDetail.astro';
 import ArticleDetail from '../../../components/ArticleDetail.astro';
 import { getContent } from '../../../lib/content';
-import { paths } from '../../../lib/i18n';
+import { paths, url } from '../../../lib/i18n';
 import type { Article, Category, Locale, Machine } from '../../../lib/types';
+import catalogueRedirects from '../../../data/catalogue-redirects.json';
 export async function getStaticPaths() {
   const content = await getContent();
   return (['tr', 'en'] as Locale[]).flatMap((locale) => [
+    ...catalogueRedirects
+      .filter((alias) => alias.locale === locale)
+      .map((alias) => ({
+        params: { locale, section: paths.machines[locale], slug: alias.slug },
+        props: {
+          kind: 'legacy-product',
+          machine: content.machines.find((product) => product.id === alias.productId),
+        },
+      })),
     ...content.machines
       .filter((m) => m.published.includes(locale))
       .map((machine) => ({
@@ -17,6 +27,10 @@ export async function getStaticPaths() {
     ...content.categories.map((category) => ({
       params: { locale, section: paths.categories[locale], slug: category.slug[locale] },
       props: { kind: 'category', category },
+    })),
+    ...content.categories.map((category) => ({
+      params: { locale, section: paths.machines[locale], slug: category.slug[locale] },
+      props: { kind: 'family-alias', category },
     })),
     ...content.articles
       .filter((a) => a.published.includes(locale))
@@ -33,8 +47,12 @@ const props = Astro.props as {
   category?: Category;
   article?: Article;
 };
+if (props.kind === 'family-alias')
+  return Astro.redirect(url(locale, 'categories', props.category!.slug[locale]), 301);
+if (props.kind === 'legacy-product')
+  return Astro.redirect(url(locale, 'machines', props.machine!.slug[locale]), 301);
 ---
 
 {props.kind === 'category' && <Catalogue locale={locale} category={props.category!} />}
-{props.kind === 'machine' && <MachineDetail locale={locale} machine={props.machine!} />}
+{props.kind === 'machine' && <ProductDetail locale={locale} machine={props.machine!} />}
 {props.kind === 'article' && <ArticleDetail locale={locale} article={props.article!} />}
