@@ -3,6 +3,7 @@ export function initEnquiryForm() {
   const form = document.querySelector<HTMLFormElement>('[data-enquiry-form]');
   if (!form) return;
   const tr = form.dataset.locale === 'tr';
+  const emailDelivery = form.dataset.delivery === 'formspree';
   const status = form.querySelector<HTMLElement>('[data-form-status]')!;
   const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
   const label = form.querySelector<HTMLElement>('[data-submit-label]')!;
@@ -46,9 +47,10 @@ export function initEnquiryForm() {
   }
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (form.dataset.staticHosting === 'true') return;
+    if (form.dataset.staticHosting === 'true' && !emailDelivery) return;
     if (busy) return;
     const data = Object.fromEntries(new FormData(form));
+    if (data.website) return;
     const validation = validateEnquiry(data);
     for (const name of ['name', 'email', 'phone', 'message']) {
       const field = form.elements.namedItem(name) as HTMLInputElement;
@@ -93,14 +95,31 @@ export function initEnquiryForm() {
     status.textContent = '';
     status.className = 'form-status';
     try {
-      const response = await fetch('/api/enquiries', {
+      const option = select.selectedOptions[0];
+      const productName = select.value ? option.textContent?.trim() || select.value : '';
+      const payload = emailDelivery
+        ? {
+            ...validation.value,
+            ...(validation.value.email ? { email: validation.value.email } : { email: undefined }),
+            product: productName || (tr ? 'Genel bilgi talebi' : 'General enquiry'),
+            _subject: `TECHNICSAN · ${productName || (tr ? 'Satış talebi' : 'Sales enquiry')}`,
+            page: document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href,
+            reference: key,
+          }
+        : data;
+      const response = await fetch(form.action, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Idempotency-Key': key },
-        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          ...(emailDelivery ? {} : { 'Idempotency-Key': key }),
+        },
+        body: JSON.stringify(payload),
+        credentials: emailDelivery ? 'omit' : 'same-origin',
         signal: AbortSignal.timeout(20000),
       });
       const result = await response.json().catch(() => ({}));
-      if (!response.ok)
+      if (!response.ok || (emailDelivery && result.ok !== true))
         throw new Error(
           response.status === 429
             ? 'rate'

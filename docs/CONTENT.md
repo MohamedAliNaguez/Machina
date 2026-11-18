@@ -26,7 +26,7 @@ Product and category pages use `/en/products/`, `/tr/urunler/`, `/en/categories/
 
 ## Ownership and editorial review
 
-The TECHNICSAN name/logo, Ankara location and five product types were supplied by the owner. The owner also supplied **+90 532 712 24 17** for phone/WhatsApp and **info@technicsan.com** for email on 18 November 2026. These public contact references live in `src/data/contact.json` and populate the preview settings. Shared contact links appear on every page and on the contact screen; product-page email and WhatsApp links include the translated product name and its page URL. When using Sanity content, enter the same references in Company & launch settings. This does not configure email delivery or enable the hosted preview form.
+The TECHNICSAN name/logo, Ankara location and five product types were supplied by the owner. The owner also supplied **+90 532 712 24 17** for phone/WhatsApp and **info@technicsan.com** for email on 18 November 2026. These public contact references live in `src/data/contact.json` and populate the preview settings. Shared contact links appear on every page and on the contact screen; product-page email and WhatsApp links include the translated product name and its page URL. When using Sanity content, enter the same references in Company & launch settings. The owner separately authorised direct email enquiries and verified the company Formspree account. Hosted delivery is configured in `src/data/enquiry-delivery.json`; local development remains an email-free SQLite preview.
 
 Legal company details, exact address, represented brands, certifications, history, customer names and business claims remain unverified. Do not infer these from reference sites.
 

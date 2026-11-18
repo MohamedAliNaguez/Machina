@@ -3,6 +3,7 @@ import { withBase } from '../lib/paths';
 import { getContent } from '../lib/content';
 import { l, url, labels } from '../lib/i18n';
 import type { Locale } from '../lib/types';
+import { hostedEnquiryEndpoint } from '../lib/enquiry-delivery';
 interface Props {
   locale: Locale;
   machineId?: string;
@@ -11,6 +12,8 @@ const { locale, machineId } = Astro.props;
 const { machines, settings, categories } = await getContent();
 const selected = machines.find((machine) => machine.id === machineId);
 const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
+const emailDelivery = !!hostedEnquiryEndpoint;
+const disabled = staticHosting && !emailDelivery;
 ---
 
 <form
@@ -19,8 +22,9 @@ const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
   data-locale={locale}
   data-preview={!settings.identityVerified}
   data-static-hosting={staticHosting}
+  data-delivery={emailDelivery ? 'formspree' : 'local'}
   data-sitekey={staticHosting ? '' : settings.turnstileSiteKey || ''}
-  action={staticHosting ? undefined : withBase('/api/enquiries')}
+  action={hostedEnquiryEndpoint || (staticHosting ? undefined : withBase('/api/enquiries'))}
   method="post"
   novalidate
 >
@@ -73,7 +77,7 @@ const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
     <input
       id="enquiry-name"
       name="name"
-      disabled={staticHosting}
+      disabled={disabled}
       autocomplete="name"
       placeholder={l(locale, 'Adınız ve soyadınız', 'Your full name')}
       required
@@ -88,7 +92,7 @@ const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
       <input
         id="enquiry-email"
         name="email"
-        disabled={staticHosting}
+        disabled={disabled}
         type="email"
         autocomplete="email"
         placeholder={l(locale, 'E-posta adresiniz', 'Your email address')}
@@ -102,7 +106,7 @@ const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
       <input
         id="enquiry-phone"
         name="phone"
-        disabled={staticHosting}
+        disabled={disabled}
         type="tel"
         autocomplete="tel"
         placeholder={l(locale, 'Telefon numaranız', 'Your phone number')}
@@ -120,7 +124,7 @@ const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
     <textarea
       id="enquiry-message"
       name="message"
-      disabled={staticHosting}
+      disabled={disabled}
       rows="3"
       required
       minlength="10"
@@ -136,6 +140,15 @@ const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
   </div>
   {!staticHosting && settings.turnstileSiteKey && <div id="turnstile-widget"></div>}
   <p class="privacy-help">
+    {emailDelivery && (
+      <>
+        {l(
+          locale,
+          `Adınız, iletişim bilgileriniz ve mesajınız, talebinize yanıt verilmesi için Formspree üzerinden ${settings.email} adresine iletilir. `,
+          `Your name, contact details and message are sent through Formspree to ${settings.email} to respond to your enquiry. `,
+        )}
+      </>
+    )}
     {l(locale, 'Göndermeden önce ', 'Read our ')}
     <a href={url(locale, 'privacy')}>{l(locale, 'gizlilik bildirimini', 'privacy notice')}</a>
     {l(locale, ' okuyun', ' before submitting')}
@@ -143,16 +156,16 @@ const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
   <button
     class="button"
     type="submit"
-    disabled={staticHosting}
-    aria-describedby={staticHosting ? 'enquiry-preview-notice' : undefined}
+    disabled={disabled}
+    aria-describedby={disabled ? 'enquiry-preview-notice' : undefined}
   >
     <span data-submit-label>
-      {staticHosting
+      {disabled
         ? l(locale, 'Yalnızca önizleme', 'Preview only')
         : l(locale, 'Talep gönder', 'Send enquiry')}
     </span>
   </button>
-  {(staticHosting || !settings.identityVerified) && (
+  {!emailDelivery && (staticHosting || !settings.identityVerified) && (
     <p class="enquiry-preview-note" id="enquiry-preview-notice">
       {staticHosting
         ? l(
@@ -172,8 +185,12 @@ const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
     <p class="notice">
       {l(
         locale,
-        'Bu form için JavaScript gereklidir. Varsa doğrudan iletişim kanallarını kullanabilirsiniz.',
-        'This form requires JavaScript. Use direct contact channels when available.',
+        emailDelivery
+          ? 'Formspree güvenli gönderim sayfasında devam edebilirsiniz.'
+          : 'Bu form için JavaScript gereklidir. Doğrudan iletişim kanallarını kullanabilirsiniz.',
+        emailDelivery
+          ? 'You can continue on Formspree’s secure submission page.'
+          : 'This form requires JavaScript. Use the direct contact channels.',
       )}
     </p>
   </noscript>

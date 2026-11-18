@@ -8,7 +8,7 @@ Live preview: [Machina](https://mohamedalinaguez.github.io/Machina/en/). Public 
 
 The GitHub Pages workflow builds and publishes the static preview on every push to `main`, using the repository's Pages origin and base path. It needs no Cloudflare account or deployment secret. Repository settings → Pages → Source must be **GitHub Actions**.
 
-The hosted version retains sample labels and `noindex` metadata. It has no server or enquiry storage: sending and personal contact inputs are disabled with a clear preview notice. The local development version still supports local SQLite enquiry testing. A real enquiry backend, reviewed privacy copy and verified company content are needed for the full launch.
+The hosted version retains sample labels and `noindex` metadata. Its sales enquiry form sends to the owner-confirmed **info@technicsan.com** inbox through the company Formspree form configured in `src/data/enquiry-delivery.json`. This is separate from GitHub hosting: Formspree handles private submission storage and email notifications. The local development version still uses local SQLite and sends no email. Verified company/product content and reviewed privacy copy are still needed for the full launch.
 
 ## Run locally
 

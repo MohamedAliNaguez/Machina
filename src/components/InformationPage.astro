@@ -5,6 +5,7 @@ import Layout from '../layouts/Layout.astro';
 import SteelIntro from './SteelIntro.astro';
 import EnquiryForm from './EnquiryForm.astro';
 import ContactLinks from './ContactLinks.astro';
+import { hostedEnquiryEndpoint } from '../lib/enquiry-delivery';
 import { getContent } from '../lib/content';
 import { labels, l, otherLocale, url, type Section } from '../lib/i18n';
 import type { Locale } from '../lib/types';
@@ -50,8 +51,12 @@ const privacySections = [
     title: l(locale, 'Talepleri kim yönetir', 'Who handles enquiries'),
     text: l(
       locale,
-      'Doğrulanmış şirket adı ve gizlilik iletişim bilgileri burada yer alacaktır.',
-      'Verified company name and privacy contact will appear here. This section will set out who is responsible for handling enquiries submitted through this website.',
+      hostedEnquiryEndpoint
+        ? `TECHNICSAN satış taleplerine ${settings.email} adresinden yanıt verir.`
+        : 'Doğrulanmış şirket adı ve gizlilik iletişim bilgileri burada yer alacaktır.',
+      hostedEnquiryEndpoint
+        ? `TECHNICSAN responds to sales enquiries through ${settings.email}.`
+        : 'Verified company name and privacy contact will appear here. This section will set out who is responsible for handling enquiries submitted through this website.',
     ),
   },
   {
@@ -59,8 +64,12 @@ const privacySections = [
     title: l(locale, 'Paylaştığınız bilgiler', 'Information you provide'),
     text: l(
       locale,
-      'Bu bölüm, talep formu aracılığıyla istenen bilgileri ve nasıl toplandığını açıklayacaktır.',
-      'This section will describe the information requested through the enquiry form, and how it is collected.',
+      hostedEnquiryEndpoint
+        ? 'Form, adınızı, e-posta veya telefonunuzu, mesajınızı, isteğe bağlı ürün seçiminizi ve dili iletir. Bir talep referansı ve formun sayfa adresi de eklenir.'
+        : 'Bu bölüm, talep formu aracılığıyla istenen bilgileri ve nasıl toplandığını açıklayacaktır.',
+      hostedEnquiryEndpoint
+        ? 'The form submits your name, email or phone, message, optional product selection and language. An enquiry reference and the form page address are also included.'
+        : 'This section will describe the information requested through the enquiry form, and how it is collected.',
     ),
   },
   {
@@ -68,8 +77,12 @@ const privacySections = [
     title: l(locale, 'Kullanım ve saklama', 'Use and retention'),
     text: l(
       locale,
-      'Onaylanmış işleme amaçları, hizmet sağlayıcıları ve saklama bilgileri onaylı metinde yer alacaktır.',
-      'Confirmed processing purposes, service providers and retention information will appear in the approved notice.',
+      hostedEnquiryEndpoint
+        ? 'Talepler, yanıt verilmek üzere Formspree üzerinden iletilir; Formspree hesabında ve satış e-posta kutusunda saklanır. Saklama ve silme ile ilgili sorularınızı satış iletişim adresine iletebilirsiniz.'
+        : 'Onaylanmış işleme amaçları, hizmet sağlayıcıları ve saklama bilgileri onaylı metinde yer alacaktır.',
+      hostedEnquiryEndpoint
+        ? 'Enquiries are sent through Formspree so sales can respond, and are stored in the Formspree account and sales mailbox. Contact sales with questions about retention or deletion.'
+        : 'Confirmed processing purposes, service providers and retention information will appear in the approved notice.',
     ),
   },
   {
@@ -77,8 +90,12 @@ const privacySections = [
     title: l(locale, 'İletişim', 'Your contact'),
     text: l(
       locale,
-      'Gizlilik talepleri için onaylanmış iletişim kanalı burada yer alacaktır.',
-      'The approved contact route for privacy requests will appear here.',
+      settings.email
+        ? `Bilgilerinizle ilgili sorularınızı ${settings.email} adresine iletebilirsiniz.`
+        : 'Gizlilik talepleri için onaylanmış iletişim kanalı burada yer alacaktır.',
+      settings.email
+        ? `For questions about your information, contact ${settings.email}.`
+        : 'The approved contact route for privacy requests will appear here.',
     ),
   },
 ];
@@ -298,11 +315,44 @@ const privacySections = [
               <p>
                 {l(
                   locale,
-                  'Şirketin onaylı gizlilik bildirimi yayımdan önce tamamlanacaktır. Bu önizlemede yalnızca örnek bilgiler kullanın.',
-                  'The company notice must be completed before launch. Use sample information only in this preview.',
+                  hostedEnquiryEndpoint
+                    ? 'Şirketin tam gizlilik bildirimi inceleme aşamasındadır. Aşağıdaki bilgiler, etkin satış talep formunun nasıl çalıştığını açıklar.'
+                    : 'Şirketin onaylı gizlilik bildirimi yayımdan önce tamamlanacaktır. Bu önizlemede yalnızca örnek bilgiler kullanın.',
+                  hostedEnquiryEndpoint
+                    ? 'The full company notice is under review. The information below explains how the active sales enquiry form works.'
+                    : 'The company notice must be completed before launch. Use sample information only in this preview.',
                 )}
               </p>
             </div>
+            {hostedEnquiryEndpoint && (
+              <section>
+                <h2>{l(locale, 'Satış talep formu', 'Sales enquiry form')}</h2>
+                <p>
+                  {l(
+                    locale,
+                    `Formdaki ad, e-posta veya telefon, mesaj, seçilen ürün ve dil bilgileri, talebinize yanıt verilmesi amacıyla Formspree'ye gönderilir ve TECHNICSAN satış iletişim adresi ${settings.email} üzerinden işlenir. Talepler Formspree hesabında ve satış e-posta kutusunda saklanır.`,
+                    `The form sends your name, email or phone, message, selected product and language to Formspree for TECHNICSAN to respond to your enquiry at ${settings.email}. Enquiries are stored in the Formspree account and the sales mailbox.`,
+                  )}
+                </p>
+                <p>
+                  <a
+                    href="https://formspree.io/legal/privacy-policy/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {l(locale, 'Formspree gizlilik politikası', 'Formspree privacy policy')}
+                  </a>
+                </p>
+                <p>
+                  {l(
+                    locale,
+                    'Verilerinizle ilgili sorular için: ',
+                    'For questions about your information: ',
+                  )}
+                  <a href={'mailto:' + settings.email}>{settings.email}</a>
+                </p>
+              </section>
+            )}
             {privacySections.map((item) => (
               <section id={item.id}>
                 <h2>{item.title}</h2>
