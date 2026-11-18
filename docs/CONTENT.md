@@ -26,7 +26,9 @@ Product and category pages use `/en/products/`, `/tr/urunler/`, `/en/categories/
 
 ## Ownership and editorial review
 
-The TECHNICSAN name/logo, Ankara location and five product types were supplied by the owner. Legal company details, exact address, contact channels, represented brands, certifications, history, customer names and business claims remain unverified. Do not infer these from reference sites.
+The TECHNICSAN name/logo, Ankara location and five product types were supplied by the owner. The owner also supplied **+90 532 712 24 17** for phone/WhatsApp and **info@technicsan.com** for email on 18 November 2026. These public contact references live in `src/data/contact.json` and populate the preview settings. Shared contact links appear on every page and on the contact screen; product-page email and WhatsApp links include the translated product name and its page URL. When using Sanity content, enter the same references in Company & launch settings. This does not configure email delivery or enable the hosted preview form.
+
+Legal company details, exact address, represented brands, certifications, history, customer names and business claims remain unverified. Do not infer these from reference sites.
 
 The three buyer guides are labelled drafts about preparing enquiries, compressor requirements, and storage/mixing requirements. They do not contain operating pressures, safety procedures or technical settings. Before publication, add the actual author/reviewer, review date and sources supporting any technical claims. Review Turkish and English terminology and image rights. Do not invent reviews, prices or endorsements.
 

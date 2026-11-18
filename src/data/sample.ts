@@ -1,6 +1,7 @@
 import type { Article, Content, Localized, Machine } from '../lib/types';
 import catalogueProducts from './catalogue-products.json';
 import { productTypes } from './product-types';
+import contact from './contact.json';
 const t = <T>(tr: T, en: T): Localized<T> => ({ tr, en });
 
 // Imported manufacturer references stay unverified until supply, facts and reuse rights are approved.
@@ -128,7 +129,13 @@ const articles: Article[] = [
 ];
 
 export const sampleContent: Content = {
-  settings: { name: 'TECHNICSAN', identityVerified: false, city: 'Ankara', privacyReviewed: false },
+  settings: {
+    name: 'TECHNICSAN',
+    identityVerified: false,
+    city: 'Ankara',
+    privacyReviewed: false,
+    ...contact,
+  },
   categories: productTypes,
   machines,
   articles,

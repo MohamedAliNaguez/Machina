@@ -4,6 +4,7 @@ import { withBase } from '../lib/paths';
 import Layout from '../layouts/Layout.astro';
 import SteelIntro from './SteelIntro.astro';
 import EnquiryForm from './EnquiryForm.astro';
+import ContactLinks from './ContactLinks.astro';
 import { getContent } from '../lib/content';
 import { labels, l, otherLocale, url, type Section } from '../lib/i18n';
 import type { Locale } from '../lib/types';
@@ -261,49 +262,12 @@ const privacySections = [
           <p>
             {l(
               locale,
-              'Kesin konum ve satış iletişim bilgileri yayımdan önce doğrulanacaktır',
-              'Exact location and sales contacts will be confirmed before launch',
+              'Açık adres teyit edildikten sonra eklenecektir',
+              'The exact address will be added once confirmed',
             )}
           </p>
         )}
-        {settings.phone ? (
-          <div class="contact-channel">
-            <strong>{l(locale, 'Telefon', 'Phone')}</strong>
-            <a href={'tel:' + settings.phone.replace(/[^+\d]/g, '')}>{settings.phone}</a>
-          </div>
-        ) : (
-          !settings.identityVerified && (
-            <div class="contact-channel">
-              <strong>{l(locale, 'Telefon', 'Phone')}</strong>
-              <span>{l(locale, 'Bilgiler bekleniyor', 'Details pending')}</span>
-            </div>
-          )
-        )}
-        {settings.whatsapp ? (
-          <div class="contact-channel">
-            <strong>WhatsApp</strong>
-            <a
-              href={'https://wa.me/' + settings.whatsapp.replace(/\D/g, '')}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {l(locale, 'WhatsApp ile görüşün', 'Chat on WhatsApp')}
-            </a>
-          </div>
-        ) : (
-          !settings.identityVerified && (
-            <div class="contact-channel">
-              <strong>WhatsApp</strong>
-              <span>{l(locale, 'Bilgiler bekleniyor', 'Details pending')}</span>
-            </div>
-          )
-        )}
-        {settings.email && (
-          <div class="contact-channel">
-            <strong>{l(locale, 'E-posta', 'Email')}</strong>
-            <a href={'mailto:' + settings.email}>{settings.email}</a>
-          </div>
-        )}
+        <ContactLinks locale={locale} settings={settings} layout="stacked" />
       </aside>
       <EnquiryForm locale={locale} />
     </div>

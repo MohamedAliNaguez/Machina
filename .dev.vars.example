@@ -3,7 +3,7 @@ SITE_ORIGIN=http://localhost:4322
 # Preview submissions are stored locally; no real email is sent.
 # Production must configure all of these:
 RESEND_API_KEY=
-SALES_EMAIL=
+SALES_EMAIL=info@technicsan.com
 FROM_EMAIL=
 RATE_LIMIT_SECRET=
 TURNSTILE_SECRET_KEY=

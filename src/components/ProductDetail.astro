@@ -4,6 +4,7 @@ import Breadcrumbs from './Breadcrumbs.astro';
 import MachineCard from './MachineCard.astro';
 import ProductVisual from './ProductVisual.astro';
 import ProductLightbox from './ProductLightbox.astro';
+import ContactLinks from './ContactLinks.astro';
 import { withBase } from '../lib/paths';
 import { getContent } from '../lib/content';
 import { l, labels, otherLocale, url } from '../lib/i18n';
@@ -15,7 +16,7 @@ interface Props {
 }
 const { locale, machine: product } = Astro.props;
 const sourceReview = await getSourceReview(product.id);
-const { categories, machines } = await getContent();
+const { categories, machines, settings } = await getContent();
 const category = categories.find((item) => item.id === product.categoryId)!;
 const copy = labels(locale);
 const related = machines
@@ -170,6 +171,17 @@ const schema = product.sample
               {l(locale, 'Ürün grubuna dönün', 'Back to product type')}
             </a>
           </div>
+          <div class="product-direct-contact">
+            <ContactLinks
+              locale={locale}
+              settings={settings}
+              theme="dark"
+              product={{
+                name: product.name[locale],
+                url: new URL(url(locale, 'machines', product.slug[locale]), origin).href,
+              }}
+            />
+          </div>
           {!product.sample && (
             <p class="pressure-availability">
               {copy[product.status]} ·{' '}
@@ -318,3 +330,9 @@ const schema = product.sample
     </div>
   </section>
 </Layout>
+
+<style>
+  .product-direct-contact {
+    margin-top: 16px;
+  }
+</style>

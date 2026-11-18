@@ -2,6 +2,7 @@
 import { withBase } from '../lib/paths';
 import SteelLoader from '../components/loading/SteelLoader.astro';
 import Brand from '../components/Brand.astro';
+import ContactLinks from '../components/ContactLinks.astro';
 import '@fontsource/barlow-condensed/latin-600.css';
 import '@fontsource/barlow-condensed/latin-700.css';
 import '@fontsource/barlow-condensed/latin-ext-600.css';
@@ -182,6 +183,12 @@ const crumbSchema = breadcrumbs.length
     <main id="main">
       <slot />
     </main>
+    <footer class="contact-reference">
+      <div class="container">
+        <span>TECHNICSAN</span>
+        <ContactLinks locale={locale} settings={settings} />
+      </div>
+    </footer>
     <script>
       const toggle = document.querySelector<HTMLButtonElement>('#menu-toggle');
       const nav = document.querySelector<HTMLElement>('#primary-nav');
@@ -226,3 +233,24 @@ const crumbSchema = breadcrumbs.length
     </script>
   </body>
 </html>
+
+<style>
+  .contact-reference {
+    padding-block: 18px;
+    border-top: 1px solid var(--border);
+    background: var(--background);
+  }
+  .contact-reference > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 32px;
+  }
+  .contact-reference span {
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+  }
+</style>
