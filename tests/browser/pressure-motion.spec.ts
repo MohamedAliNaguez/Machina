@@ -1,13 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-test('hero waits for the intro, runs once, settles and can be replayed without moving controls', async ({
+test('hero waits for the intro, runs once and settles without moving controls', async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/en/');
   const artwork = page.locator('[data-pressure-art]');
   const intro = page.locator('[data-site-loader]');
-  const replay = page.getByRole('button', { name: 'Replay motion', exact: true });
   await expect(intro).toBeVisible();
   await expect(artwork).not.toHaveAttribute('data-motion', 'running');
   await page.getByRole('button', { name: 'Continue to website', exact: true }).click();
@@ -19,15 +18,11 @@ test('hero waits for the intro, runs once, settles and can be replayed without m
   await expect
     .poll(() => piston.evaluate((element) => getComputedStyle(element).transform))
     .not.toBe(initial);
-  await expect(replay).toBeDisabled();
+  await expect(page.locator('[data-pressure-replay]')).toHaveCount(0);
   await expect(artwork).toHaveAttribute('data-motion', 'settled', { timeout: 6000 });
   expect(await actions.boundingBox()).toEqual(before);
-  await expect(replay).toBeEnabled();
-  await replay.click();
-  await expect(artwork).toHaveAttribute('data-motion', 'running');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect(artwork).toHaveAttribute('data-motion', 'reduced');
-  await expect(replay).toBeHidden();
   await expect(artwork.locator('img')).toBeVisible();
 });
 

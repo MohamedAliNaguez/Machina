@@ -123,3 +123,23 @@ Verification completed: 19 unit/backend tests; all six browser scenarios, includ
 - Passed all 10 browser checks, including two new motion scenarios for intro ordering, real piston movement, replay, stable action positions, cancelling on reduced-motion changes, Turkish headings and high-contrast fallback. Existing catalogue/enquiry/accessibility scenarios pass.
 - Static build passes for 663 pages and 14,649 internal references, with no TypeScript/Astro diagnostics. Inspected desktop frames at four animation times and the settled state; no browser errors. Normal-motion phone review has no horizontal overflow, working replay and an observed initial-load layout-shift total of approximately 0.011 in that local run (not field data).
 - Motion uses native SVG and Web Animations over the cached responsive image; no video, new service or animation dependency. Local preview remains on port 4332.
+
+## Approved logo master adoption — 18 November 2026
+
+The refined redraw is now the tracked identity source at docs/brand/technicsan-master.svg. Header and reversed lockups, intro wordmarks, compact logo, favicon, social image and the pressure motif all derive from it. The export command rejects raster inputs, preventing regeneration of the retired trace.
+
+The 663-page build passed, checking 14,649 internal references. Browser journeys passed; a low-contrast label in the local-only source-review panel was corrected and the accessibility scan passed on rerun. Formatting passes. Desktop and mobile intro screenshots confirm the approved wordmark loads at double pixel density. No external deployment performed for this adoption.
+
+## Enlarged product gallery — 18 November 2026
+
+Main product images now open a native modal gallery with a contained large image, sliding transitions, thumbnail selection, Previous/Next controls, count, keyboard navigation and horizontal touch swipes. Close, Escape and backdrop dismissal restore focus and scrolling; the selected image remains on the product page. Reduced motion swaps immediately. Image failures provide a localized message, and the no-JavaScript link still opens the image file.
+
+Verified desktop and Turkish phone layouts, wrapping navigation, focus restoration and swipe/thumbnail interaction. Corrected mobile grid sizing, a stale outgoing image under reduced motion and accessible names on placeholder products. The new gallery scenarios and representative accessibility scans pass; existing catalogue, enquiry and navigation scenarios passed. The 663-page build verifies 15,273 internal link/asset references. Screenshots are in test-results/product-lightbox-desktop.png and product-lightbox-mobile.png.
+
+## Studio image viewer refinement — 18 November 2026
+
+Replaced the framed gallery with an uninterrupted full-screen white canvas, quiet Source Sans 3 captions, round zoom/close controls and a floating forest-green thumbnail dock. The product-page preview has a lighter enlargement chip and subtler thumbnail selection. Single-photo views omit the dock.
+
+Added 1.8x zoom with mouse/touch dragging and a Fit image reset. Photo changes clear zoom, maintain the selected product-page image and use decoded-image transitions. Reduced motion removes animated zoom and transitions. Original source image pixels are retained.
+
+Desktop and Turkish mobile screenshots reviewed. Focused browser checks pass for zoom/panning, wrapped navigation, swiping, thumbnail selection, closing/focus restoration and representative accessibility scans. Native dialog, Pointer Events, CSS backdrop filtering and Web Animations provide the interaction without a new library or service.

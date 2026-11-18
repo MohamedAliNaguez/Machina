@@ -1,0 +1,139 @@
+---
+import { withBase } from '../lib/paths';
+import { l } from '../lib/i18n';
+import type { Locale, Machine } from '../lib/types';
+import '../styles/product-lightbox.css';
+interface Props {
+  product: Machine;
+  locale: Locale;
+}
+const { product, locale } = Astro.props;
+const photos = product.images.map((image) => ({
+  src: withBase(image.src),
+  alt: image.alt[locale],
+  placeholder: !!image.placeholder,
+}));
+---
+
+<dialog
+  id="product-lightbox"
+  class="product-lightbox"
+  aria-labelledby="gallery-title"
+  data-product-gallery
+  data-photos={JSON.stringify(photos)}
+  data-error={l(
+    locale,
+    'Görsel yüklenemedi. Başka bir fotoğraf seçin.',
+    'Image unavailable. Please choose another photograph.',
+  )}
+  data-zoom-in={l(locale, 'Yakınlaştır', 'Zoom in')}
+  data-zoom-out={l(locale, 'Görsele sığdır', 'Fit image')}
+>
+  <header class="product-lightbox-header">
+    <div class="product-lightbox-heading">
+      <h2 id="gallery-title">{product.name[locale]}</h2>
+      <span>{l(locale, 'Ürün galerisi', 'Product gallery')}</span>
+    </div>
+    <div class="product-lightbox-tools">
+      <span
+        class="product-lightbox-count"
+        data-gallery-count
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        1 / {photos.length}
+      </span>
+      <button
+        type="button"
+        data-gallery-zoom
+        aria-pressed="false"
+        aria-label={l(locale, 'Yakınlaştır', 'Zoom in')}
+        title={l(locale, 'Yakınlaştır', 'Zoom in')}
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          aria-hidden="true"
+        >
+          <circle cx="10.5" cy="10.5" r="6.5" />
+          <path d="m15.5 15.5 5 5M7.5 10.5h6" />
+          <path d="M10.5 7.5v6" data-zoom-plus />
+        </svg>
+      </button>
+      <button
+        type="button"
+        data-gallery-close
+        autofocus
+        aria-label={l(locale, 'Kapat', 'Close')}
+        title={l(locale, 'Kapat', 'Close')}
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          aria-hidden="true"
+        >
+          <path d="m6 6 12 12M18 6 6 18" />
+        </svg>
+      </button>
+    </div>
+  </header>
+  <div class="product-lightbox-stage" data-gallery-stage>
+    <img data-gallery-view alt="" width="1400" height="900" draggable="false" />
+    <img
+      data-gallery-outgoing
+      alt=""
+      aria-hidden="true"
+      width="1400"
+      height="900"
+      hidden
+      draggable="false"
+    />
+    <p data-gallery-error role="status" hidden></p>
+  </div>
+  <footer class="product-lightbox-footer">
+    <button
+      type="button"
+      class="product-lightbox-step"
+      data-gallery-previous
+      hidden={photos.length < 2}
+    >
+      {l(locale, 'Önceki', 'Previous')}
+    </button>
+    {photos.length > 1 && (
+      <div
+        class="product-lightbox-thumbs"
+        role="group"
+        aria-label={l(locale, 'Fotoğraf seçin', 'Choose a photograph')}
+      >
+        {photos.map((image, index) => (
+          <button
+            type="button"
+            data-gallery-index={index}
+            aria-pressed={index === 0}
+            aria-label={l(locale, 'Fotoğrafı görüntüle ', 'View photo ') + (index + 1)}
+          >
+            <img src={image.src} width="100" height="64" alt="" loading="lazy" />
+          </button>
+        ))}
+      </div>
+    )}
+    <button
+      type="button"
+      class="product-lightbox-step"
+      data-gallery-next
+      hidden={photos.length < 2}
+    >
+      {l(locale, 'Sonraki', 'Next')}
+    </button>
+  </footer>
+</dialog>
+<script src="../scripts/product-gallery.ts"></script>

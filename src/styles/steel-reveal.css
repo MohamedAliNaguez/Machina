@@ -37,11 +37,10 @@
   height: 140%;
   width: 43%;
   transform: translateY(-104%) skew(-14deg);
-  background: url('/images/theatre/title-metal.webp') center/cover;
+  background: linear-gradient(100deg, #122c20, #203d2d 65%, #152d21);
   box-shadow:
     inset 1px 0 var(--stage-muted),
     inset -2px 0 var(--stage);
-  filter: brightness(0.24);
 }
 .steel-shutters i:nth-child(1) {
   left: -14%;

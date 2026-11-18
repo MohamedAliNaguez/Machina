@@ -1,5 +1,6 @@
 ---
 import brand from '../data/brand.json';
+import symbol from '../data/brand-symbol.json';
 interface Props {
   id: string;
   compact?: boolean;
@@ -53,8 +54,11 @@ const ticks = Array.from({ length: 48 }, (_, index) => index * 7.5);
     <circle cx="320" cy="320" r="185" stroke="#223e2d" stroke-width="16" />
     <path d="M320 13V49M320 591V627M13 320H49M591 320H627" stroke="#6a8774" />
     <g transform="translate(193 230) scale(.78)">
-      <path d="M48 0H327L284 64H0ZM74 154H221L178 218H33Z" fill={`url(#${id}-metal)`} />
-      <path d="M122 78H270L228 140H83Z" fill="#9bc900" />
+      <g transform="translate(-95 -147)">
+        {symbol.map((path) => (
+          <path d={path.d} fill={path.fill === '#9bc900' ? path.fill : `url(#${id}-metal)`} />
+        ))}
+      </g>
     </g>
   </svg>
   <span class="pressure-artwork-label">TECHNICSAN / {brand.slogan}</span>

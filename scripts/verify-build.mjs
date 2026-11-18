@@ -41,6 +41,9 @@ for (const [file, html] of documents) {
     continue;
   }
   assert.match(html, /name="description"/, `Description missing: ${file}`);
+  for (const heading of html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)) {
+    assert.doesNotMatch(heading[1], /<script\b/i, `Executable script inside page heading: ${file}`);
+  }
   assert.doesNotMatch(
     html,
     /tedsan|confidence|ünal|unal-|nt[ -]?makin|gaslin|tricon|blackmer/i,

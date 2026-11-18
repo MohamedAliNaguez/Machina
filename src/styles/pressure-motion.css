@@ -24,64 +24,9 @@
   transform-box: fill-box;
   transform-origin: center;
 }
-.pressure-scene-caption {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-}
-.pressure-scene-caption > span:last-child {
-  text-align: right;
-}
-.pressure-motion-control {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  min-width: 180px;
-}
-.pressure-motion-replay {
-  align-self: center;
-  min-height: 44px;
-  padding: 8px 10px;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: var(--stage-ink);
-  font: inherit;
-  font-size: 12px;
-  letter-spacing: 0.02em;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  cursor: pointer;
-}
-.pressure-motion-replay:hover {
-  color: var(--accent);
-}
-.pressure-motion-replay:disabled {
-  opacity: 0.55;
-  cursor: default;
-}
-.pressure-motion-replay:focus-visible {
-  outline: 2px solid var(--stage-focus);
-  outline-offset: 3px;
-}
-@media (max-width: 700px) {
-  .pressure-scene-caption {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 15px;
-  }
-  .pressure-motion-control {
-    order: 3;
-    grid-column: 1 / -1;
-  }
-}
 @media (prefers-reduced-motion: reduce), (forced-colors: active) {
-  .pressure-motion-rig,
-  .pressure-motion-control {
+  .pressure-motion-rig {
     display: none !important;
-  }
-  .pressure-scene-caption {
-    grid-template-columns: 1fr 1fr;
   }
   .pressure-machine-stage {
     transform: none !important;

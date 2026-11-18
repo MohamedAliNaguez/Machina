@@ -4,8 +4,6 @@ if (artwork) {
   const root = artwork;
   const stage = root.querySelector<HTMLElement>('[data-pressure-stage]')!;
   const image = root.querySelector<HTMLImageElement>('img')!;
-  const hero = root.closest<HTMLElement>('.pressure-hero')!;
-  const replay = hero.querySelector<HTMLButtonElement>('[data-pressure-replay]')!;
   const loader = document.querySelector<HTMLElement>('[data-site-loader]');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const contrast = matchMedia('(forced-colors: active)');
@@ -16,7 +14,6 @@ if (artwork) {
   let run = 0;
   let deadline: ReturnType<typeof setTimeout> | undefined;
   let introExpired = false;
-  let replayRequested = false;
 
   function enabled() {
     return !reduced.matches && !contrast.matches;
@@ -26,7 +23,6 @@ if (artwork) {
     animations.forEach((animation) => animation.cancel());
     animations.clear();
     root.dataset.motion = enabled() ? 'settled' : 'reduced';
-    replay.disabled = false;
   }
   function animate(target: Element | null, frames: Keyframe[], options: KeyframeAnimationOptions) {
     if (!target) return;
@@ -45,7 +41,6 @@ if (artwork) {
       .querySelector('[data-pressure-source]')
       ?.setAttribute('href', image.currentSrc || image.src);
     root.dataset.motion = 'running';
-    replay.disabled = true;
     // First the compressor works; the word then stores and releases a little visual strain.
     animate(
       stage,
@@ -139,34 +134,21 @@ if (artwork) {
     ([entry]) => {
       inView = entry.isIntersecting;
       if (!inView && root.dataset.motion === 'running') stop();
-      if (inView && replayRequested) {
-        replayRequested = false;
-        void play();
-      } else maybeStart();
+      maybeStart();
     },
     { threshold: 0.35 },
   );
   visibilityObserver.observe(root);
 
   function preferenceChanged() {
-    replay.hidden = !enabled();
     if (!enabled()) {
-      replayRequested = false;
       stop();
     } else maybeStart();
   }
   reduced.addEventListener('change', preferenceChanged);
   contrast.addEventListener('change', preferenceChanged);
-  replay.addEventListener('click', () => {
-    if (inView) void play();
-    else {
-      replayRequested = true;
-      root.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  });
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-      replayRequested = false;
       stop();
     } else maybeStart();
   });
@@ -189,7 +171,6 @@ if (artwork) {
       return;
     }
     ready = true;
-    replay.hidden = !enabled();
     // Never let a broken intro hold the illustration's state machine indefinitely.
     deadline = setTimeout(() => {
       introExpired = true;

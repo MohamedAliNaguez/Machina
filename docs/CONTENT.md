@@ -37,3 +37,11 @@ Keep both language journeys complete, with reciprocal alternates, truthful descr
 The pressure-centred brand hero uses abstract artwork, not a product photograph or a technical instrument reading. Public launch requires verified identity/contact/privacy copy, actual product content and photographs, working enquiry storage/notifications, challenge keys and the approved production domain. `noindex` is not access control. Authentication is required for private editorial drafts.
 
 The existing enquiry storage/API field `machineId` remains a compatibility detail. Visitor links use the `product` query parameter; legacy `machine` parameters are accepted. Never send personal form values to analytics.
+
+# Temporary original-source review
+
+During local development, each imported product detail page has an **Open original source page** link (Turkish: **Orijinal kaynak sayfasını aç**). It opens a new tab and shows the original model/part label, plus the catalogue entry number when available. Some parts and capacity groups share a source page; use that label to locate the matching entry.
+
+`src/lib/source-review.ts` joins the neutral product ID to the original source using the ignored `.local/catalogue-provenance/presentation-map.json` and `reference-products.json` records. All 155 imported products have saved links. This is an editorial aid only: it does not modify source information or grant image-reuse rights.
+
+The panel is automatically excluded from every production build (`import.meta.env.DEV`), including GitHub Pages. Source URLs and private provenance are not copied back into the public content dataset. Missing private files simply hide the local panel. Remove the ProductDetail panel and `getSourceReview` call when the review is finished.

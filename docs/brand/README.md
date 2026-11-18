@@ -1,21 +1,24 @@
 # TECHNICSAN identity
 
-The owner supplied the TECHNICSAN logo on 17 November 2026. The fixed signature is **OUR PRESSURE. YOUR TREASURE.**. Full design rules and tokens are maintained in `DESIGN.md`.
+The owner approved the refined vector redraw on 18 November 2026 as the identity reference for the whole project. **`docs/brand/technicsan-master.svg` is the authoritative editable master.** The fixed signature is **OUR PRESSURE. YOUR TREASURE.**
 
 - Forest green: `#003B27`
-- Pressure lime: `#9BC900`
+- Lime: `#9BC900`
 - White: `#FFFFFF`
-- Pale steel: `#EDF1EE`
-- Graphite: `#1E2D26`
+- Light logo: `#F2F5F0`
 
-`public/brand/technicsan.svg` preserves the supplied emblem and TECHNICSAN letterforms as traced vector paths, with the new approved slogan outlined below the wordmark. `technicsan-light.svg` is the reversed lockup for dark surfaces. `technicsan-wordmark-light.svg` isolates the lettering for the photographic opening animation. `technicsan-symbol.svg` and `public/favicon.svg` use the three-bar emblem. `technicsan-social.png` supplies a 1200 × 630 sharing image.
+The master contains editable emblem and custom wordmark layers, individual letter paths and the approved outlined slogan. Use the exact geometry; do not substitute a similar font, retrace the old JPEG or apply automatic smoothing.
 
-Use `src/components/Brand.astro` for the full lockup. Do not type the wordmark in a similar font, stretch it, or crop out part of the signature in the header. Keep the slogan in English in both website languages. The emblem's lime bar informs selected states and short diagonal rules; lime is not a body-text colour on white.
+`Brand.astro` uses the generated full and light lockups in `public/brand/`. Compact and standalone wordmark variants, the favicon, social image and `src/data/brand-symbol.json` all derive from the same master. The pressure-ring motif uses that shared emblem geometry. Website crops preserve component dimensions; the master includes clear space.
 
-The official slogan is maintained in `src/data/brand.json` and stays in English on both language versions, including its two full stops. The slogan is outlined from Arial Bold for portable logo rendering; website display and body typography retain their existing fonts. Regenerate the outline with `scripts/prepare-slogan.ps1` on Windows after an approved wording change. Then regenerate both logo lockups, the standalone wordmark and the sharing image:
+After approved edits in the master, run:
 
 ```sh
-node scripts/prepare-brand.mjs path/to/approved-logo.jpg
+node scripts/prepare-brand.mjs
 ```
 
-This is a trace of the supplied raster, not a claim to be the original master artwork. A supplied official SVG can replace the matching exports in future. Rebranding leaves the inventory labelled as sample content and does not enable production indexing or verify company/legal details. Repository name and existing deployment URLs remain separate technical configuration.
+Raster arguments are rejected. The old JPEG, tracing exports and slogan-preparation workflow are historical references. Slogan changes require updating the master and `src/data/brand.json` together. Keep the English slogan in both language versions and preserve its punctuation. Use the light lockup on dark surfaces, and compact/emblem variants where the slogan cannot remain legible.
+
+The refined export pack in `output/technicsan-logo-refined/` is a delivery copy. The tracked master above is the project source of truth. Website typefaces and the artistic PRESSURE headline remain separate from the custom logo lettering.
+
+This identity update does not approve product data, company/contact details or public indexing. See `DESIGN.md` for site design rules.

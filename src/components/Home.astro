@@ -32,7 +32,6 @@ const copy = labels(locale);
 >
   <section class="pressure-hero" aria-labelledby="pressure-title">
     <div class="container pressure-hero-inner">
-      <span class="pressure-kicker">TECHNICSAN / {l(locale, 'ÜRÜN DÜNYASI', 'PRODUCT WORLD')}</span>
       <h1 id="pressure-title" class="pressure-heading">
         <span class="sr-only pressure-heading-text">{l(locale, 'BASINÇ', 'PRESSURE')}</span>
         <PressureWordmark />
@@ -57,15 +56,6 @@ const copy = labels(locale);
             {l(locale, 'İhtiyacınızı görüşelim', 'Discuss your requirements')}
           </a>
         </div>
-      </div>
-      <div class="pressure-scene-caption">
-        <span>ANKARA / TÜRKİYE</span>
-        <span class="pressure-motion-control">
-          <button class="pressure-motion-replay" data-pressure-replay type="button" hidden>
-            {l(locale, 'Animasyonu tekrar oynat', 'Replay motion')}
-          </button>
-        </span>
-        <span>05 {l(locale, 'ÜRÜN GRUBU', 'PRODUCT TYPES')} / 01 TECHNICSAN</span>
       </div>
     </div>
   </section>
@@ -171,4 +161,5 @@ const copy = labels(locale);
       </a>
     </div>
   </section>
+  <script src="../scripts/pressure-motion.ts"></script>
 </Layout>

@@ -3,15 +3,18 @@ import Layout from '../layouts/Layout.astro';
 import Breadcrumbs from './Breadcrumbs.astro';
 import MachineCard from './MachineCard.astro';
 import ProductVisual from './ProductVisual.astro';
+import ProductLightbox from './ProductLightbox.astro';
 import { withBase } from '../lib/paths';
 import { getContent } from '../lib/content';
 import { l, labels, otherLocale, url } from '../lib/i18n';
 import type { Locale, Machine } from '../lib/types';
+import { getSourceReview } from '../lib/source-review';
 interface Props {
   locale: Locale;
   machine: Machine;
 }
 const { locale, machine: product } = Astro.props;
+const sourceReview = await getSourceReview(product.id);
 const { categories, machines } = await getContent();
 const category = categories.find((item) => item.id === product.categoryId)!;
 const copy = labels(locale);
@@ -66,14 +69,23 @@ const schema = product.sample
       <Breadcrumbs locale={locale} items={crumbs} />
       <div class="pressure-product-overview">
         <div class="pressure-product-media">
-          <ProductVisual
-            id="product-main-image"
-            src={photo.src}
-            alt={photo.alt[locale]}
-            locale={locale}
-            placeholder={photo.placeholder}
-            priority
-          />
+          <a
+            class="product-enlarge"
+            href={withBase(photo.src)}
+            data-gallery-open
+            aria-haspopup="dialog"
+            aria-controls="product-lightbox"
+          >
+            <ProductVisual
+              id="product-main-image"
+              src={photo.src}
+              alt={photo.alt[locale]}
+              locale={locale}
+              placeholder={photo.placeholder}
+              priority
+            />
+            <span class="product-enlarge-hint">{l(locale, 'Görseli büyüt', 'Enlarge image')}</span>
+          </a>
           {product.images.length > 1 && (
             <div
               class="pressure-product-gallery"
@@ -115,12 +127,41 @@ const schema = product.sample
               </div>
             </details>
           )}
+          <ProductLightbox product={product} locale={locale} />
         </div>
         <div class="pressure-product-summary">
           <span class="pressure-product-type">TECHNICSAN / {category.name[locale]}</span>
           <h1>{product.name[locale]}</h1>
           <p class="pressure-product-lead">{product.summary[locale]}</p>
           <p class="pressure-product-description">{product.description[locale]}</p>
+          {sourceReview && (
+            <aside
+              class="source-review"
+              aria-label={l(locale, 'Geçici kaynak kontrolü', 'Temporary source review')}
+            >
+              <a
+                href={sourceReview.url}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                data-source-review
+              >
+                {l(locale, 'Orijinal kaynak sayfasını aç', 'Open original source page')}
+                <span class="sr-only">{l(locale, ' (yeni sekme)', ' (new tab)')}</span>
+              </a>
+              <p>
+                {sourceReview.section &&
+                  `${l(locale, 'Katalog kaydı', 'Catalogue entry')} ${sourceReview.section} · `}
+                {sourceReview.label}
+              </p>
+              <small>
+                {l(
+                  locale,
+                  'Yalnızca yerel önizlemede · bilgi ve görsel kontrolü için',
+                  'Local preview only · for checking information and images',
+                )}
+              </small>
+            </aside>
+          )}
           <div class="pressure-actions">
             <a class="button button-accent" href={contact}>
               {copy.quote}
@@ -277,22 +318,3 @@ const schema = product.sample
     </div>
   </section>
 </Layout>
-
-<script>
-  document.querySelectorAll<HTMLButtonElement>('[data-product-photo]').forEach((button) =>
-    button.addEventListener('click', () => {
-      const image = document.querySelector<HTMLImageElement>('#product-main-image');
-      if (!image) return;
-      image.src = button.dataset.productPhoto!;
-      image.alt = button.dataset.photoAlt || '';
-      const wrapper = image.closest('.product-visual');
-      const placeholder = button.dataset.photoPlaceholder === 'true';
-      wrapper?.classList.toggle('product-visual-pending', placeholder);
-      const caption = wrapper?.querySelector<HTMLElement>('.photography-pending');
-      if (caption) caption.hidden = !placeholder;
-      document
-        .querySelectorAll('[data-product-photo]')
-        .forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
-    }),
-  );
-</script>

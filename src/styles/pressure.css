@@ -1,4 +1,28 @@
 /* Pressure is the brand idea. Abstract artwork is never a substitute for product photography. */
+.source-review {
+  margin-top: 22px;
+  padding: 16px 18px;
+  border: 1px solid var(--stage-border);
+  border-left: 3px solid var(--accent);
+  color: var(--stage-ink);
+}
+.source-review a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--stage-ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.pressure-site .source-review p {
+  color: var(--stage-ink);
+  margin: 5px 0 9px;
+  overflow-wrap: anywhere;
+}
+.source-review small {
+  color: var(--stage-muted);
+}
 .pressure-site .steel-intro {
   background: var(--stage);
 }
@@ -37,7 +61,7 @@
 }
 .pressure-hero-inner {
   position: relative;
-  padding-block: 29px 25px;
+  padding-block: 32px 52px;
 }
 .pressure-kicker {
   position: relative;
@@ -50,7 +74,7 @@
 }
 .pressure-heading {
   position: relative;
-  margin: 16px -2% 0;
+  margin: 0 -2%;
   line-height: 1;
 }
 .pressure-heading-art {
@@ -77,10 +101,10 @@
 .pressure-hero-copy {
   position: relative;
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  align-items: start;
-  gap: 0 55px;
-  padding-top: 13px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px 48px;
+  padding-top: 20px;
 }
 .pressure-signature {
   font-family: var(--display);
@@ -90,14 +114,20 @@
   color: var(--stage-ink);
 }
 .pressure-hero-description {
+  grid-column: 1;
   color: var(--stage-muted);
-  max-width: 490px;
-  font-size: 21px;
+  max-width: 680px;
+  font-size: 19px;
   margin: 0;
 }
 .pressure-hero-copy .pressure-actions {
-  grid-column: 1 / -1;
-  margin-top: 25px;
+  grid-column: 2;
+  grid-row: 1 / 3;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  margin: 0;
+  text-align: center;
 }
 .pressure-actions {
   display: flex;
@@ -566,17 +596,28 @@
   opacity: 0.6;
 }
 .pressure-site .steel-loader .pressure-artwork {
-  width: min(70vw, 72vh);
-  top: 10%;
-  right: 5%;
-  opacity: 0.7;
+  width: min(42vw, 43vh);
+  top: 12%;
+  right: 50%;
+  transform: translateX(50%);
+  opacity: 1;
+}
+.pressure-site .steel-loader .pressure-artwork-label {
+  display: none;
 }
 .pressure-site .steel-loader .metal-headline {
   z-index: 2;
-  top: 33%;
+  top: 59%;
+  left: 50%;
+  width: min(72%, 820px);
+  transform: translateX(-50%);
 }
 .pressure-site .steel-loader-status {
-  width: 35%;
+  width: min(320px, 60%);
+  left: 50%;
+  bottom: 15%;
+  transform: translateX(-50%);
+  text-align: center;
 }
 @keyframes pressure-settle {
   from {
@@ -613,7 +654,11 @@
     padding-top: 15px;
   }
   .pressure-hero-copy .pressure-actions {
-    margin-top: 2px;
+    grid-column: 1;
+    grid-row: auto;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 6px;
   }
   .pressure-signature {
     font-size: 36px;
@@ -686,13 +731,13 @@
     font-size: 23px;
   }
   .pressure-hero-inner {
-    padding-block: 23px 22px;
+    padding-block: 26px 36px;
   }
   .pressure-kicker {
     font-size: 10px;
   }
   .pressure-heading {
-    margin: 25px -5.5% 0;
+    margin: 0 -5.5%;
   }
   .pressure-signature {
     font-size: 31px;
@@ -781,15 +826,16 @@
     font-size: 9px;
   }
   .pressure-site .steel-loader .pressure-artwork {
-    width: 85%;
-    top: 35%;
-    right: 7.5%;
+    width: min(76vw, 34vh);
+    top: 20%;
+    right: 50%;
   }
   .pressure-site .steel-loader .metal-headline {
-    top: 25%;
+    top: 59%;
+    width: 86%;
   }
   .pressure-site .steel-loader-status {
-    width: 65%;
+    width: 70%;
     bottom: 20%;
   }
 }
