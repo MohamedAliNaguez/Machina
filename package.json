@@ -26,7 +26,8 @@
     "@fontsource/barlow-condensed": "^5.2.0",
     "@fontsource/source-sans-3": "^5.2.0",
     "@phosphor-icons/core": "^2.1.1",
-    "astro": "^7.4.1"
+    "astro": "^7.4.1",
+    "libphonenumber-js": "^1.13.17"
   },
   "devDependencies": {
     "@astrojs/check": "latest",

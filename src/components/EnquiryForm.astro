@@ -4,6 +4,7 @@ import { getContent } from '../lib/content';
 import { l, url, labels } from '../lib/i18n';
 import type { Locale } from '../lib/types';
 import { hostedEnquiryEndpoint } from '../lib/sales-email';
+import { getCountries, getCountryCallingCode } from 'libphonenumber-js/min';
 interface Props {
   locale: Locale;
   machineId?: string;
@@ -14,6 +15,15 @@ const selected = machines.find((machine) => machine.id === machineId);
 const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
 const emailDelivery = !!hostedEnquiryEndpoint;
 const disabled = staticHosting && !emailDelivery;
+const regionNames = new Intl.DisplayNames([locale], { type: 'region' });
+const countryNames = new Intl.Collator(locale);
+const phoneCountries = getCountries()
+  .map((country) => ({
+    country,
+    name: regionNames.of(country) || country,
+    dialCode: '+' + getCountryCallingCode(country),
+  }))
+  .sort((a, b) => countryNames.compare(a.name, b.name));
 ---
 
 <form
@@ -103,16 +113,35 @@ const disabled = staticHosting && !emailDelivery;
     </div>
     <div class="form-field">
       <label for="enquiry-phone">{l(locale, 'Telefon', 'Phone')}</label>
-      <input
-        id="enquiry-phone"
-        name="phone"
-        disabled={disabled}
-        type="tel"
-        autocomplete="tel"
-        placeholder={l(locale, 'Telefon numaranız', 'Your phone number')}
-        maxlength="40"
-        aria-describedby="phone-error contact-help"
-      />
+      <div class="phone-input-group">
+        <label class="sr-only" for="enquiry-phone-country">
+          {l(locale, 'Ülke telefon kodu', 'Country calling code')}
+        </label>
+        <select
+          id="enquiry-phone-country"
+          name="phoneCountry"
+          disabled={disabled}
+          aria-describedby="contact-help"
+          data-phone-country
+        >
+          {phoneCountries.map(({ country, name, dialCode }) => (
+            <option value={country} selected={country === 'TR'} data-dial-code={dialCode}>
+              {dialCode} {name}
+            </option>
+          ))}
+        </select>
+        <input
+          id="enquiry-phone"
+          name="phone"
+          disabled={disabled}
+          type="tel"
+          inputmode="tel"
+          autocomplete="tel"
+          placeholder={l(locale, 'Telefon numaranız', 'Your phone number')}
+          maxlength="40"
+          aria-describedby="phone-error contact-help"
+        />
+      </div>
       <span class="field-error" id="phone-error"></span>
     </div>
   </div>
@@ -195,6 +224,19 @@ const disabled = staticHosting && !emailDelivery;
     </p>
   </noscript>
 </form>
+<style>
+  .phone-input-group {
+    display: grid;
+    grid-template-columns: 7.75rem minmax(0, 1fr);
+    gap: 8px;
+    min-width: 0;
+  }
+  .phone-input-group select,
+  .phone-input-group input {
+    min-width: 0;
+    font-variant-numeric: tabular-nums;
+  }
+</style>
 <script>
   import { initEnquiryForm } from '../scripts/enquiry';
   initEnquiryForm();

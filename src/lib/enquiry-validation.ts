@@ -1,3 +1,5 @@
+import { parseInternationalPhone } from './phone';
+
 export type ErrorCode = 'required' | 'contact' | 'invalid' | 'length';
 export interface EnquiryInput {
   name: string;
@@ -33,6 +35,11 @@ export function validateEnquiry(
     (!/^[+\d\s().-]{7,40}$/.test(value.phone) || value.phone.replace(/\D/g, '').length < 7)
   )
     errors.phone = 'invalid';
+  if (value.phone && str('phoneCountry')) {
+    const phone = parseInternationalPhone(value.phone, str('phoneCountry'));
+    if (phone) value.phone = phone.number;
+    else errors.phone = 'invalid';
+  }
   if (value.message.length < 10 || value.message.length > 4000) errors.message = 'length';
   if (!['en', 'tr'].includes(value.language)) errors.language = 'invalid';
   if (value.machineId && !/^[a-zA-Z0-9_-]{1,100}$/.test(value.machineId))

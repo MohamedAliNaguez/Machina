@@ -1,4 +1,5 @@
 import { validateEnquiry } from '../lib/enquiry-validation';
+import { parseInternationalPhone } from '../lib/phone';
 export function initEnquiryForm() {
   const form = document.querySelector<HTMLFormElement>('[data-enquiry-form]');
   if (!form) return;
@@ -16,6 +17,16 @@ export function initEnquiryForm() {
   const select = form.elements.namedItem('machineId') as HTMLSelectElement;
   if (selected && [...select.options].some((o) => o.value === selected)) select.value = selected;
   const textarea = form.elements.namedItem('message') as HTMLTextAreaElement;
+  const phoneInput = form.elements.namedItem('phone') as HTMLInputElement;
+  const phoneCountry = form.elements.namedItem('phoneCountry') as HTMLSelectElement;
+  phoneInput.addEventListener('change', () => {
+    if (!/^(\+|00)/.test(phoneInput.value.trim())) return;
+    const phone = parseInternationalPhone(phoneInput.value, phoneCountry.value);
+    if (phone?.country) {
+      phoneCountry.value = phone.country;
+      phoneInput.value = phone.nationalNumber;
+    }
+  });
   textarea.addEventListener('input', () => {
     textarea.style.height = 'auto';
     textarea.style.height = `${Math.max(130, textarea.scrollHeight)}px`;
