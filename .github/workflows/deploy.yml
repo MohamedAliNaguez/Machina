@@ -29,7 +29,7 @@ jobs:
       - name: Build repository-hosted preview
         run: npm run build
         env:
-          PUBLIC_SITE_URL: ${{ steps.pages.outputs.origin }}
+          PUBLIC_SITE_URL: https://technicsan.com
           PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           PUBLIC_HOSTING: github-pages
           PUBLIC_LAUNCH_READY: 'false'
