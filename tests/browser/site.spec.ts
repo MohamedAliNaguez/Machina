@@ -23,6 +23,10 @@ test('bilingual product routes and the five-type catalogue filters work', async 
   await expect(page.locator('[data-machine-card]:visible')).toHaveCount(2);
 });
 test('enquiry validates, saves locally and never claims an email was sent', async ({ page }) => {
+  // Exercise the secure-random fallback for browsers/origins without randomUUID().
+  await page.addInitScript(() => {
+    Object.defineProperty(Crypto.prototype, 'randomUUID', { value: undefined, configurable: true });
+  });
   await page.goto('/en/contact/?product=v-type-silobas');
   await expect(page.getByLabel('Product of interest')).toHaveValue('v-type-silobas');
   await expect(page.getByRole('link', { name: 'TR', exact: true })).toHaveAttribute(

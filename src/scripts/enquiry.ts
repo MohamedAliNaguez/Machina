@@ -1,5 +1,13 @@
 import { validateEnquiry } from '../lib/enquiry-validation';
 import { parseInternationalPhone } from '../lib/phone';
+function requestId() {
+  if (typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  bytes[6] = (bytes[6] & 15) | 64;
+  bytes[8] = (bytes[8] & 63) | 128;
+  const hex = [...bytes].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
 export function initEnquiryForm() {
   const form = document.querySelector<HTMLFormElement>('[data-enquiry-form]');
   if (!form) return;
@@ -9,7 +17,7 @@ export function initEnquiryForm() {
   const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
   const label = form.querySelector<HTMLElement>('[data-submit-label]')!;
   const initialLabel = label.textContent!;
-  let key = crypto.randomUUID();
+  let key = requestId();
   let previousPayload = '';
   let busy = false;
   const params = new URLSearchParams(location.search);
@@ -97,7 +105,7 @@ export function initEnquiryForm() {
       return;
     }
     const payloadSignature = JSON.stringify(validation.value);
-    if (previousPayload && previousPayload !== payloadSignature) key = crypto.randomUUID();
+    if (previousPayload && previousPayload !== payloadSignature) key = requestId();
     previousPayload = payloadSignature;
     busy = true;
     button.disabled = true;
@@ -157,7 +165,7 @@ export function initEnquiryForm() {
       if (form.dataset.sitekey)
         (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
       previousPayload = '';
-      key = crypto.randomUUID();
+      key = requestId();
     } catch (error) {
       if (form.dataset.sitekey)
         (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
