@@ -98,10 +98,11 @@ if (scene) {
       frame = requestAnimationFrame(tick);
       return;
     }
-    const delta = last ? Math.min(60, now - last) : 0;
+    const delta = last ? Math.max(0, now - last) : 0;
     last = now;
     elapsed = Math.min(duration, elapsed + delta);
-    life += delta;
+    // Growth follows visible elapsed time even on slower renderers; settled sway stays gentle.
+    life += Math.min(60, delta);
     render(elapsed / duration);
     root.dataset.animation = elapsed < duration ? 'growing' : 'living';
     frame = requestAnimationFrame(tick);
