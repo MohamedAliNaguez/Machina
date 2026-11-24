@@ -168,7 +168,8 @@ test('preview metadata, source photographs, attribution and desktop screenshot',
   await page.screenshot({ path: 'test-results/preview-desktop.png', fullPage: false });
   await page.goto('/en/products/lpg-bobtail/');
   await expect(page.locator('[data-product-photo]')).toHaveCount(12);
-  await expect(page.locator('[data-product-caption]')).toContainText('Reference photograph');
+  const primaryImageDescription = await page.locator('#product-main-image').getAttribute('alt');
+  await expect(page.locator('[data-product-caption]')).toHaveText(primaryImageDescription!);
   await expect(page.locator('.pressure-preview-note')).toContainText('approval pending');
   await expect(page.locator('script[type="application/ld+json"]')).not.toContainText(
     '"@type":"Product"',
