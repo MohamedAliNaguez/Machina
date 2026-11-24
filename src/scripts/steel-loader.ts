@@ -1,9 +1,9 @@
-// A 3.5-second first-visit introduction. Content remains usable without this script.
+// A one-second first-visit introduction. Content remains usable without this script.
 const loader = document.querySelector<HTMLElement>('[data-site-loader]');
 if (loader) {
   const root = loader;
   const sessionKey = 'technicsan:pressure-intro:v1';
-  const introDuration = 3500;
+  const introDuration = 1000;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const previewTrigger = document.querySelector<HTMLButtonElement>('[data-preview-steel-loader]');
   let readyTimer: ReturnType<typeof setTimeout> | undefined;
@@ -157,7 +157,7 @@ if (loader) {
       hide(visited ? 'session-skipped' : 'motion-or-history-skipped', true);
     } else {
       show();
-      deadline = setTimeout(() => hide('timeout'), 4000);
+      deadline = setTimeout(() => hide('timeout'), 1500);
       const checkReadiness = () => {
         const images = [...document.querySelectorAll<HTMLImageElement>('main img')].filter(
           (image) => {

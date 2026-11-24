@@ -1,12 +1,12 @@
 ---
 import { withBase } from '../lib/paths';
 import Layout from '../layouts/Layout.astro';
-import SteelIntro from './SteelIntro.astro';
+import '../styles/catalogue-showroom.css';
 import MachineCard from './MachineCard.astro';
 import { getContent } from '../lib/content';
 import { l, labels, otherLocale, url } from '../lib/i18n';
 import type { Category, Locale } from '../lib/types';
-import brand from '../data/brand.json';
+
 interface Props {
   locale: Locale;
   category?: Category;
@@ -15,12 +15,17 @@ interface Props {
 const { locale, category, brandId } = Astro.props;
 const { machines, categories, articles } = await getContent();
 const copy = labels(locale);
-const visible = machines.filter(
+const availableProducts = machines.filter(
   (product) =>
     product.published.includes(locale) &&
     (!category || product.categoryId === category.id) &&
     (!brandId || product.brandId === brandId),
 );
+// Give each approved family an equal first appearance, then retain the remaining inventory.
+const featured = categories.flatMap(
+  (type) => availableProducts.find((p) => p.categoryId === type.id) || [],
+);
+const visible = [...featured, ...availableProducts.filter((p) => !featured.includes(p))];
 const title = category?.name[locale] || copy.machines;
 const description =
   category?.description[locale] ||
@@ -49,186 +54,133 @@ const guide = articles.find(
   )}
   breadcrumbs={crumbs.length ? crumbs : [{ name: title }]}
 >
-  <SteelIntro
-    locale={locale}
-    title={title.toLocaleUpperCase(locale === 'tr' ? 'tr-TR' : 'en-GB')}
-    subtitle={description}
-    eyebrow={l(locale, 'TECHNICSAN / ÜRÜN KATALOĞU', 'TECHNICSAN / PRODUCT CATALOGUE')}
-    variant={category ? 'category-intro pressure-category-intro' : 'catalogue-intro'}
-    breadcrumbs={crumbs}
-  />
+  <section class="showroom-intro">
+    <div class="container showroom-intro-inner">
+      <div>
+        <span class="eyebrow">{l(locale, 'ÜRÜN KATALOĞU', 'PRODUCT CATALOGUE')}</span>
+        <h1>{title}</h1>
+      </div>
+      <p>{description}</p>
+    </div>
+  </section>
   <div
-    class:list={[
-      'container',
-      'steel-catalogue',
-      'pressure-catalogue',
-      { 'category-catalogue': !!category },
-    ]}
+    class:list={['container', 'showroom-catalogue', { 'category-catalogue': !!category }]}
     data-catalogue
     data-locale={locale}
     data-fixed-category={category?.id || ''}
     data-fixed-category-name={category?.name[locale] || ''}
   >
-    <div class="catalogue-search search-box">
-      <img
-        class="control-icon"
-        src={withBase('/icons/magnifying-glass.svg')}
-        alt=""
-        width="20"
-        height="20"
-      />
-      <label for="machine-search" class="sr-only">
-        {l(locale, 'Ürün veya ürün grubu arayın', 'Search products or product types')}
-      </label>
-      <input
-        id="machine-search"
-        type="search"
-        placeholder={l(locale, 'Ürün arayın', 'Search products')}
-        autocomplete="off"
-      />
-      <button
-        type="button"
-        data-clear-search
-        hidden
-        aria-label={l(locale, 'Aramayı temizle', 'Clear search')}
-      >
-        {l(locale, 'Temizle', 'Clear')}
-      </button>
-    </div>
-    <div class="mobile-filter-row">
-      <button
-        class="mobile-filter-toggle"
-        type="button"
-        data-filter-toggle
-        aria-expanded="false"
-        aria-controls="machine-filters"
-      >
-        <img
-          class="control-icon"
-          src={withBase('/icons/faders-horizontal.svg')}
-          alt=""
-          width="20"
-          height="20"
+    <div class="showroom-toolbar">
+      <div class="catalogue-search search-box">
+        <img src={withBase('/icons/magnifying-glass.svg')} alt="" width="20" height="20" />
+        <label for="machine-search" class="sr-only">
+          {l(locale, 'Ürün veya ürün grubu arayın', 'Search products or product types')}
+        </label>
+        <input
+          id="machine-search"
+          type="search"
+          placeholder={l(
+            locale,
+            'Model, ürün grubu veya uygulama arayın',
+            'Search products by model, family or application',
+          )}
+          autocomplete="off"
         />
-        {l(locale, 'Ürün grupları', 'Product types')}
-      </button>
-      <span class="filter-current" data-filter-current>
-        {category?.name[locale] || copy.all}
-      </span>
-    </div>
-    <div class="catalogue-layout">
+        <button
+          type="button"
+          data-clear-search
+          hidden
+          aria-label={l(locale, 'Aramayı temizle', 'Clear search')}
+        >
+          {l(locale, 'Temizle', 'Clear')}
+        </button>
+      </div>
       <aside
         id="machine-filters"
         class="filter-panel"
         aria-label={l(locale, 'Ürün filtreleri', 'Product filters')}
       >
         {category ? (
-          <nav class="pressure-type-nav" aria-label={l(locale, 'Ürün grupları', 'Product types')}>
-            <span class="eyebrow">{l(locale, 'ÜRÜN GRUPLARI', 'PRODUCT TYPES')}</span>
+          <nav class="showroom-families" aria-label={l(locale, 'Ürün grupları', 'Product types')}>
+            <a class="family-chip" href={url(locale, 'machines')}>
+              {copy.all}
+            </a>
             {categories.map((type) => (
               <a
+                class="family-chip"
                 href={url(locale, 'categories', type.slug[locale])}
                 aria-current={type.id === category.id ? 'page' : undefined}
               >
                 {type.name[locale]}
               </a>
             ))}
-            <a href={url(locale, 'machines')}>{copy.all}</a>
           </nav>
         ) : (
-          <fieldset class="filter-group">
-            <legend>{l(locale, 'ÜRÜN GRUBU', 'PRODUCT TYPE')}</legend>
+          <fieldset class="showroom-families">
+            <legend class="sr-only">{l(locale, 'Ürün grupları', 'Product types')}</legend>
+            <button type="button" class="family-chip" data-all-categories aria-pressed="true">
+              {l(locale, 'Tüm ürünler', 'All products')}
+            </button>
             {categories.map((type) => (
-              <label class="filter-choice">
+              <label class="family-chip">
                 <input type="checkbox" data-filter="category" value={type.id} />
-                {type.name[locale]}
+                <span>{type.name[locale]}</span>
               </label>
             ))}
           </fieldset>
         )}
-        <button class="filter-reset" type="button" data-reset>
+      </aside>
+    </div>
+    <section class="catalogue-results" aria-label={l(locale, 'Ürün sonuçları', 'Product results')}>
+      <h2 class="sr-only" tabindex="-1">
+        {l(locale, 'Katalogdaki ürünler', 'Products in the catalogue')}
+      </h2>
+      <div class="showroom-results-bar">
+        <p class="results-count" aria-live="polite" aria-atomic="true" data-results-count>
+          {visible.length} {l(locale, 'ürün', 'products')}
+        </p>
+        <button type="button" class="filter-reset" data-reset>
           {l(locale, 'Filtreleri temizle', 'Reset filters')}
         </button>
-        <p class="pressure-filter-note" lang="en">
-          <span class="brand-slogan-part">{brand.sloganLines[0]}</span>{' '}
-          <span class="brand-slogan-part">{brand.sloganLines[1]}</span>
-        </p>
-      </aside>
-      <section
-        class="catalogue-results"
-        aria-label={l(locale, 'Ürün sonuçları', 'Product results')}
-      >
-        <h2 class="sr-only" tabindex="-1">
-          {l(locale, 'Katalogdaki ürünler', 'Products in the catalogue')}
-        </h2>
-        {category && (
-          <div class="category-copy">
-            <h2>{l(locale, 'Uygulamanızla başlayın', 'Start with your application')}</h2>
-            <p>
-              {l(
-                locale,
-                'Bu gruptaki ürünleri inceleyin. Talebinizde uygulamanızı, kapasite ihtiyacınızı ve mevcut bağlantıları paylaşın.',
-                'Explore the products in this family. Share your application, required capacity and existing interfaces in your enquiry.',
-              )}
-            </p>
-          </div>
-        )}
-        <p class="results-count" aria-live="polite" aria-atomic="true" data-results-count>
-          {visible.length} {l(locale, 'ürün', visible.length === 1 ? 'product' : 'products')}
-        </p>
-        <div class="machine-grid">
-          {visible.map((product, index) => (
-            <MachineCard machine={product} locale={locale} priority={index < 3} />
-          ))}
-        </div>
-        <nav
-          class="catalogue-pagination"
-          aria-label={l(locale, 'Ürün sayfaları', 'Product pages')}
-          data-pagination
-          hidden
-        >
-          <button type="button" class="button button-outline" data-page-previous>
-            {l(locale, 'Önceki sayfa', 'Previous page')}
-          </button>
-          <span data-page-status></span>
-          <button type="button" class="button button-outline" data-page-next>
-            {l(locale, 'Sonraki sayfa', 'Next page')}
-          </button>
-        </nav>
-        <div class="empty-state" data-empty hidden>
-          <h2>{l(locale, 'Eşleşen ürün bulunamadı', 'No products match these filters')}</h2>
-          <p>
-            {l(
-              locale,
-              'Başka bir ürün arayın veya filtreleri temizleyin.',
-              'Try another product or reset the filters.',
-            )}
-          </p>
-          <button type="button" class="button button-outline" data-reset>
-            {l(locale, 'Filtreleri temizle', 'Reset filters')}
-          </button>
-          <a class="text-link" href={url(locale, 'contact')}>
-            {l(locale, 'Satış ekibiyle görüşün', 'Contact sales')}
-          </a>
-        </div>
-        <p class="section-note">
+      </div>
+      <div class="machine-grid">
+        {visible.map((product, index) => (
+          <MachineCard machine={product} locale={locale} priority={index < 3} />
+        ))}
+      </div>
+      <div class="empty-state" data-empty hidden>
+        <h2>{l(locale, 'Eşleşen ürün bulunamadı', 'No products match these filters')}</h2>
+        <p>
           {l(
             locale,
-            'TECHNICSAN katalog önizlemesi · Teknik bilgiler ve tedarik onayı bekleniyor',
-            'TECHNICSAN catalogue preview · Technical review and supply approval pending',
+            'Başka bir ürün arayın veya filtreleri temizleyin.',
+            'Try another product or reset the filters.',
           )}
         </p>
-        <noscript>
-          <p class="notice">
-            {l(
-              locale,
-              'Tüm ürünler listelenmiştir. Arama ve filtreler için JavaScript gereklidir.',
-              'All products are listed. Search and filters require JavaScript.',
-            )}
-          </p>
-        </noscript>
-      </section>
-    </div>
+        <button type="button" class="button button-outline" data-reset>
+          {l(locale, 'Filtreleri temizle', 'Reset filters')}
+        </button>
+        <a class="text-link" href={url(locale, 'contact')}>
+          {l(locale, 'Satış ekibiyle görüşün', 'Contact sales')}
+        </a>
+      </div>
+      <p class="section-note">
+        {l(
+          locale,
+          'TECHNICSAN katalog önizlemesi · Teknik bilgiler ve tedarik onayı bekleniyor',
+          'TECHNICSAN catalogue preview · Technical review and supply approval pending',
+        )}
+      </p>
+      <noscript>
+        <p class="notice">
+          {l(
+            locale,
+            'Tüm ürünler listelenmiştir. Arama ve filtreler için JavaScript gereklidir.',
+            'All products are listed. Search and filters require JavaScript.',
+          )}
+        </p>
+      </noscript>
+    </section>
   </div>
   {category && guide && (
     <section class="pressure-guide-callout">

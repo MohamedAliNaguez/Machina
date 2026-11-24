@@ -1,0 +1,227 @@
+---
+import type { Locale, Machine } from '../lib/types';
+import { l } from '../lib/i18n';
+import { withBase } from '../lib/paths';
+import { getProductModel } from '../lib/product-models';
+interface Props {
+  product: Machine;
+  locale: Locale;
+}
+const { product, locale } = Astro.props;
+const model = getProductModel(product.id);
+const poster =
+  product.id === 'v-type-silobas' ? product.images[1] || product.images[0] : product.images[0];
+const referencePoints =
+  product.id === 'v-type-silobas'
+    ? [
+        {
+          title: l(locale, 'Tank gövdesi', 'Tank body'),
+          description: l(
+            locale,
+            'Görseldeki dış formu inceleyin. Gerekli tank konfigürasyonunu satış ekibiyle teyit edin.',
+            'Inspect the visible exterior. Confirm the required vessel configuration with sales.',
+          ),
+          x: 48,
+          y: 40,
+        },
+        {
+          title: l(locale, 'Hortum güzergâhı', 'Hose routing'),
+          description: l(
+            locale,
+            'Referans görseldeki hortumu inceleyin. Bağlantıları ve teslimat kapsamını teyit edin.',
+            'Inspect the hose shown in the reference image. Confirm connections and the supplied equipment.',
+          ),
+          x: 48,
+          y: 67,
+        },
+        {
+          title: l(locale, 'Şasi', 'Chassis'),
+          description: l(
+            locale,
+            'Görseldeki şasi ve aks düzenini inceleyin. Nihai donanımı satış ekibiyle teyit edin.',
+            'Inspect the visible chassis and axle arrangement. Confirm the final equipment with sales.',
+          ),
+          x: 73,
+          y: 79,
+        },
+      ]
+    : [];
+const points =
+  model?.hotspots?.map((point) => ({
+    title: point.title[locale],
+    description: point.description[locale],
+  })) || referencePoints;
+---
+
+<dialog
+  id="product-inspection"
+  class="product-inspection"
+  aria-labelledby="inspection-title"
+  data-product-inspection
+  data-locale={locale}
+  data-model-src={model ? withBase(model.src) : ''}
+  data-hotspots={JSON.stringify(model?.hotspots || [])}
+  data-points={JSON.stringify(points)}
+>
+  <header class="inspection-header">
+    <div>
+      <strong id="inspection-title">TECHNICSAN / 3D STUDIO</strong>
+      <span>{product.name[locale]}</span>
+    </div>
+    <div>
+      <span class="inspection-status-badge">
+        {model
+          ? l(locale, '3D İNCELEME', '3D INSPECTION')
+          : l(locale, 'MODEL BEKLENİYOR', 'MODEL PENDING')}
+      </span>
+      <button type="button" data-inspection-close autofocus>
+        {l(locale, 'Kapat', 'Close')}
+      </button>
+    </div>
+  </header>
+  <div class="inspection-workspace">
+    <div class="inspection-main">
+      <div class="inspection-canvas" data-inspection-canvas>
+        <div class="inspection-reference" data-inspection-reference>
+          <div class="inspection-photo-object">
+            <img
+              src={withBase(poster.src)}
+              alt={poster.alt[locale]}
+              width="1774"
+              height="887"
+              loading="lazy"
+            />
+            {!model &&
+              referencePoints.map((point, index) => (
+                <button
+                  class="inspection-hotspot"
+                  type="button"
+                  style={`left:${point.x}%;top:${point.y}%`}
+                  data-inspection-point={index}
+                  aria-label={point.title}
+                  aria-pressed={index === 0}
+                >
+                  {String(index + 1).padStart(2, '0')}
+                </button>
+              ))}
+          </div>
+        </div>
+        <div class="inspection-model-host" data-inspection-host></div>
+        <span class="inspection-canvas-label" data-inspection-label>
+          {l(locale, 'REFERANS GÖRSEL', 'REFERENCE IMAGE')}
+        </span>
+        <p class="inspection-canvas-note" role="status" aria-live="polite" data-inspection-status>
+          {model
+            ? l(locale, '3D model isteğe bağlı yüklenir', 'The 3D model loads on request')
+            : l(
+                locale,
+                '2D referans görsel · Tam dönüş için onaylı 3D model gereklidir',
+                '2D reference image · Full rotation requires an approved 3D model',
+              )}
+        </p>
+        {model && (
+          <button class="button button-accent inspection-load" type="button" data-inspection-load>
+            {l(locale, '3D modeli yükleyin', 'Load 3D model')}
+          </button>
+        )}
+      </div>
+      <div class="inspection-bottom">
+        <div
+          class="inspection-presets"
+          role="group"
+          aria-label={l(locale, 'Kayıtlı görünümler', 'Saved views')}
+        >
+          <button type="button" data-inspection-view="35deg 75deg auto" disabled>
+            {l(locale, 'Üç çeyrek', 'Three-quarter')}
+          </button>
+          <button type="button" data-inspection-view="90deg 90deg auto" disabled>
+            {l(locale, 'Yan', 'Side')}
+          </button>
+          <button type="button" data-inspection-view="180deg 80deg auto" disabled>
+            {l(locale, 'Arka', 'Rear')}
+          </button>
+        </div>
+        <div
+          class="inspection-tools"
+          role="group"
+          aria-label={l(locale, '3D kontrolleri', '3D controls')}
+        >
+          <button type="button" data-inspection-mode="orbit" aria-pressed="true" disabled>
+            {l(locale, 'Döndür', 'Orbit')}
+          </button>
+          <button type="button" data-inspection-mode="pan" aria-pressed="false" disabled>
+            {l(locale, 'Kaydır', 'Pan')}
+          </button>
+          <button
+            type="button"
+            data-inspection-zoom="in"
+            disabled
+            aria-label={l(locale, '3D yakınlaştır', 'Zoom 3D in')}
+          >
+            +
+          </button>
+          <button
+            type="button"
+            data-inspection-zoom="out"
+            disabled
+            aria-label={l(locale, '3D uzaklaştır', 'Zoom 3D out')}
+          >
+            −
+          </button>
+          <button type="button" data-inspection-reset disabled>
+            {l(locale, 'Görünümü sıfırla', 'Reset view')}
+          </button>
+        </div>
+      </div>
+    </div>
+    <aside class="inspection-panel">
+      <span class="eyebrow">{l(locale, 'AYRINTILARI KEŞFEDİN', 'GUIDED INSPECTION')}</span>
+      <h2>{l(locale, 'Her ayrıntı, kendi bağlamında', 'Explore the details')}</h2>
+      <p>
+        {points.length
+          ? l(
+              locale,
+              'İncelemek için bir ayrıntı seçin.',
+              'Select a detail to focus your inspection.',
+            )
+          : l(
+              locale,
+              'Ürünü incelemek için fotoğraf galerisine dönün.',
+              'Return to the photo gallery to inspect this product.',
+            )}
+      </p>
+      <div class="inspection-points">
+        {points.map((point, index) => (
+          <button type="button" data-inspection-point={index} aria-pressed={index === 0}>
+            <b>{String(index + 1).padStart(2, '0')}</b>
+            {point.title}
+          </button>
+        ))}
+      </div>
+      {points[0] && (
+        <div class="inspection-readout" aria-live="polite">
+          <h3 data-inspection-point-title>{points[0].title}</h3>
+          <p data-inspection-point-description>{points[0].description}</p>
+        </div>
+      )}
+      <div class="inspection-availability">
+        <strong>
+          {model
+            ? l(locale, 'Onaylı 3D model', 'Approved 3D model')
+            : l(locale, 'Onaylı 3D model bekleniyor', 'Awaiting an approved 3D model')}
+        </strong>
+        <p>
+          {l(
+            locale,
+            'Ölçüler ve nihai donanım ürün belgeleriyle teyit edilmelidir.',
+            'Measurements and final equipment must be confirmed against product documentation.',
+          )}
+        </p>
+      </div>
+      <button class="inspection-return" type="button" data-inspection-close>
+        {l(locale, 'Fotoğraflara dönün', 'Back to photographs')}
+      </button>
+    </aside>
+  </div>
+</dialog>
+<script src="../scripts/product-inspection.ts"></script>

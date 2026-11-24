@@ -1,0 +1,34 @@
+{
+  "foundation": {
+    "width": 412,
+    "height": 209
+  },
+  "spare-parts": {
+    "width": 397,
+    "height": 233
+  },
+  "compressors": {
+    "width": 402,
+    "height": 237
+  },
+  "bulkers-lpg": {
+    "width": 404,
+    "height": 211
+  },
+  "exports": {
+    "width": 380,
+    "height": 255
+  },
+  "mixers": {
+    "width": 402,
+    "height": 249
+  },
+  "silos": {
+    "width": 385,
+    "height": 305
+  },
+  "foliage": {
+    "width": 415,
+    "height": 176
+  }
+}

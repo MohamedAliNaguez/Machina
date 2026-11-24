@@ -15,21 +15,13 @@ export function initCatalogue() {
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/ı/g, 'i');
   let composing = false;
-  const pageSize = 24;
-  let currentPage = 1;
-  const pagination = root.querySelector<HTMLElement>('[data-pagination]')!;
-  const previous = root.querySelector<HTMLButtonElement>('[data-page-previous]')!;
-  const next = root.querySelector<HTMLButtonElement>('[data-page-next]')!;
   function readUrl() {
     const params = new URLSearchParams(location.search);
     search.value = (params.get('q') || '').slice(0, 100);
     const selected = (params.get('category') || '').split(',');
     filters.forEach((filter) => (filter.checked = selected.includes(filter.value)));
-    const requestedPage = Number(params.get('page') || 1);
-    currentPage = Number.isSafeInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
   }
-  function apply(persist = true, resetPage = true) {
-    if (resetPage) currentPage = 1;
+  function apply(persist = true) {
     const query = fold(search.value.trim());
     const categories = filters.filter((filter) => filter.checked).map((filter) => filter.value);
     const matching = cards.filter(
@@ -37,17 +29,12 @@ export function initCatalogue() {
         (!query || fold(card.dataset.search || '').includes(query)) &&
         (!categories.length || categories.includes(card.dataset.category || '')),
     );
+    root!
+      .querySelector('[data-all-categories]')
+      ?.setAttribute('aria-pressed', String(categories.length === 0));
     const count = matching.length;
-    const pageCount = Math.max(1, Math.ceil(count / pageSize));
-    currentPage = Math.min(currentPage, pageCount);
-    const displayed = new Set(matching.slice((currentPage - 1) * pageSize, currentPage * pageSize));
+    const displayed = new Set(matching);
     cards.forEach((card) => (card.hidden = !displayed.has(card)));
-    pagination.hidden = pageCount === 1;
-    previous.disabled = currentPage === 1;
-    next.disabled = currentPage === pageCount;
-    root!.querySelector('[data-page-status]')!.textContent = tr
-      ? `Sayfa ${currentPage} / ${pageCount}`
-      : `Page ${currentPage} of ${pageCount}`;
     root!.querySelector('[data-results-count]')!.textContent =
       count + (tr ? ' sonuç' : count === 1 ? ' result' : ' results');
     root!.querySelector<HTMLElement>('[data-empty]')!.hidden = count !== 0;
@@ -61,7 +48,6 @@ export function initCatalogue() {
       const params = new URLSearchParams();
       if (search.value.trim()) params.set('q', search.value.trim());
       if (categories.length) params.set('category', categories.join(','));
-      if (currentPage > 1) params.set('page', String(currentPage));
       history.replaceState(null, '', location.pathname + (params.size ? '?' + params : ''));
       document
         .querySelector('meta[name="robots"]')
@@ -79,15 +65,11 @@ export function initCatalogue() {
       }
     }
   }
-  function changePage(delta: number) {
-    currentPage += delta;
-    apply(true, false);
-    const heading = root!.querySelector<HTMLElement>('.catalogue-results h2');
-    heading?.focus({ preventScroll: true });
-    root!.querySelector('.catalogue-results')?.scrollIntoView({ block: 'start' });
-  }
-  previous.addEventListener('click', () => changePage(-1));
-  next.addEventListener('click', () => changePage(1));
+
+  root.querySelector('[data-all-categories]')?.addEventListener('click', () => {
+    filters.forEach((filter) => (filter.checked = false));
+    apply();
+  });
   const close = () => {
     toggle?.setAttribute('aria-expanded', 'false');
     panel?.classList.remove('is-open');
@@ -133,8 +115,8 @@ export function initCatalogue() {
   );
   window.addEventListener('popstate', () => {
     readUrl();
-    apply(false, false);
+    apply(false);
   });
   readUrl();
-  apply(false, false);
+  apply();
 }

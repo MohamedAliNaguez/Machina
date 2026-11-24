@@ -9,4 +9,5 @@ playwright-report
 public/images
 exports
 output
+meshy_output
 premium-audit.json

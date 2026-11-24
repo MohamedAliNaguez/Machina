@@ -6,7 +6,7 @@ import { url, otherLocale } from '../src/lib/i18n';
 
 test('sample catalogue is bilingual, navigable and explicitly unverified', () => {
   validateContent(sampleContent, false);
-  assert.equal(sampleContent.machines.length, 155);
+  assert.equal(sampleContent.machines.length, 14);
   assert.deepEqual(
     sampleContent.categories.map((category) => category.name.en),
     ['Cement bulker', 'LPG catalog', 'Compressors', 'Mixers', 'Silos'],
@@ -20,7 +20,16 @@ test('sample catalogue is bilingual, navigable and explicitly unverified', () =>
     sampleContent.machines.every(
       (m) =>
         m.sample &&
-        m.images.every((i) => !i.sourceUrl && !i.credit && i.rightsStatus === 'pending'),
+        m.images.every(
+          (i) =>
+            !i.sourceUrl &&
+            !i.credit &&
+            (i.rightsStatus === 'pending' ||
+              (m.id === 'v-type-silobas' &&
+                i.src.startsWith('/images/products/technicsan/') &&
+                i.rightsStatus === 'approved' &&
+                i.illustrative)),
+        ),
     ),
   );
   assert.equal(sampleContent.settings.identityVerified, false);
@@ -72,16 +81,16 @@ test('reference catalogue preserves all five families and treats missing source 
     ),
     {
       'cement-bulker': 1,
-      'lpg-catalog': 136,
-      compressors: 4,
-      mixers: 6,
-      silos: 8,
+      'lpg-catalog': 7,
+      compressors: 2,
+      mixers: 2,
+      silos: 2,
     },
   );
   assert.equal(
     sampleContent.machines.flatMap((product) => product.images).filter((image) => image.placeholder)
       .length,
-    76,
+    5,
   );
   assert.ok(
     !sampleContent.machines.some((product) => /^lpg-part-(?:8|62|63|64|93|94)$/.test(product.id)),
@@ -119,8 +128,12 @@ test('source attribution, table shape and pending publication approvals are enfo
     privacyNotice: { tr: 'Test', en: 'Test' },
     turnstileSiteKey: 'test',
   };
-  pending.machines = [pending.machines.find((product) => product.id === 'lpg-domestic-tank')!];
+  pending.machines = [pending.machines.find((product) => product.id === 'lpg-semi-trailer')!];
   pending.machines[0].sample = false;
+  pending.machines[0].images.forEach((image) => {
+    image.illustrative = false;
+    image.placeholder = false;
+  });
   assert.throws(() => validateContent(pending, true), /unapproved source content/);
 });
 
@@ -136,11 +149,17 @@ test('public catalogue contains no supplier names, external brochures or private
     sampleContent.machines
       .flatMap((product) => product.images)
       .filter((image) => !image.placeholder).length,
-    80,
+    58,
   );
   assert.ok(
     sampleContent.machines
       .flatMap((product) => product.images)
-      .every((image) => image.src.startsWith('/images/products/catalogue/') || image.placeholder),
+      .every(
+        (image) =>
+          image.src.startsWith('/images/products/catalogue/') ||
+          image.src.startsWith('/images/products/technicsan/') ||
+          image.src.startsWith('/images/products/lpg/') ||
+          image.placeholder,
+      ),
   );
 });

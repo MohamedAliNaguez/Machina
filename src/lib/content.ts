@@ -1,39 +1,62 @@
+import { repositoryContent } from '../data/repository';
+import { validateHistoryApproval } from '../data/history';
+import delivery from '../data/enquiry-delivery.json';
+import { validateEnquirySetup } from './launch-enquiries';
 import { sampleContent } from '../data/sample';
 import { productTypeIds } from '../data/product-types';
 import type { Content, Locale } from './types';
+import { sanityConfig, sanityContentQuery } from './sanity';
 
 const buildEnv = import.meta.env ?? {};
 export const isDraftPreview = buildEnv.SANITY_PREVIEW === 'true';
 export const launchReady = buildEnv.PUBLIC_LAUNCH_READY === 'true';
 let pending: Promise<Content> | undefined;
+let loadedAt = 0;
 export function getContent(): Promise<Content> {
-  return (pending ??= load());
+  // Refresh published CMS content on local page reloads; production builds share one snapshot.
+  if (buildEnv.DEV && Date.now() - loadedAt > 2000) pending = undefined;
+  if (!pending) {
+    loadedAt = Date.now();
+    pending = load().catch((error) => {
+      pending = undefined;
+      throw error;
+    });
+  }
+  return pending;
 }
 async function load(): Promise<Content> {
-  if (buildEnv.CONTENT_SOURCE !== 'sanity') {
+  if (launchReady) validateHistoryApproval();
+  const source = buildEnv.CONTENT_SOURCE || 'sanity';
+  const provider = buildEnv.PUBLIC_HOSTING === 'github-pages' ? 'formspree' : 'cloudflare';
+  if (launchReady)
+    validateEnquirySetup({
+      hosting: buildEnv.PUBLIC_HOSTING || '',
+      formId: buildEnv.PUBLIC_FORMSPREE_FORM_ID ?? delivery.formspreeFormId,
+    });
+  if (source === 'repository') {
+    if (isDraftPreview)
+      throw new Error('Repository content does not support Sanity draft previews.');
+    validateContent(repositoryContent, launchReady, { enquiryProvider: provider });
+    return repositoryContent;
+  }
+  if (source !== 'sanity' && source !== 'sample') throw new Error('Unknown content source.');
+  if (source === 'sample') {
     if (launchReady)
       throw new Error('Launch blocked: sample content cannot be published as a live company.');
     validateContent(sampleContent, false);
     return sampleContent;
   }
-  const project = buildEnv.SANITY_PROJECT_ID;
-  const dataset = buildEnv.SANITY_DATASET || 'production';
+  const project = buildEnv.SANITY_PROJECT_ID || sanityConfig.projectId;
+  const dataset = buildEnv.SANITY_DATASET || sanityConfig.dataset;
   if (!project || !/^[a-z0-9]+$/.test(project))
     throw new Error('A valid SANITY_PROJECT_ID is required.');
   if (isDraftPreview && !buildEnv.SANITY_READ_TOKEN)
     throw new Error('Draft previews require an authenticated SANITY_READ_TOKEN.');
   if (isDraftPreview && launchReady) throw new Error('Draft previews must never be launch-ready.');
-  const query = `{
-    "settings": *[_type == "siteSettings"][0]{..., "heroImage": heroImage{..., "src": asset->url}},
-    "categories": *[_type == "category"],
-    "brands": *[_type == "brand"],
-    "machines": *[_type in ["newModel", "usedMachine"]]{..., "kind": select(_type == "newModel" => "new", "used"), "categoryId": category->id, "brandId": brand->id, "images": images[]{..., "src": asset->url}, "brochure": brochure{..., "url": asset->url}},
-    "articles": *[_type == "article"]{..., "categoryId": category->id, "image": image.asset->url}
-  }`;
   const endpoint = new URL(
     `https://${project}.api.sanity.io/v2025-02-19/data/query/${encodeURIComponent(dataset)}`,
   );
-  endpoint.searchParams.set('query', query);
+  endpoint.searchParams.set('query', sanityContentQuery);
   endpoint.searchParams.set('perspective', isDraftPreview ? 'drafts' : 'published');
   const response = await fetch(endpoint, {
     headers: buildEnv.SANITY_READ_TOKEN
@@ -44,14 +67,18 @@ async function load(): Promise<Content> {
   if (!response.ok)
     throw new Error(`Sanity content unavailable (${response.status}). No sample fallback used.`);
   const { result } = await response.json();
-  validateContent(result, launchReady);
+  validateContent(result, launchReady, { enquiryProvider: provider });
   result.categories.sort(
     (a: Content['categories'][number], b: Content['categories'][number]) =>
       productTypeIds.indexOf(a.id) - productTypeIds.indexOf(b.id),
   );
   return result;
 }
-export function validateContent(value: Content, live: boolean) {
+export function validateContent(
+  value: Content,
+  live: boolean,
+  options: { enquiryProvider?: 'cloudflare' | 'formspree' } = {},
+) {
   if (
     !value?.settings ||
     !Array.isArray(value.machines) ||
@@ -79,11 +106,13 @@ export function validateContent(value: Content, live: boolean) {
       !value.settings.about?.en ||
       !value.settings.privacyNotice?.tr ||
       !value.settings.privacyNotice?.en ||
-      !value.settings.turnstileSiteKey)
+      (options.enquiryProvider !== 'formspree' && !value.settings.turnstileSiteKey))
   )
     throw new Error(
       'Launch blocked: approved bilingual company/privacy copy and challenge configuration are required.',
     );
+  if (live && !value.machines.length)
+    throw new Error('Launch blocked: at least one approved product is required.');
   const ids = new Set<string>();
   for (const item of [...value.machines, ...value.categories, ...value.articles]) {
     if (!item.id || ids.has(item.id)) throw new Error('Content IDs must be unique.');
@@ -168,12 +197,25 @@ export function validateContent(value: Content, live: boolean) {
       throw new Error(`Invalid specification table ${machine.id}.`);
     if (
       live &&
-      (machine.technicalReview === 'pending' ||
+      (machine.technicalReview !== 'approved' ||
         machine.reference?.reviewStatus === 'pending' ||
-        machine.images.some((image) => image.rightsStatus === 'pending'))
+        machine.images.some((image) => image.rightsStatus !== 'approved'))
     )
       throw new Error(`Launch blocked: unapproved source content ${machine.id}.`);
   }
+  if (
+    live &&
+    value.machines.some(
+      (product) =>
+        product.published.length !== 2 ||
+        !product.published.includes('tr') ||
+        !product.published.includes('en') ||
+        new Set(product.images.map((image) => image.src)).size < 2,
+    )
+  )
+    throw new Error(
+      'Launch blocked: every product requires both languages and two distinct approved photographs.',
+    );
   for (const article of value.articles) {
     if (!article.published?.length || !article.sections?.length || !safeMediaUrl(article.image))
       throw new Error(`Incomplete article ${article.id}.`);
@@ -185,8 +227,22 @@ export function validateContent(value: Content, live: boolean) {
       )
         throw new Error(`Incomplete ${locale} article ${article.id}.`);
   }
-  if (live && value.articles.some((a) => a.sample || !a.author || !a.reviewedAt))
-    throw new Error('Launch blocked: articles require an author and review date.');
+  if (
+    live &&
+    value.articles.some(
+      (a) =>
+        a.sample ||
+        !a.author?.trim() ||
+        !a.reviewer?.trim() ||
+        !a.reviewedAt ||
+        !Number.isFinite(Date.parse(a.reviewedAt)) ||
+        !a.sources?.length ||
+        a.sources.some((source) => !source.title || !safeExternalUrl(source.url)),
+    )
+  )
+    throw new Error(
+      'Launch blocked: articles require an author, reviewer, valid review date and supporting sources.',
+    );
   for (const group of [value.machines, value.categories, value.articles])
     for (const locale of ['tr', 'en'] as Locale[]) {
       const slugs = group.map((item) => item.slug[locale]);

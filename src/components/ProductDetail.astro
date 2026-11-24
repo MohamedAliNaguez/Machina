@@ -5,6 +5,10 @@ import MachineCard from './MachineCard.astro';
 import ProductVisual from './ProductVisual.astro';
 import ProductLightbox from './ProductLightbox.astro';
 import ContactLinks from './ContactLinks.astro';
+import ProductInspection from './ProductInspection.astro';
+import { getProductModel } from '../lib/product-models';
+import '../styles/catalogue-showroom.css';
+import { directContactLinks } from '../lib/contact';
 import { withBase } from '../lib/paths';
 import { getContent } from '../lib/content';
 import { l, labels, otherLocale, url } from '../lib/i18n';
@@ -19,21 +23,34 @@ const sourceReview = await getSourceReview(product.id);
 const { categories, machines, settings } = await getContent();
 const category = categories.find((item) => item.id === product.categoryId)!;
 const copy = labels(locale);
-const related = machines
-  .filter((item) => item.id !== product.id && item.published.includes(locale))
-  .sort(
-    (a, b) =>
-      Number(b.categoryId === product.categoryId) - Number(a.categoryId === product.categoryId),
-  )
-  .slice(0, 4);
+const approvedModel = getProductModel(product.id);
+const relatedCandidates = machines.filter(
+  (item) => item.id !== product.id && item.published.includes(locale),
+);
+const sameFamily = relatedCandidates.find((item) => item.categoryId === product.categoryId);
+const otherFamilies = categories
+  .filter((item) => item.id !== product.categoryId)
+  .flatMap((family) => relatedCandidates.find((item) => item.categoryId === family.id) || []);
+const related = [...(sameFamily ? [sameFamily] : []), ...otherFamilies].slice(0, 3);
 const photo = product.images[0];
+const whatsapp = directContactLinks(settings, locale, {
+  name: product.name[locale],
+  url: new URL(
+    url(locale, 'machines', product.slug[locale]),
+    import.meta.env.DEV
+      ? Astro.url.origin
+      : import.meta.env.PUBLIC_SITE_URL || 'https://technicsan.com',
+  ).href,
+}).find((link) => link.channel === 'whatsapp');
 const contact = url(locale, 'contact') + '?product=' + encodeURIComponent(product.id);
 const crumbs = [
   { name: copy.machines, href: url(locale, 'machines') },
   { name: category.name[locale], href: url(locale, 'categories', category.slug[locale]) },
   { name: product.name[locale] },
 ];
-const origin = import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321';
+const origin = import.meta.env.DEV
+  ? Astro.url.origin
+  : import.meta.env.PUBLIC_SITE_URL || 'https://technicsan.com';
 const schema = product.sample
   ? []
   : [
@@ -65,270 +82,355 @@ const schema = product.sample
   schema={schema}
   socialImage={photo.placeholder ? undefined : photo.src}
 >
-  <section class="pressure-product-hero">
-    <div class="container">
-      <Breadcrumbs locale={locale} items={crumbs} />
-      <div class="pressure-product-overview">
-        <div class="pressure-product-media">
-          <a
-            class="product-enlarge"
-            href={withBase(photo.src)}
-            data-gallery-open
-            aria-haspopup="dialog"
-            aria-controls="product-lightbox"
-          >
-            <ProductVisual
-              id="product-main-image"
-              src={photo.src}
-              alt={photo.alt[locale]}
-              locale={locale}
-              placeholder={photo.placeholder}
-              priority
-            />
-            <span class="product-enlarge-hint">{l(locale, 'Görseli büyüt', 'Enlarge image')}</span>
-          </a>
-          {product.images.length > 1 && (
+  <div class="showroom-product">
+    <section class="pressure-product-hero">
+      <div class="container">
+        <Breadcrumbs locale={locale} items={crumbs} />
+        <div class="pressure-product-overview">
+          <div class="pressure-product-media">
             <div
-              class="pressure-product-gallery"
-              role="group"
-              aria-label={l(locale, 'Ürün fotoğrafları', 'Product photographs')}
+              class="product-media-controls"
+              aria-label={l(locale, 'Ürün görünümleri', 'Product views')}
             >
-              {product.images.slice(0, 6).map((image, index) => (
+              <span class="product-photo-tab">{l(locale, 'Fotoğraflar', 'Photographs')}</span>
+              {approvedModel && (
                 <button
                   type="button"
-                  data-product-photo={withBase(image.src)}
-                  data-photo-alt={image.alt[locale]}
-                  data-photo-placeholder={String(!!image.placeholder)}
-                  aria-pressed={index === 0}
-                  aria-label={l(locale, 'Fotoğraf ', 'Photo ') + (index + 1)}
+                  data-inspection-open
+                  aria-haspopup="dialog"
+                  aria-controls="product-inspection"
                 >
-                  <img src={withBase(image.src)} alt="" width="220" height="137" loading="lazy" />
+                  <svg
+                    width="19"
+                    height="19"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    aria-hidden="true"
+                  >
+                    <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9Z M4 7.5l8 4.5 8-4.5M12 12v9" />
+                  </svg>
+                  {l(locale, '3D olarak inceleyin', 'Explore in 3D')}
                 </button>
-              ))}
+              )}
             </div>
-          )}
-          {product.images.length > 6 && (
-            <details class="product-more-photos">
-              <summary>
-                {l(locale, 'Diğer fotoğraflar', 'More photographs')} ({product.images.length - 6})
-              </summary>
-              <div class="pressure-product-gallery">
-                {product.images.slice(6).map((image, index) => (
+            <div class="product-photo-stage">
+              <a
+                class="product-enlarge"
+                href={withBase(photo.src)}
+                data-gallery-open
+                aria-haspopup="dialog"
+                aria-controls="product-lightbox"
+              >
+                <ProductVisual
+                  id="product-main-image"
+                  src={photo.src}
+                  alt={photo.alt[locale]}
+                  locale={locale}
+                  placeholder={photo.placeholder}
+                  priority
+                />
+                <span class="product-enlarge-hint">
+                  {l(locale, 'Görseli büyüt', 'Enlarge image')}
+                </span>
+                <svg
+                  class="product-expand-icon"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  aria-hidden="true"
+                >
+                  <path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5" />
+                </svg>
+              </a>
+              <span class="product-photo-caption" data-product-caption>
+                {photo.alt[locale]}
+              </span>
+            </div>
+            {product.images.length > 1 && (
+              <div
+                class="pressure-product-gallery"
+                role="group"
+                aria-label={l(locale, 'Ürün fotoğrafları', 'Product photographs')}
+              >
+                {product.images.map((image, index) => (
                   <button
                     type="button"
                     data-product-photo={withBase(image.src)}
                     data-photo-alt={image.alt[locale]}
-                    data-photo-placeholder="false"
-                    aria-pressed="false"
-                    aria-label={l(locale, 'Fotoğraf ', 'Photo ') + (index + 7)}
+                    data-photo-placeholder={String(!!image.placeholder)}
+                    aria-pressed={index === 0}
+                    aria-label={l(locale, 'Fotoğraf ', 'Photo ') + (index + 1)}
                   >
                     <img src={withBase(image.src)} alt="" width="220" height="137" loading="lazy" />
+                    <span>{l(locale, 'Fotoğraf ', 'Photo ') + (index + 1)}</span>
                   </button>
                 ))}
               </div>
-            </details>
-          )}
-          <ProductLightbox product={product} locale={locale} />
-        </div>
-        <div class="pressure-product-summary">
-          <span class="pressure-product-type">TECHNICSAN / {category.name[locale]}</span>
-          <h1>{product.name[locale]}</h1>
-          <p class="pressure-product-lead">{product.summary[locale]}</p>
-          <p class="pressure-product-description">{product.description[locale]}</p>
-          {sourceReview && (
-            <aside
-              class="source-review"
-              aria-label={l(locale, 'Geçici kaynak kontrolü', 'Temporary source review')}
-            >
-              <a
-                href={sourceReview.url}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                data-source-review
-              >
-                {l(locale, 'Orijinal kaynak sayfasını aç', 'Open original source page')}
-                <span class="sr-only">{l(locale, ' (yeni sekme)', ' (new tab)')}</span>
+            )}
+            <ProductLightbox product={product} locale={locale} />
+            <p class="product-gallery-help">
+              {l(
+                locale,
+                'Büyütmek için görsele dokunun · Ayrıntıları yakınlaştırın',
+                'Select a photograph to enlarge · Zoom to inspect the details',
+              )}
+            </p>
+          </div>
+          <div class="pressure-product-summary">
+            <span class="pressure-product-type">{category.name[locale]}</span>
+            <h1>{product.name[locale]}</h1>
+            <p class="pressure-product-lead">{product.summary[locale]}</p>
+            <dl class="product-key-facts">
+              <div>
+                <dt>{l(locale, 'Ürün grubu', 'Product family')}</dt>
+                <dd>{category.name[locale]}</dd>
+              </div>
+              {product.specs.slice(0, 2).map((spec) => (
+                <div>
+                  <dt>{spec.label[locale]}</dt>
+                  <dd>{spec.value}</dd>
+                </div>
+              ))}
+              <div>
+                <dt>{l(locale, 'Konfigürasyon', 'Configuration')}</dt>
+                <dd>{l(locale, 'Satış ekibiyle teyit edin', 'Confirm with sales')}</dd>
+              </div>
+            </dl>
+            <div class="product-sales-actions">
+              <a class="button button-accent" href={contact}>
+                {copy.quote}
               </a>
-              <p>
-                {sourceReview.section &&
-                  `${l(locale, 'Katalog kaydı', 'Catalogue entry')} ${sourceReview.section} · `}
-                {sourceReview.label}
+              {whatsapp && (
+                <a
+                  class="product-whatsapp"
+                  href={whatsapp.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {l(locale, 'WhatsApp ile görüşün', 'Discuss on WhatsApp')}
+                  <span class="sr-only">{l(locale, ' (yeni sekme)', ' (new tab)')}</span>
+                </a>
+              )}
+            </div>
+            <div class="product-direct-contact">
+              <ContactLinks
+                locale={locale}
+                settings={settings}
+                product={{
+                  name: product.name[locale],
+                  url: new URL(url(locale, 'machines', product.slug[locale]), origin).href,
+                }}
+              />
+            </div>
+            {!product.sample && (
+              <p class="pressure-availability">
+                {copy[product.status]} ·{' '}
+                {l(locale, 'Satış ekibi tarafından teyit edilir', 'Subject to sales confirmation')}
               </p>
-              <small>
+            )}
+            {product.sample && (
+              <p class="pressure-preview-note">
                 {l(
                   locale,
-                  'Yalnızca yerel önizlemede · bilgi ve görsel kontrolü için',
-                  'Local preview only · for checking information and images',
+                  'Ürün önizlemesi · Teknik bilgiler ve tedarik onayı bekleniyor',
+                  'Product preview · Technical review and supply approval pending',
                 )}
-              </small>
-            </aside>
-          )}
-          <div class="pressure-actions">
-            <a class="button button-accent" href={contact}>
-              {copy.quote}
-            </a>
-            <a class="text-link" href={url(locale, 'categories', category.slug[locale])}>
-              {l(locale, 'Ürün grubuna dönün', 'Back to product type')}
-            </a>
+              </p>
+            )}
+            {sourceReview && (
+              <aside
+                class="source-review"
+                aria-label={l(locale, 'Geçici kaynak kontrolü', 'Temporary source review')}
+              >
+                <a
+                  href={sourceReview.url}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  data-source-review
+                >
+                  {l(locale, 'Orijinal kaynak sayfasını aç', 'Open original source page')}
+                  <span class="sr-only">{l(locale, ' (yeni sekme)', ' (new tab)')}</span>
+                </a>
+                <small>
+                  {l(
+                    locale,
+                    'Yalnızca yerel önizlemede · bilgi ve görsel kontrolü için',
+                    'Local preview only · for checking information and images',
+                  )}
+                </small>
+              </aside>
+            )}
           </div>
-          <div class="product-direct-contact">
-            <ContactLinks
-              locale={locale}
-              settings={settings}
-              theme="dark"
-              product={{
-                name: product.name[locale],
-                url: new URL(url(locale, 'machines', product.slug[locale]), origin).href,
-              }}
-            />
-          </div>
-          {!product.sample && (
-            <p class="pressure-availability">
-              {copy[product.status]} ·{' '}
-              {l(locale, 'Satış ekibi tarafından teyit edilir', 'Subject to sales confirmation')}
-            </p>
-          )}
-          {product.sample && (
-            <p class="pressure-preview-note">
-              {l(
-                locale,
-                'Kaynak ürün önizlemesi · TECHNICSAN tedarik onayı bekleniyor',
-                'Source product preview · TECHNICSAN supply approval pending',
-              )}
-            </p>
-          )}
         </div>
+        {approvedModel && <ProductInspection product={product} locale={locale} />}
       </div>
-    </div>
-  </section>
-  <div class="container pressure-product-information">
-    <section>
-      <span class="eyebrow">{l(locale, 'UYGULAMANIZ', 'YOUR APPLICATION')}</span>
-      <h2>{l(locale, 'Görüşülecek bilgiler', 'Information to discuss')}</h2>
-      <ul class="pressure-requirements">
-        {(category.requirements?.[locale] || product.applications[locale]).map(
-          (requirement, index) => (
-            <li>
-              <span aria-hidden="true">0{index + 1}</span>
-              {requirement}
-            </li>
-          ),
-        )}
-      </ul>
     </section>
-    <section>
-      <span class="eyebrow">{l(locale, 'ÜRÜN BİLGİLERİ', 'PRODUCT INFORMATION')}</span>
-      <h2>{l(locale, 'Teknik özellikler', 'Technical specifications')}</h2>
-      {product.specs.length ? (
-        <div
-          class="table-scroll"
-          tabindex="0"
-          role="region"
-          aria-label={l(locale, 'Teknik özellik tablosu', 'Specifications table')}
-        >
-          <table>
-            <caption>
-              {l(
-                locale,
-                'Nihai konfigürasyonu satış ekibiyle teyit edin',
-                'Confirm the final configuration with sales',
-              )}
-            </caption>
-            <tbody>
-              {product.specs.map((spec) => (
-                <tr>
-                  <th scope="row">{spec.label[locale]}</th>
-                  <td>{spec.value}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div class="pressure-data-pending">
-          <strong>
-            {l(locale, 'Doğrulanmış ürün bilgileri bekleniyor', 'Verified product data pending')}
-          </strong>
-          <p>
+    <nav
+      class="container product-section-nav"
+      aria-label={l(locale, 'Ürün bilgileri', 'Product information')}
+    >
+      <a href="#overview">{l(locale, 'Genel bakış', 'Overview')}</a>
+      <a href="#specifications">{l(locale, 'Teknik özellikler', 'Specifications')}</a>
+      <a href="#applications">{l(locale, 'Uygulamalar', 'Applications')}</a>
+      {product.brochure && <a href="#documents">{l(locale, 'Belgeler', 'Documents')}</a>}
+    </nav>
+    <section class="product-editorial-overview" id="overview">
+      <div class="container">
+        <div>
+          <span class="eyebrow">{l(locale, 'GENEL BAKIŞ', 'OVERVIEW')}</span>
+          <h2>
             {l(
               locale,
-              'Gerçek modele ait basınç, kapasite, boyut ve diğer ilgili bilgiler onaylandıktan sonra burada yayımlanacaktır.',
-              'Pressure, capacity, dimensions and other applicable details will appear here once the actual model information has been approved.',
+              'Uygulamanız için doğru konfigürasyon',
+              'The right configuration for your application',
             )}
-          </p>
+          </h2>
         </div>
-      )}
-      {product.brochure?.url.startsWith('/images/') ? (
-        <a class="text-link" href={product.brochure.url} target="_blank" rel="noopener noreferrer">
-          {product.brochure.label[locale]}
-        </a>
-      ) : (
-        <p class="section-note">
-          {l(
-            locale,
-            'Onaylı ürün broşürü henüz eklenmedi',
-            'An approved product brochure has not been supplied yet',
-          )}
-        </p>
-      )}
+        <p>{product.description[locale]}</p>
+      </div>
     </section>
-    {product.specificationTable && (
-      <section class="product-configuration-table">
-        <span class="eyebrow">{product.model}</span>
-        <h2>{l(locale, 'Model konfigürasyonları', 'Model configurations')}</h2>
-        <div
-          class="table-scroll"
-          tabindex="0"
-          role="region"
-          aria-label={l(locale, 'Model konfigürasyon tablosu', 'Model configuration table')}
-        >
-          <table>
-            <caption>
+    <div class="container pressure-product-information">
+      <section id="applications">
+        <span class="eyebrow">{l(locale, 'UYGULAMANIZ', 'YOUR APPLICATION')}</span>
+        <h2>{l(locale, 'Görüşülecek bilgiler', 'Information to discuss')}</h2>
+        <ul class="pressure-requirements">
+          {(category.requirements?.[locale] || product.applications[locale]).map(
+            (requirement, index) => (
+              <li>
+                <span aria-hidden="true">0{index + 1}</span>
+                {requirement}
+              </li>
+            ),
+          )}
+        </ul>
+      </section>
+      <section id="specifications">
+        <span class="eyebrow">{l(locale, 'ÜRÜN BİLGİLERİ', 'PRODUCT INFORMATION')}</span>
+        <h2>{l(locale, 'Teknik özellikler', 'Technical specifications')}</h2>
+        {product.specs.length ? (
+          <div
+            class="table-scroll"
+            tabindex="0"
+            role="region"
+            aria-label={l(locale, 'Teknik özellik tablosu', 'Specifications table')}
+          >
+            <table>
+              <caption>
+                {l(
+                  locale,
+                  'Nihai konfigürasyonu satış ekibiyle teyit edin',
+                  'Confirm the final configuration with sales',
+                )}
+              </caption>
+              <tbody>
+                {product.specs.map((spec) => (
+                  <tr>
+                    <th scope="row">{spec.label[locale]}</th>
+                    <td>{spec.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="pressure-data-pending">
+            <strong>
+              {l(locale, 'Doğrulanmış ürün bilgileri bekleniyor', 'Verified product data pending')}
+            </strong>
+            <p>
               {l(
                 locale,
-                'Model konfigürasyonları; nihai teknik bilgileri teyit edin',
-                'Model configurations; confirm the final technical information',
+                'Gerçek modele ait basınç, kapasite, boyut ve diğer ilgili bilgiler onaylandıktan sonra burada yayımlanacaktır.',
+                'Pressure, capacity, dimensions and other applicable details will appear here once the actual model information has been approved.',
               )}
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">{l(locale, 'Özellik', 'Specification')}</th>
-                {product.specificationTable.columns.map((column) => (
-                  <th scope="col">{column}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {product.specificationTable.rows.map((row) => (
-                <tr>
-                  <th scope="row">{row.label[locale]}</th>
-                  {row.values.map((value) => (
-                    <td>{value}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            </p>
+          </div>
+        )}
+        <div id="documents">
+          <h3>{l(locale, 'Belgeler', 'Documents')}</h3>
+          {product.brochure?.url.startsWith('/images/') ? (
+            <a
+              class="text-link"
+              href={withBase(product.brochure.url)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {product.brochure.label[locale]}
+            </a>
+          ) : (
+            <p class="section-note">
+              {l(
+                locale,
+                'Onaylı ürün broşürü henüz eklenmedi',
+                'An approved product brochure has not been supplied yet',
+              )}
+            </p>
+          )}
         </div>
       </section>
-    )}
-  </div>
-  <section class="container pressure-other-products">
-    <div class="section-heading">
-      <div>
-        <span class="eyebrow">TECHNICSAN</span>
-        <h2>{l(locale, 'İlgili ürünler', 'Related products')}</h2>
+      {product.specificationTable && (
+        <section class="product-configuration-table">
+          <span class="eyebrow">{product.model}</span>
+          <h2>{l(locale, 'Model konfigürasyonları', 'Model configurations')}</h2>
+          <div
+            class="table-scroll"
+            tabindex="0"
+            role="region"
+            aria-label={l(locale, 'Model konfigürasyon tablosu', 'Model configuration table')}
+          >
+            <table>
+              <caption>
+                {l(
+                  locale,
+                  'Model konfigürasyonları; nihai teknik bilgileri teyit edin',
+                  'Model configurations; confirm the final technical information',
+                )}
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">{l(locale, 'Özellik', 'Specification')}</th>
+                  {product.specificationTable.columns.map((column) => (
+                    <th scope="col">{column}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {product.specificationTable.rows.map((row) => (
+                  <tr>
+                    <th scope="row">{row.label[locale]}</th>
+                    {row.values.map((value) => (
+                      <td>{value}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+    </div>
+    <section class="container pressure-other-products">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">TECHNICSAN</span>
+          <h2>{l(locale, 'İlgili ürünler', 'Related products')}</h2>
+        </div>
+        <a class="text-link" href={url(locale, 'machines')}>
+          {copy.all}
+        </a>
       </div>
-      <a class="text-link" href={url(locale, 'machines')}>
-        {copy.all}
-      </a>
-    </div>
-    <div class="pressure-related-grid">
-      {related.map((item) => (
-        <MachineCard machine={item} locale={locale} compact />
-      ))}
-    </div>
-  </section>
+      <div class="pressure-related-grid">
+        {related.map((item) => (
+          <MachineCard machine={item} locale={locale} compact />
+        ))}
+      </div>
+    </section>
+  </div>
 </Layout>
 
 <style>

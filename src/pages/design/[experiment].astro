@@ -1,0 +1,102 @@
+---
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+import Layout from '../../layouts/Layout.astro';
+import Product3DViewer from '../../components/Product3DViewer.astro';
+import ProductInspection from '../../components/ProductInspection.astro';
+import { getContent } from '../../lib/content';
+import '../../styles/catalogue-showroom.css';
+
+// The trial and its unapproved geometry are never published in a static deployment.
+export function getStaticPaths() {
+  return import.meta.env.DEV
+    ? ['product-3d', 'inspection', 'inspection-tr'].map((experiment) => ({
+        params: { experiment },
+      }))
+    : [];
+}
+const inspection = Astro.params.experiment?.startsWith('inspection');
+const locale = Astro.params.experiment === 'inspection-tr' ? 'tr' : 'en';
+const { machines } = await getContent();
+const product = machines.find((item) => item.id === 'v-type-silobas')!;
+const ready = existsSync(resolve('meshy_output/cement-bulker/technicsan-cement-bulker.glb'));
+---
+
+<Layout
+  locale="en"
+  title="Interactive cement bulker study"
+  description="A local TECHNICSAN 3D product-viewing trial based on owner-supplied reference images."
+  noindex
+>
+  <div class="container product-study">
+    <div class="product-study-heading">
+      <div>
+        <span class="eyebrow">TECHNICSAN / PHOTO-BASED 3D APPROXIMATION</span>
+        <h1>Pressure in perspective</h1>
+      </div>
+      <p>
+        Reference photographs for the product study. The simplified prototype was withdrawn after
+        review; a realistic product model is still required.
+      </p>
+    </div>
+    {inspection ? (
+      <>
+        <button
+          class="button button-accent"
+          type="button"
+          data-inspection-open
+          aria-controls="product-inspection"
+          aria-haspopup="dialog"
+        >
+          {locale === 'tr' ? '3D olarak inceleyin' : 'Explore in 3D'}
+        </button>
+        <ProductInspection product={product} locale={locale} />
+      </>
+    ) : (
+      <Product3DViewer
+        locale="en"
+        src="/__product-3d/trial.glb"
+        poster="/__product-3d/reference.png"
+        ready={ready}
+      />
+    )}
+    <p class="product-study-note">
+      This independently authored model approximates the supplied photographs. Dimensions, hidden
+      details and fittings require review against the actual product. It is not an engineering
+      model.
+    </p>
+  </div>
+</Layout>
+<style>
+  .product-study {
+    padding-block: 48px 64px;
+  }
+  .product-study-heading {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    align-items: end;
+    gap: 40px;
+    margin-bottom: 30px;
+  }
+  .product-study-heading h1 {
+    margin-top: 12px;
+    font-size: clamp(44px, 5vw, 72px);
+  }
+  .product-study-heading p {
+    max-width: 420px;
+  }
+  .product-study-note {
+    font-size: 13px;
+    margin-top: 18px;
+    max-width: 780px;
+  }
+  @media (max-width: 700px) {
+    .product-study {
+      padding-block: 28px;
+    }
+    .product-study-heading {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+</style>

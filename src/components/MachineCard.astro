@@ -3,6 +3,7 @@ import type { Locale, Machine } from '../lib/types';
 import { labels, l, url } from '../lib/i18n';
 import ProductVisual from './ProductVisual.astro';
 import { getContent } from '../lib/content';
+import { getProductModel } from '../lib/product-models';
 interface Props {
   machine: Machine;
   locale: Locale;
@@ -33,6 +34,9 @@ const href = url(locale, 'machines', machine.slug[locale]);
         : '')
     }
   >
+    {getProductModel(machine.id) && (
+      <span class="product-model-badge">{l(locale, '3D önizleme', '3D preview')}</span>
+    )}
     <ProductVisual
       src={machine.images[0].src}
       alt={machine.images[0].alt[locale]}
@@ -58,7 +62,7 @@ const href = url(locale, 'machines', machine.slug[locale]);
       <span class:list={['card-stock', machine.status]}>{copy[machine.status]}</span>
     )}
     <a class="text-link card-view" href={href}>
-      {copy.details}
+      {l(locale, 'Ürünü inceleyin', 'View product')}
     </a>
   </div>
 </article>

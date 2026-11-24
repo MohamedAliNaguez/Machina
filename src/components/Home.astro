@@ -3,6 +3,9 @@ import Layout from '../layouts/Layout.astro';
 import ProductVisual from './ProductVisual.astro';
 import ArticleCard from './ArticleCard.astro';
 import PressureWordmark from './PressureWordmark.astro';
+import FamilyIllustration from './FamilyIllustration.astro';
+import { withBase } from '../lib/paths';
+import '../styles/home-refined.css';
 import { getContent } from '../lib/content';
 import { labels, l, url, otherLocale } from '../lib/i18n';
 import type { Locale } from '../lib/types';
@@ -12,6 +15,13 @@ interface Props {
 }
 const { locale } = Astro.props;
 const { categories, articles, machines } = await getContent();
+const families = categories.map((category) => ({
+  category,
+  product:
+    machines.find(
+      (product) => product.categoryId === category.id && !product.images[0].placeholder,
+    ) || machines.find((product) => product.categoryId === category.id),
+}));
 const copy = labels(locale);
 ---
 
@@ -30,136 +40,184 @@ const copy = labels(locale);
   )}
   alternate={url(otherLocale(locale))}
 >
-  <section class="pressure-hero" aria-labelledby="pressure-title">
-    <div class="container pressure-hero-inner">
-      <h1 id="pressure-title" class="pressure-heading">
-        <span class="sr-only pressure-heading-text">{l(locale, 'BASINÇ', 'PRESSURE')}</span>
-        <PressureWordmark />
-      </h1>
-      <div class="pressure-hero-copy">
-        <p class="pressure-signature" lang="en">
-          <span class="brand-slogan-part">{brand.sloganLines[0]}</span>{' '}
-          <span class="brand-slogan-part">{brand.sloganLines[1]}</span>
-        </p>
-        <p class="pressure-hero-description">
-          {l(
-            locale,
-            'Çimento silobası, LPG kataloğu, kompresörler, mikserler ve silolar',
-            'Cement bulker, LPG catalog, compressors, mixers and silos',
-          )}
-        </p>
-        <div class="pressure-actions">
-          <a class="button button-accent" href={url(locale, 'machines')}>
-            {copy.explore}
+  <div class="home-refined">
+    <section class="pressure-hero" aria-labelledby="pressure-title">
+      <div class="container pressure-hero-inner">
+        <h1 id="pressure-title" class="pressure-heading">
+          <span class="sr-only pressure-heading-text">{l(locale, 'BASINÇ', 'PRESSURE')}</span>
+          <PressureWordmark />
+        </h1>
+        <div class="pressure-hero-copy">
+          <p class="pressure-signature" lang="en">
+            <span class="brand-slogan-part">{brand.sloganLines[0]}</span>{' '}
+            <span class="brand-slogan-part">{brand.sloganLines[1]}</span>
+          </p>
+          <p class="pressure-hero-description">
+            {l(
+              locale,
+              'Çimento silobası, LPG kataloğu, kompresörler, mikserler ve silolar',
+              'Cement bulker, LPG catalog, compressors, mixers and silos',
+            )}
+          </p>
+          <div class="pressure-actions">
+            <a class="button button-accent" href={url(locale, 'machines')}>
+              {copy.explore}
+            </a>
+            <a class="text-link" href={url(locale, 'contact')}>
+              {l(locale, 'İhtiyacınızı görüşelim', 'Discuss your requirements')}
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="container pressure-families" aria-labelledby="product-types-heading">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">
+            {l(locale, 'BEŞ ÜRÜN GRUBU · TEK ODAK', 'FIVE FAMILIES · ONE FOCUS')}
+          </span>
+          <h2 id="product-types-heading">
+            {l(locale, 'İhtiyacınıza uygun ürünler', 'Find your product family')}
+          </h2>
+        </div>
+        <a class="text-link" href={url(locale, 'machines')}>
+          {l(locale, 'Tüm ürünleri inceleyin', 'View all products')}
+        </a>
+      </div>
+      <div class="pressure-family-grid">
+        {families.map(({ category, product }, index) => (
+          <a class="pressure-family" href={url(locale, 'categories', category.slug[locale])}>
+            <span class="pressure-family-number">0{index + 1}</span>
+            <div class="home-family-visual">
+              {product && !product.images[0].placeholder ? (
+                <ProductVisual src={product.images[0].src} alt="" locale={locale} />
+              ) : (
+                <FamilyIllustration family={category.id} />
+              )}
+              {(!product ||
+                product.images[0].placeholder ||
+                product.images[0].illustrative ||
+                product.images[0].rightsStatus === 'pending') && (
+                <span class="home-visual-caption">
+                  {product && !product.images[0].placeholder && !product.images[0].illustrative
+                    ? l(locale, 'Referans fotoğraf', 'Reference photograph')
+                    : l(locale, 'Temsili görsel', 'Illustration')}
+                </span>
+              )}
+            </div>
+            <h3>{category.name[locale]}</h3>
+            <p>{category.description[locale]}</p>
+            <span class="pressure-family-link">
+              {l(locale, 'Ürünleri inceleyin', 'Explore products')}
+            </span>
           </a>
-          <a class="text-link" href={url(locale, 'contact')}>
-            {l(locale, 'İhtiyacınızı görüşelim', 'Discuss your requirements')}
+        ))}
+      </div>
+      <p class="section-note">
+        {l(
+          locale,
+          'TECHNICSAN ürün kataloğu · Konfigürasyon ve tedarik teyit edilir',
+          'TECHNICSAN product catalogue · Configuration and supply subject to confirmation',
+        )}
+      </p>
+    </section>
+    <section class="pressure-brand-section" aria-labelledby="home-application-title">
+      <div class="container pressure-brand-grid">
+        <figure class="home-application-visual">
+          <img
+            src={withBase('/images/products/technicsan/v-type-side.webp')}
+            alt={l(
+              locale,
+              'TECHNICSAN çimento silobasının temsili yan görünümü',
+              'Illustrative side view of a TECHNICSAN cement bulker',
+            )}
+            width="1774"
+            height="887"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption>
+            {l(locale, 'Temsili ürün konfigürasyonu', 'Illustrative product configuration')}
+          </figcaption>
+        </figure>
+        <div class="pressure-brand-copy">
+          <span class="eyebrow">
+            {l(locale, 'UYGULAMANIZDAN BAŞLAYALIM', 'BUILT AROUND YOUR APPLICATION')}
+          </span>
+          <h2 id="home-application-title">
+            {l(
+              locale,
+              'Doğru seçim, doğru sorularla başlar',
+              'The right fit starts with the right questions',
+            )}
+          </h2>
+          <p>
+            {l(
+              locale,
+              'Malzemenizi, ihtiyaç duyduğunuz kapasiteyi ve çalışma koşullarınızı anlatın. Uygun ürün grubunu ve teyit edilmesi gereken ayrıntıları birlikte belirleyelim.',
+              'Tell us about your material, required capacity and working conditions. Together, we can identify the product family and details to confirm.',
+            )}
+          </p>
+          <ul class="home-application-points">
+            <li>{l(locale, 'Malzeme ve kullanım amacı', 'Material and intended use')}</li>
+            <li>{l(locale, 'Kapasite ve çalışma koşulları', 'Capacity and working conditions')}</li>
+            <li>
+              {l(
+                locale,
+                'Konfigürasyon ve teknik belgeler',
+                'Configuration and technical documentation',
+              )}
+            </li>
+          </ul>
+          <a class="text-link" href={url(locale, 'about')}>
+            {l(locale, 'TECHNICSAN hakkında', 'About TECHNICSAN')}
           </a>
         </div>
       </div>
-    </div>
-  </section>
-  <section class="container pressure-families" aria-labelledby="product-types-heading">
-    <div class="section-heading">
-      <div>
-        <span class="eyebrow">{l(locale, 'ODAKLANMIŞ BİR KATALOG', 'A FOCUSED CATALOGUE')}</span>
-        <h2 id="product-types-heading">{l(locale, 'Beş ürün grubu', 'Five product types')}</h2>
-      </div>
-      <a class="text-link" href={url(locale, 'machines')}>
-        {l(locale, 'Tüm ürünleri inceleyin', 'View all products')}
-      </a>
-    </div>
-    <div class="pressure-family-grid">
-      {categories.map((category, index) => (
-        <a class="pressure-family" href={url(locale, 'categories', category.slug[locale])}>
-          <span class="pressure-family-number">0{index + 1} / TECHNICSAN</span>
-          <ProductVisual
-            src={
-              (machines.find(
-                (product) => product.categoryId === category.id && !product.images[0].placeholder,
-              ) || machines.find((product) => product.categoryId === category.id))!.images[0].src
-            }
-            alt=""
-            locale={locale}
-          />
-          <h3>{category.name[locale]}</h3>
-          <p>{category.description[locale]}</p>
-          <span class="pressure-family-link">
-            {l(locale, 'Ürün grubunu keşfedin', 'Explore this product type')}
+    </section>
+    {articles.some((article) => article.published.includes(locale)) && (
+      <section class="guides-section container">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">
+              {l(locale, 'GÖRÜŞMEYE HAZIRLANIN', 'PREPARE THE CONVERSATION')}
+            </span>
+            <h2>{l(locale, 'Ürün notları ve rehberler', 'Product notes & guides')}</h2>
+          </div>
+          <a class="text-link" href={url(locale, 'guides')}>
+            {l(locale, 'Tüm rehberler', 'All guides')}
+          </a>
+        </div>
+        <div class="article-grid">
+          {articles
+            .filter((article) => article.published.includes(locale))
+            .slice(0, 3)
+            .map((article) => (
+              <ArticleCard article={article} locale={locale} />
+            ))}
+        </div>
+      </section>
+    )}
+    <section class="pressure-contact-band">
+      <div class="container">
+        <div>
+          <span class="eyebrow">
+            {l(locale, 'ÜRÜNDEN ÖNCE İHTİYACINIZ', 'START WITH YOUR REQUIREMENTS')}
           </span>
-        </a>
-      ))}
-    </div>
-    <p class="section-note">
-      {l(
-        locale,
-        'TECHNICSAN ürün kataloğu · Konfigürasyon ve tedarik teyit edilir',
-        'TECHNICSAN product catalogue · Configuration and supply subject to confirmation',
-      )}
-    </p>
-  </section>
-  <section class="pressure-brand-section">
-    <div class="container pressure-brand-grid">
-      <div>
-        <span class="eyebrow">TECHNICSAN</span>
-        <h2 lang="en">
-          {brand.sloganLines[0]}
-          <br />
-          {brand.sloganLines[1]}
-        </h2>
-      </div>
-      <div class="pressure-brand-copy">
-        <p>
-          {l(
-            locale,
-            'Markamızın odağında basınç var. Kataloğumuzda ise yalnızca beş ürün grubu: çimento silobası, LPG kataloğu, kompresörler, mikserler ve silolar.',
-            'Pressure sits at the heart of our identity. Our catalogue brings together exactly five product types: Cement bulker, LPG catalog, Compressors, Mixers and Silos.',
-          )}
-        </p>
-        <p>
-          {l(
-            locale,
-            'Ürün grubunuzu seçin, uygulamanızı anlatın ve ihtiyacınıza ilişkin bilgileri birlikte netleştirelim.',
-            'Choose your product type, describe your application and start a focused conversation about your requirements.',
-          )}
-        </p>
-        <a class="text-link" href={url(locale, 'about')}>
-          {l(locale, 'TECHNICSAN hakkında', 'About TECHNICSAN')}
+          <h2>{l(locale, 'Uygulamanızı konuşalım', 'Tell us about your application')}</h2>
+          <p>
+            {l(
+              locale,
+              'Ürün grubunuzu seçtiniz mi? Bir sonraki adımı birlikte netleştirelim.',
+              'Have a product family in mind? Let’s work through the next step together.',
+            )}
+          </p>
+        </div>
+        <a class="button" href={url(locale, 'contact')}>
+          {copy.quote}
         </a>
       </div>
-    </div>
-  </section>
-  <section class="guides-section container">
-    <div class="section-heading">
-      <div>
-        <span class="eyebrow">{l(locale, 'GÖRÜŞMEYE HAZIRLANIN', 'PREPARE THE CONVERSATION')}</span>
-        <h2>{l(locale, 'Ürün notları ve rehberler', 'Product notes & guides')}</h2>
-      </div>
-      <a class="text-link" href={url(locale, 'guides')}>
-        {l(locale, 'Tüm rehberler', 'All guides')}
-      </a>
-    </div>
-    <div class="article-grid">
-      {articles
-        .filter((article) => article.published.includes(locale))
-        .slice(0, 3)
-        .map((article) => (
-          <ArticleCard article={article} locale={locale} />
-        ))}
-    </div>
-  </section>
-  <section class="pressure-contact-band">
-    <div class="container">
-      <div>
-        <span class="eyebrow">
-          {l(locale, 'ÜRÜNDEN ÖNCE İHTİYACINIZ', 'START WITH YOUR REQUIREMENTS')}
-        </span>
-        <h2>{l(locale, 'Uygulamanızı konuşalım', 'Tell us about your application')}</h2>
-      </div>
-      <a class="button" href={url(locale, 'contact')}>
-        {copy.quote}
-      </a>
-    </div>
-  </section>
+    </section>
+  </div>
   <script src="../scripts/pressure-motion.ts"></script>
 </Layout>

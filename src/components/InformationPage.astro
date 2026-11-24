@@ -1,10 +1,10 @@
 ---
 import brand from '../data/brand.json';
+import HistoryCanopy from './HistoryCanopy.astro';
 import { withBase } from '../lib/paths';
 import Layout from '../layouts/Layout.astro';
 import SteelIntro from './SteelIntro.astro';
-import EnquiryForm from './EnquiryForm.astro';
-import ContactLinks from './ContactLinks.astro';
+import ContactPressure from './ContactPressure.astro';
 import { hostedEnquiryEndpoint } from '../lib/sales-email';
 import { getContent } from '../lib/content';
 import { labels, l, otherLocale, url, type Section } from '../lib/i18n';
@@ -117,26 +117,19 @@ const privacySections = [
     },
   ]}
 >
-  <SteelIntro
-    locale={locale}
-    title={title}
-    subtitle={descriptions[section]}
-    variant={'information-intro ' + section + '-intro'}
-    eyebrow={
-      section === 'about' && !settings.identityVerified
-        ? l(
-            locale,
-            `${settings.name} HAKKINDA · TASARIM ÖNİZLEMESİ`,
-            `ABOUT ${settings.name} · DESIGN PREVIEW`,
-          )
-        : undefined
-    }
-    note={
-      section === 'guides' && visibleArticles.some((a) => a.sample)
-        ? l(locale, 'Önizleme içerikleri · Taslak rehberler', 'Preview content · Draft articles')
-        : undefined
-    }
-  />
+  {section !== 'about' && section !== 'contact' && (
+    <SteelIntro
+      locale={locale}
+      title={title}
+      subtitle={descriptions[section]}
+      variant={'information-intro ' + section + '-intro'}
+      note={
+        section === 'guides' && visibleArticles.some((a) => a.sample)
+          ? l(locale, 'Önizleme içerikleri · Taslak rehberler', 'Preview content · Draft articles')
+          : undefined
+      }
+    />
+  )}
   {section === 'guides' && (
     <section class="container steel-guides">
       {featured && (
@@ -208,6 +201,7 @@ const privacySections = [
   )}
   {section === 'about' && (
     <>
+      <HistoryCanopy locale={locale} />
       <section class="container steel-about">
         <div class="about-copy">
           <h2>
@@ -268,30 +262,10 @@ const privacySections = [
       </section>
     </>
   )}
-  {section === 'contact' && (
-    <div class="container steel-contact">
-      <aside class="contact-aside">
-        <h2>{l(locale, 'Satış ekibiyle görüşün', 'Contact sales')}</h2>
-        <strong class="contact-city">{settings.city}, Türkiye</strong>
-        {settings.address ? (
-          <p>{settings.address}</p>
-        ) : (
-          <p>
-            {l(
-              locale,
-              'Açık adres teyit edildikten sonra eklenecektir',
-              'The exact address will be added once confirmed',
-            )}
-          </p>
-        )}
-        <ContactLinks locale={locale} settings={settings} layout="stacked" />
-      </aside>
-      <EnquiryForm locale={locale} />
-    </div>
-  )}
+  {section === 'contact' && <ContactPressure locale={locale} settings={settings} />}
   {section === 'privacy' && (
     <div class="container steel-reading privacy-reading">
-      {!settings.privacyNotice && (
+      {!settings.privacyNotice?.[locale] && (
         <nav class="reading-outline" aria-label={l(locale, 'Bu sayfada', 'On this page')}>
           <span>{l(locale, 'BU SAYFADA', 'ON THIS PAGE')}</span>
           {privacySections.map((item) => (
@@ -300,7 +274,7 @@ const privacySections = [
         </nav>
       )}
       <article class="steel-prose">
-        {settings.privacyNotice ? (
+        {settings.privacyNotice?.[locale] ? (
           <p>{settings.privacyNotice[locale]}</p>
         ) : (
           <>

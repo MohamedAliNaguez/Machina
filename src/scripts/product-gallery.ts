@@ -91,6 +91,8 @@ if (gallery) {
   function sync(photo: GalleryPhoto) {
     main.src = photo.src;
     main.alt = photo.alt;
+    const selectedCaption = document.querySelector('[data-product-caption]');
+    if (selectedCaption) selectedCaption.textContent = photo.alt;
     if (opener) opener.href = photo.src;
     main.closest('.product-visual')?.classList.toggle('product-visual-pending', photo.placeholder);
     const caption = main

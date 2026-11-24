@@ -5,7 +5,7 @@ test('enlarged product gallery slides, wraps and returns to the selected product
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/en/products/silos-1000-2000/');
+  await page.goto('/en/products/v-type-silobas/');
   await page.getByRole('button', { name: 'Photo 2', exact: true }).click();
   const opener = page.getByRole('link', { name: /Enlarge image$/ });
   const photo2 = await page.locator('#product-main-image').getAttribute('src');
@@ -53,7 +53,7 @@ test('enlarged product gallery slides, wraps and returns to the selected product
 test('Turkish mobile gallery supports swiping, thumbnails and closing', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/tr/urunler/silos-1000-2000/');
+  await page.goto('/tr/urunler/v-type-silobas/');
   await page.getByRole('link', { name: /Görseli büyüt$/ }).click();
   const dialog = page.getByRole('dialog');
   await expect(dialog.locator('[data-gallery-count]')).toHaveText('1 / 2');

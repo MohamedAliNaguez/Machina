@@ -1,0 +1,44 @@
+---
+import LivingCanopy from './LivingCanopy.astro';
+import { companyHistory } from '../data/history';
+import { l } from '../lib/i18n';
+import type { Locale } from '../lib/types';
+import '../styles/history-canopy.css';
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const milestones = companyHistory.milestones;
+---
+
+<LivingCanopy locale={locale} />
+<section
+  class="history-milestones container"
+  id="history-milestones"
+  aria-labelledby="history-heading"
+>
+  <header>
+    <span class="eyebrow">1972 / 2006</span>
+    <h2 id="history-heading">
+      {l(locale, 'Her dalda yeni bir başlangıç', 'A new beginning on every branch')}
+    </h2>
+    <p>
+      {l(
+        locale,
+        'Kuruluşumuzdan yeni üretim alanlarına uzanan kilometre taşları',
+        'Milestones from the founding years to new areas of production',
+      )}
+    </p>
+  </header>
+  <ol class="history-reading-list">
+    {milestones.map((item, index) => (
+      <li id={`history-${item.id}`} data-history-reading={index}>
+        <span class="history-reading-year">{item.year}</span>
+        <div>
+          <h3>{item.title[locale]}</h3>
+          <p>{item.description[locale]}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>

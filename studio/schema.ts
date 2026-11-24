@@ -22,6 +22,14 @@ const localeText = defineType({
   type: 'object',
   fields: localeFields('text'),
 });
+const companyCopy = defineType({
+  name: 'companyCopy',
+  title: 'Company copy awaiting approval',
+  type: 'object',
+  fields: ['tr', 'en'].map((name) =>
+    defineField({ name, title: name === 'tr' ? 'Türkçe' : 'English', type: 'text' }),
+  ),
+});
 const localeSlug = defineType({
   name: 'localeSlug',
   title: 'URLs',
@@ -192,9 +200,9 @@ const machineFields = (used: boolean) => [
   }),
   defineField({
     name: 'source',
-    title: 'Internal technical reference',
+    title: 'Public technical reference note',
     description:
-      'Not displayed on product pages. Keep restricted documentation in the private archive, outside the public dataset.',
+      'The free dataset is public. Use a neutral note here; keep confidential documentation and supplier provenance outside Sanity.',
     type: 'string',
     validation: required,
   }),
@@ -382,9 +390,35 @@ const article = defineType({
     defineField({
       name: 'author',
       type: 'string',
-      description: 'Actual author or reviewer. Required by the live build.',
+      description: 'Actual author. Required by the live build.',
+      validation: (rule) =>
+        rule.custom((value, context) =>
+          context.document?.sample || value?.trim()
+            ? true
+            : 'Add the actual author before publishing reviewed content.',
+        ),
     }),
-    defineField({ name: 'reviewedAt', type: 'datetime' }),
+    defineField({
+      name: 'reviewer',
+      type: 'string',
+      description: 'Actual reviewer. Required by the live build.',
+      validation: (rule) =>
+        rule.custom((value, context) =>
+          context.document?.sample || value?.trim()
+            ? true
+            : 'Add the actual reviewer before publishing reviewed content.',
+        ),
+    }),
+    defineField({
+      name: 'reviewedAt',
+      type: 'datetime',
+      validation: (rule) =>
+        rule.custom((value, context) =>
+          context.document?.sample || (value && Number.isFinite(Date.parse(value)))
+            ? true
+            : 'Record the review date before publishing reviewed content.',
+        ),
+    }),
     sample(),
     published(),
   ],
@@ -403,8 +437,30 @@ const siteSettings = defineType({
       validation: required,
     }),
     defineField({ name: 'legalName', title: 'Verified company name', type: 'string' }),
-    defineField({ name: 'about', title: 'Approved company description', type: 'localeText' }),
-    defineField({ name: 'privacyNotice', title: 'Approved privacy notice', type: 'localeText' }),
+    defineField({
+      name: 'about',
+      title: 'Approved company description',
+      type: 'companyCopy',
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const copy = value as { tr?: string; en?: string } | undefined;
+          return !context.document?.identityVerified || (copy?.tr?.trim() && copy?.en?.trim())
+            ? true
+            : 'Approved identity requires company copy in both languages.';
+        }),
+    }),
+    defineField({
+      name: 'privacyNotice',
+      title: 'Approved privacy notice',
+      type: 'companyCopy',
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const copy = value as { tr?: string; en?: string } | undefined;
+          return !context.document?.privacyReviewed || (copy?.tr?.trim() && copy?.en?.trim())
+            ? true
+            : 'Privacy approval requires reviewed copy in both languages.';
+        }),
+    }),
     defineField({ name: 'heroImage', title: 'Approved homepage photograph', type: 'machineImage' }),
     defineField({ name: 'identityVerified', type: 'boolean', initialValue: false }),
     defineField({ name: 'city', type: 'string', initialValue: 'Ankara', validation: required }),
@@ -433,6 +489,7 @@ const siteSettings = defineType({
 export const schemaTypes = [
   localeString,
   localeText,
+  companyCopy,
   localeSlug,
   localizedList,
   spec,

@@ -18,4 +18,5 @@ playwright-report/
 coverage/
 exports/
 output/
+meshy_output/
 *.log

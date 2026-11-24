@@ -1,0 +1,226 @@
+---
+import { l } from '../lib/i18n';
+import type { Locale } from '../lib/types';
+
+interface Props {
+  locale: Locale;
+  src: string;
+  poster: string;
+  ready?: boolean;
+}
+const { locale, src, poster, ready = true } = Astro.props;
+---
+
+<section
+  class="product-3d"
+  data-product-3d
+  data-model-src={src}
+  data-locale={locale}
+  data-scene="light"
+  aria-label={l(locale, 'Etkileşimli 3D ürün incelemesi', 'Interactive 3D product study')}
+>
+  <div class="product-3d-stage" data-3d-stage>
+    <span class="product-3d-marker" aria-hidden="true">
+      TECHNICSAN / PRODUCT STUDY 01
+    </span>
+    <div class="product-3d-host" data-3d-host></div>
+    <div class="product-3d-poster" data-3d-poster>
+      <img
+        src={poster}
+        alt={l(
+          locale,
+          'TECHNICSAN çimento silobası referans görseli',
+          'TECHNICSAN cement bulker reference image',
+        )}
+        width="1536"
+        height="1024"
+      />
+      <button class="button" type="button" data-3d-load disabled={!ready}>
+        {ready
+          ? l(locale, '3D olarak inceleyin', 'Explore in 3D')
+          : l(locale, 'Onaylı 3D model gerekli', 'Approved 3D model required')}
+      </button>
+    </div>
+    <div class="product-3d-toolbar" data-3d-toolbar hidden>
+      <button type="button" data-3d-reset>
+        {l(locale, 'Görünümü sıfırla', 'Reset view')}
+      </button>
+      <button type="button" data-3d-rotate aria-pressed="false">
+        {l(locale, 'Döndür', 'Rotate')}
+      </button>
+      <button type="button" data-3d-scene aria-pressed="false">
+        {l(locale, 'Koyu stüdyo', 'Dark studio')}
+      </button>
+      <button type="button" data-3d-fullscreen>
+        {l(locale, 'Tam ekran', 'Fullscreen')}
+      </button>
+    </div>
+  </div>
+  <div class="product-3d-caption">
+    <p role="status" aria-live="polite" data-3d-status>
+      {l(
+        locale,
+        ready
+          ? 'Fotoğraf referansı · 3D model isteğe bağlı yüklenir'
+          : 'Fotoğraf referansı · 3D model dosyası bekleniyor',
+        ready
+          ? 'Photo reference · 3D loads on request'
+          : 'Photo reference · Awaiting an exportable 3D model',
+      )}
+    </p>
+    <span>
+      {l(
+        locale,
+        'Görsel çalışma · Teknik çizim değildir',
+        'Visual study · Not a technical drawing',
+      )}
+    </span>
+  </div>
+</section>
+
+<style>
+  .product-3d {
+    border: 1px solid var(--border);
+  }
+  .product-3d-stage {
+    position: relative;
+    isolation: isolate;
+    min-height: 540px;
+    height: min(66vh, 720px);
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 70%, #dce5dd, #f8faf7 70%);
+  }
+  .product-3d-stage::after {
+    content: '';
+    position: absolute;
+    inset: 60% -30% -50%;
+    transform: perspective(650px) rotateX(58deg);
+    background-image:
+      linear-gradient(#244f3420 1px, transparent 1px),
+      linear-gradient(90deg, #244f3420 1px, transparent 1px);
+    background-size: 80px 80px;
+    z-index: -1;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse, #000, transparent 65%);
+  }
+  [data-scene='dark'] .product-3d-stage {
+    background: radial-gradient(ellipse at 50% 75%, #284836, #071e15 75%);
+  }
+  .product-3d-marker {
+    position: absolute;
+    top: 24px;
+    left: 26px;
+    z-index: 2;
+    color: #476451;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    pointer-events: none;
+  }
+  [data-scene='dark'] .product-3d-marker {
+    color: #c4d3c7;
+  }
+  .product-3d-host {
+    position: absolute;
+    inset: 32px 0 72px;
+  }
+  .product-3d-host :global(model-viewer) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    --poster-color: transparent;
+    --progress-bar-color: var(--accent);
+  }
+  .product-3d-poster {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
+    place-items: center;
+    padding: 48px 40px 80px;
+  }
+  .product-3d-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+  .product-3d-poster > button {
+    position: absolute;
+    bottom: 32px;
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 10px 35px #092d1e25;
+  }
+  .product-3d-toolbar {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    bottom: 20px;
+    left: 16px;
+    right: 16px;
+  }
+  .product-3d-toolbar button {
+    min-height: 44px;
+    padding: 8px 18px;
+    border: 1px solid #ffffff60;
+    background: #f9fcf9ed;
+    color: var(--primary);
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .product-3d-toolbar button[aria-pressed='true'] {
+    background: var(--primary);
+    color: white;
+  }
+  .product-3d-toolbar button:focus-visible {
+    outline-offset: 2px;
+  }
+  .product-3d-caption {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    padding: 17px 24px;
+    background: white;
+    font-size: 14px;
+  }
+  .product-3d-caption span {
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .product-3d-stage:fullscreen {
+    height: 100vh;
+    min-height: 100vh;
+  }
+  @media (max-width: 700px) {
+    .product-3d-stage {
+      min-height: 400px;
+      height: 55vh;
+    }
+    .product-3d-poster {
+      padding: 50px 12px 76px;
+    }
+    .product-3d-marker {
+      left: 16px;
+      font-size: 9px;
+    }
+    .product-3d-toolbar {
+      left: 8px;
+      right: 8px;
+      gap: 3px;
+    }
+    .product-3d-toolbar button {
+      font-size: 12px;
+      padding-inline: 10px;
+    }
+    .product-3d-caption {
+      padding: 14px 16px;
+    }
+  }
+</style>
+<script src="../scripts/product-3d.ts"></script>

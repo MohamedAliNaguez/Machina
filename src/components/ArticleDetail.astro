@@ -81,6 +81,7 @@ const answer = article.excerpt[locale];
       {!article.sample && (article.author || article.reviewedAt) && (
         <div class="article-byline">
           {article.author}
+          {article.reviewer && ' · ' + l(locale, 'İnceleyen: ', 'Reviewer: ') + article.reviewer}
           {article.reviewedAt &&
             ' · ' +
               l(locale, 'İnceleme: ', 'Reviewed: ') +

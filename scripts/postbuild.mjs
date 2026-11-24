@@ -1,4 +1,5 @@
 import { readdir, readFile, writeFile } from 'node:fs/promises';
+import delivery from '../src/data/enquiry-delivery.json' with { type: 'json' };
 try {
   process.loadEnvFile();
 } catch {}
@@ -6,17 +7,23 @@ const live = process.env.PUBLIC_LAUNCH_READY === 'true';
 const site = process.env.PUBLIC_SITE_URL || 'http://localhost:4321';
 const base = '/' + (process.env.PUBLIC_BASE_PATH || '').split('/').filter(Boolean).join('/');
 const hostedOnGitHub = process.env.PUBLIC_HOSTING === 'github-pages';
-if (hostedOnGitHub && live)
-  throw new Error(
-    'GitHub Pages is configured for the static preview. A live enquiry backend is required before enabling launch mode.',
-  );
+if (
+  live &&
+  hostedOnGitHub &&
+  !/^[a-z0-9]{6,32}$/.test(process.env.PUBLIC_FORMSPREE_FORM_ID ?? delivery.formspreeFormId ?? '')
+)
+  throw new Error('Live static hosting requires a configured Formspree endpoint.');
+if (live && !['github-pages', 'cloudflare'].includes(process.env.PUBLIC_HOSTING || ''))
+  throw new Error('Live builds require explicit production hosting.');
 if (
   live &&
   (!site.startsWith('https://') ||
-    process.env.CONTENT_SOURCE !== 'sanity' ||
+    !['repository', 'sanity'].includes(process.env.CONTENT_SOURCE || '') ||
     process.env.SANITY_PREVIEW === 'true')
 )
-  throw new Error('Live builds require an HTTPS domain and published Sanity content.');
+  throw new Error(
+    'Live builds require an HTTPS domain and approved repository or published Sanity content.',
+  );
 async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
   return (

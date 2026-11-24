@@ -8,8 +8,9 @@ import { getCountries, getCountryCallingCode } from 'libphonenumber-js/min';
 interface Props {
   locale: Locale;
   machineId?: string;
+  heading?: string;
 }
-const { locale, machineId } = Astro.props;
+const { locale, machineId, heading } = Astro.props;
 const { machines, settings, categories } = await getContent();
 const selected = machines.find((machine) => machine.id === machineId);
 const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
@@ -38,7 +39,8 @@ const phoneCountries = getCountries()
   method="post"
   novalidate
 >
-  <h2>{l(locale, 'Teklif isteyin', 'Request a quote')}</h2>
+  <h2>{heading || l(locale, 'Teklif isteyin', 'Request a quote')}</h2>
+  <slot name="intro" />
   <div class="enquiry-machine-context" data-machine-context hidden={!selected}>
     <img
       data-context-image

@@ -7,20 +7,20 @@ test('bilingual product routes and the five-type catalogue filters work', async 
   await expect(page).toHaveURL('/tr/urunler/bnb-72-e/');
   await expect(page.locator('html')).toHaveAttribute('lang', 'tr');
   await page.goto('/en/products/?category=cement-bulker,lpg-catalog');
-  await expect(page.locator('[data-machine-card]:visible')).toHaveCount(24);
+  await expect(page.locator('[data-machine-card]:visible')).toHaveCount(8);
   await expect(page.locator('[data-filter="category"]')).toHaveCount(5);
   await page.getByRole('searchbox').fill('no-such-model');
   await expect(
     page.getByRole('heading', { name: 'No products match these filters' }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Clear search', exact: true }).click();
-  await expect(page.locator('[data-machine-card]:visible')).toHaveCount(24);
+  await expect(page.locator('[data-machine-card]:visible')).toHaveCount(8);
   await page.getByRole('button', { name: 'Reset filters', exact: true }).first().click();
-  await expect(page.locator('[data-machine-card]:visible')).toHaveCount(24);
+  await expect(page.locator('[data-machine-card]:visible')).toHaveCount(14);
   await page.getByRole('checkbox', { name: 'Compressors', exact: true }).check();
   await page.getByRole('link', { name: 'TR', exact: true }).click();
   await expect(page).toHaveURL(/\/tr\/urunler\/\?category=compressors$/);
-  await expect(page.locator('[data-machine-card]:visible')).toHaveCount(4);
+  await expect(page.locator('[data-machine-card]:visible')).toHaveCount(2);
 });
 test('enquiry validates, saves locally and never claims an email was sent', async ({ page }) => {
   await page.goto('/en/contact/?product=v-type-silobas');
@@ -57,31 +57,23 @@ test('network failure preserves the form and retry remains possible', async ({ p
   await expect(page.getByRole('button', { name: 'Talep gönder' })).toBeEnabled();
 });
 
-test('catalogue pagination preserves language/filter state and searches source part codes', async ({
+test('curated catalogue preserves filter/search language state and excludes archived products', async ({
   page,
 }) => {
-  await page.goto('/en/products/?category=lpg-catalog');
-  await expect(page.locator('[data-results-count]')).toContainText('136 results');
-  await page.getByRole('button', { name: 'Next page', exact: true }).click();
-  await expect(page).toHaveURL(/category=lpg-catalog&page=2$/);
-  const secondPageFirstId = await page
-    .locator('[data-machine-card]:visible')
-    .first()
-    .getAttribute('data-id');
+  await page.goto('/en/products/?category=lpg-catalog&page=2');
+  await expect(page.locator('[data-results-count]')).toContainText('7 results');
+  await expect(page).not.toHaveURL(/page=/);
+  await expect(page.getByRole('button', { name: 'Next page', exact: true })).toHaveCount(0);
   await page.getByRole('link', { name: 'TR', exact: true }).click();
-  await expect(page).toHaveURL(/\/tr\/urunler\/\?category=lpg-catalog&page=2$/);
-  await expect(page.locator('[data-machine-card]:visible').first()).toHaveAttribute(
-    'data-id',
-    secondPageFirstId!,
-  );
-  await page.getByRole('searchbox').fill('G.S.L.636');
+  await expect(page).toHaveURL(/category=lpg-catalog$/);
+  await page.getByRole('searchbox').fill('bobtail');
   await expect(page.locator('[data-machine-card]:visible')).toHaveCount(1);
   await expect(page.locator('[data-machine-card]:visible')).toHaveAttribute(
     'data-id',
-    'lpg-part-10',
+    'lpg-bobtail',
   );
-  await expect(page.locator('[data-pagination]')).toBeHidden();
-  await expect(page).not.toHaveURL(/page=/);
+  const response = await page.goto('/en/products/lpg-part-10/');
+  expect(response?.status()).toBe(404);
 });
 
 test('source gallery, configurations, product quote context and mobile tables work', async ({
@@ -99,7 +91,7 @@ test('source gallery, configurations, product quote context and mobile tables wo
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.getByRole('link', { name: 'Request a quote', exact: true }).last().click();
   await expect(page.getByLabel('Product of interest')).toHaveValue('wet-system');
-  await page.goto('/en/products/silos-1000-2000/');
+  await page.goto('/en/products/v-type-silobas/');
   const secondPhoto = page.getByRole('button', { name: 'Photo 2', exact: true });
   const target = await secondPhoto.getAttribute('data-product-photo');
   await secondPhoto.click();
@@ -130,7 +122,7 @@ test('representative pages have no serious accessibility violations', async ({ p
     '/tr/urunler/',
     '/en/products/bnb-72-e/',
     '/en/products/wet-system/',
-    '/tr/urunler/lpg-part-10/',
+    '/tr/urunler/lpg-bobtail/',
     '/en/contact/',
     '/tr/rehberler/',
     '/en/categories/cement-bulker/',
@@ -174,14 +166,14 @@ test('preview metadata, source photographs, attribution and desktop screenshot',
   await expect(page.locator('[data-site-loader]')).toBeHidden();
   await page.screenshot({ path: 'test-results/home-desktop.png', fullPage: true });
   await page.screenshot({ path: 'test-results/preview-desktop.png', fullPage: false });
-  await page.goto('/en/products/lpg-part-95/');
-  await expect(
-    page.getByText('Product photography pending', { exact: true }).first(),
-  ).toBeVisible();
+  await page.goto('/en/products/lpg-bobtail/');
+  await expect(page.locator('[data-product-photo]')).toHaveCount(12);
+  await expect(page.locator('[data-product-caption]')).toContainText('Reference photograph');
+  await expect(page.locator('.pressure-preview-note')).toContainText('approval pending');
   await expect(page.locator('script[type="application/ld+json"]')).not.toContainText(
     '"@type":"Product"',
   );
   await page.goto('/en/products/');
-  await expect(page.locator('[data-machine-card]:visible')).toHaveCount(24);
+  await expect(page.locator('[data-machine-card]:visible')).toHaveCount(14);
   await page.screenshot({ path: 'test-results/catalogue-desktop.png', fullPage: false });
 });

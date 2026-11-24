@@ -24,14 +24,14 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm test
-      - name: Build repository-hosted preview
+      - name: Build published Sanity content (manual preview deployment)
         run: npm run build
         env:
           PUBLIC_SITE_URL: https://technicsan.com
           PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           PUBLIC_HOSTING: github-pages
           PUBLIC_LAUNCH_READY: 'false'
-          CONTENT_SOURCE: sample
+          CONTENT_SOURCE: sanity
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist

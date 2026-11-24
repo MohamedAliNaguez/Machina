@@ -71,6 +71,7 @@ export interface Article {
   sections: { heading: Localized; text: Localized }[];
   sources: { title: string; url: string }[];
   author?: string;
+  reviewer?: string;
   reviewedAt?: string;
   sample: boolean;
   published: Locale[];

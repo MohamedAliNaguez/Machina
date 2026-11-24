@@ -1,0 +1,59 @@
+---
+interface Props {
+  family: string;
+}
+const { family } = Astro.props;
+---
+
+<svg
+  class="family-illustration"
+  viewBox="0 0 300 190"
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d="M24 161H276" stroke="#c8d5c8" />
+  <g stroke="#315c49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    {family === 'lpg-catalog' ? (
+      <>
+        <rect x="37" y="55" width="226" height="84" rx="42" fill="#fafbf7" />
+        <path d="M80 55v84M220 55v84M47 85h204M86 140l-8 19H58l-8-23M221 140l8 19h20l-1-24" />
+        <path d="M146 55V42h15v13M151 42V33m-10 0h20M164 42h19v21" />
+        <circle cx="194" cy="41" r="8" fill="#edf2e8" />
+        <path d="m194 41 3-3M194 49v7" />
+        <path d="M115 103h65" stroke="#8fb600" stroke-width="4" />
+      </>
+    ) : family === 'compressors' ? (
+      <>
+        <rect x="40" y="101" width="220" height="47" rx="23.5" fill="#fafbf7" />
+        <path d="M61 148v11h19v-11m140 0v11h19v-12M61 101V88h172v13" />
+        <rect x="72" y="52" width="66" height="36" rx="4" fill="#e5ede3" />
+        <circle cx="105" cy="70" r="12" />
+        <path d="M94 70h22m-11-11v22" />
+        <path d="M153 88V63h20V43h20v20h22v25M158 51h10m-10-6h10m31 6h10m-10-6h10" />
+        <path d="M143 69h-5m77 2h15V58h17v43M63 125h165" stroke="#8fb600" />
+        <circle cx="238" cy="50" r="8" fill="#fafbf7" />
+        <path d="m238 50 3-3" />
+      </>
+    ) : family === 'mixers' ? (
+      <>
+        <path d="m87 70 64-29 45 43-18 52-70-8-30-30Z" fill="#fafbf7" />
+        <ellipse cx="92" cy="93" rx="21" ry="28" transform="rotate(-24 92 93)" fill="#e5ede3" />
+        <path d="m124 54 40 39-9 40m-18-85 41 40-11 47M184 87l22 7 14-13M208 94v23h-17" />
+        <path d="M74 137h163v9H74zM92 136l15-29m74 29-9-18M99 146v10m116-10v10M232 138V73h14" />
+        <circle cx="101" cy="153" r="9" fill="#edf2e8" />
+        <circle cx="215" cy="153" r="9" fill="#edf2e8" />
+        <path d="m140 48 37 40-11 43" stroke="#8fb600" stroke-width="4" />
+      </>
+    ) : (
+      <>
+        <rect x="102" y="38" width="96" height="76" rx="10" fill="#fafbf7" />
+        <path d="m102 106 38 34h20l38-34M112 114v46m76-46v46M140 140v12h20v-12M102 58h96M102 88h96M141 38V29h18v9" />
+        <path
+          d="M91 43v115m-8-102h16m-16 15h16m-16 15h16m-16 15h16m-16 15h16m-16 15h16m-16 15h16"
+          stroke="#8fb600"
+        />
+      </>
+    )}
+  </g>
+</svg>

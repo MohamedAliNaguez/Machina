@@ -11,10 +11,12 @@ const { variant = 'default', class: className, decorative = false } = Astro.prop
 
 <img
   class:list={['brand-logo', className]}
-  src={withBase(`/brand/technicsan${variant === 'light' ? '-light' : ''}.svg`)}
+  src={withBase(
+    variant === 'light' ? '/brand/technicsan-light.svg' : '/brand/technicsan-white-4k.png',
+  )}
   alt={decorative ? '' : 'TECHNICSAN — ' + brand.slogan}
-  width="1382"
-  height="231"
+  width={variant === 'light' ? 1382 : 4096}
+  height={variant === 'light' ? 231 : 800}
   decoding="async"
   fetchpriority="high"
 />

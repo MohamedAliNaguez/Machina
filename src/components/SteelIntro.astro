@@ -45,3 +45,43 @@ const {
     <slot />
   </div>
 </section>
+
+<style>
+  :global(.pressure-site) .steel-intro::after {
+    display: none;
+  }
+  :global(.pressure-site) .steel-intro {
+    background: #f0f4f0;
+    color: var(--primary);
+    border-bottom: 1px solid var(--border);
+    min-height: 0;
+    padding-block: 36px;
+  }
+  :global(.pressure-site) .steel-intro .steel-intro-art {
+    display: none;
+  }
+  :global(.pressure-site) .steel-intro .steel-intro-content {
+    padding-block: 0;
+  }
+  :global(.pressure-site) .steel-intro .metal-title {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(44px, 6vw, 76px);
+    color: var(--primary);
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    text-shadow: none;
+    filter: none;
+    letter-spacing: -0.025em;
+  }
+  :global(.pressure-site) .steel-intro .steel-eyebrow,
+  :global(.pressure-site) .steel-intro .steel-breadcrumbs,
+  :global(.pressure-site) .steel-intro .steel-breadcrumbs a,
+  :global(.pressure-site) .steel-intro .steel-intro-subtitle,
+  :global(.pressure-site) .steel-intro .steel-intro-note {
+    color: var(--muted);
+  }
+  :global(.pressure-site) .steel-intro .steel-breadcrumbs [aria-current] {
+    color: var(--primary);
+  }
+</style>

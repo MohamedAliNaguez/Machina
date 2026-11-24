@@ -7,9 +7,7 @@ test('hero waits for the intro, runs once and settles without moving controls', 
   await page.goto('/en/');
   const artwork = page.locator('[data-pressure-art]');
   const intro = page.locator('[data-site-loader]');
-  await expect(intro).toBeVisible();
-  await expect(artwork).not.toHaveAttribute('data-motion', 'running');
-  await page.getByRole('button', { name: 'Continue to website', exact: true }).click();
+  await expect(intro).toBeHidden({ timeout: 2500 });
   await expect(artwork).toHaveAttribute('data-motion', 'running');
   const actions = page.locator('.pressure-hero-copy .pressure-actions');
   const before = await actions.boundingBox();

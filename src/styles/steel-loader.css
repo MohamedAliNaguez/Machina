@@ -10,7 +10,7 @@
   opacity: 1;
 }
 .steel-loader[data-state='loading'] {
-  animation: steel-loader-failsafe 4.3s step-end forwards;
+  animation: steel-loader-failsafe 1.8s step-end forwards;
 }
 .steel-loader[data-state='closing'] {
   opacity: 0;

@@ -1,0 +1,174 @@
+---
+import EnquiryForm from './EnquiryForm.astro';
+import { directContactLinks } from '../lib/contact';
+import { l } from '../lib/i18n';
+import { withBase } from '../lib/paths';
+import type { Locale, Settings } from '../lib/types';
+import '../styles/contact-pressure.css';
+interface Props {
+  locale: Locale;
+  settings: Settings;
+}
+const { locale, settings } = Astro.props;
+const channels = directContactLinks(settings, locale);
+---
+
+<section class="pressure-contact" aria-labelledby="contact-title">
+  <aside class="contact-brand-panel">
+    <div class="contact-brand-art" aria-hidden="true">
+      <img
+        src={withBase('/images/contact/pressure-line-1086.webp')}
+        srcset={`${withBase('/images/contact/pressure-line-600.webp')} 600w, ${withBase('/images/contact/pressure-line-1086.webp')} 1086w`}
+        sizes="(max-width:1100px) 100vw, 50vw"
+        width="1086"
+        height="1448"
+        alt=""
+        fetchpriority="high"
+      />
+      <svg viewBox="0 0 1086 1448" preserveAspectRatio="xMidYMid slice">
+        <path
+          class="contact-pressure-pulse"
+          d="M355 738 C130 720 34 850 117 942 C175 1052 375 1054 570 1120 C760 1178 850 1276 925 1450"
+          fill="none"
+          stroke="#e2f299"
+          stroke-width="3"
+          stroke-linecap="round"
+        />
+      </svg>
+    </div>
+    <div class="contact-brand-content">
+      <span class="contact-pressure-eyebrow">
+        <i aria-hidden="true"></i>
+        {l(locale, 'TECHNICSAN / SATIŞ İLETİŞİM', 'TECHNICSAN / CONTACT SALES')}
+      </span>
+      <h1 id="contact-title">
+        {locale === 'en' ? (
+          <>
+            <span>Let’s put your</span>
+            <span>project in motion</span>
+          </>
+        ) : (
+          <>
+            <span>Projenize birlikte</span>
+            <span>hareket verelim</span>
+          </>
+        )}
+      </h1>
+      <p class="contact-brand-intro">
+        {l(
+          locale,
+          'Doğru ekipman, doğru başlangıç. İhtiyaçlarınızı birlikte değerlendirelim.',
+          'The right equipment starts with a conversation. Let’s find what works for your project.',
+        )}
+      </p>
+      <a class="contact-form-shortcut" href="#sales-enquiry">
+        {l(locale, 'Teklif talebinizi iletin', 'Send an enquiry')}
+      </a>
+      <nav
+        class="contact-channel-list"
+        aria-label={l(locale, 'Doğrudan satış iletişimi', 'Contact sales directly')}
+      >
+        {channels.map((channel) => (
+          <a
+            href={channel.href}
+            data-contact-channel={channel.channel}
+            target={channel.channel === 'whatsapp' ? '_blank' : undefined}
+            rel={channel.channel === 'whatsapp' ? 'noopener noreferrer' : undefined}
+          >
+            <span class="contact-channel-icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                {channel.channel === 'phone' ? (
+                  <path d="M5 3h4l2 5-3 2c1.5 3 3 4.5 6 6l2-3 5 2v4c0 1-1 2-2 2C10 21 3 14 3 5c0-1 1-2 2-2Z" />
+                ) : channel.channel === 'email' ? (
+                  <>
+                    <rect x="3" y="5" width="18" height="14" rx="1" />
+                    <path d="m3 6 9 7 9-7" />
+                  </>
+                ) : (
+                  <>
+                    <path d="M20.5 11.5a8.5 8.5 0 0 1-12.8 7.3L3 21l1.8-4.8a8.5 8.5 0 1 1 15.7-4.7Z" />
+                    <path d="m8.5 7 2 3-1.2 1.2c.8 1.6 1.5 2.3 3.1 3.1l1.2-1.2 3 2c-1.2 2.8-4.4 1.4-6.8-1C7.4 11.7 6 8.2 8.5 7Z" />
+                  </>
+                )}
+              </svg>
+            </span>
+            <span class="contact-channel-copy">
+              <span>
+                {channel.channel === 'phone'
+                  ? l(locale, 'ARAMA', 'CALL')
+                  : channel.label.toLocaleUpperCase(locale === 'tr' ? 'tr-TR' : 'en-GB')}
+              </span>
+              <strong>{channel.channel === 'whatsapp' ? 'WhatsApp' : channel.value}</strong>
+            </span>
+            {channel.channel === 'whatsapp' && (
+              <span class="sr-only">{l(locale, ' (yeni sekme)', ' (new tab)')}</span>
+            )}
+          </a>
+        ))}
+      </nav>
+      <div class="contact-location">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
+        </svg>
+        <span>{settings.city}, Türkiye</span>
+      </div>
+      {settings.address && <p class="contact-verified-address">{settings.address}</p>}
+    </div>
+  </aside>
+  <div class="contact-enquiry-panel" id="sales-enquiry">
+    <div class="contact-form-topline">
+      <span>{l(locale, 'BİRLİKTE BAŞLAYALIM', 'LET’S GET STARTED')}</span>
+      <figure class="contact-product-art" data-contact-product-art>
+        <img
+          src={withBase('/images/products/technicsan/v-type-side.webp')}
+          width="1774"
+          height="887"
+          alt=""
+          decoding="async"
+        />
+        <figcaption>
+          {l(locale, 'Temsili ürün konfigürasyonu', 'Illustrative product configuration')}
+        </figcaption>
+      </figure>
+    </div>
+    <EnquiryForm
+      locale={locale}
+      heading={l(locale, 'İhtiyacınızı anlatın', 'Tell us what you need')}
+    >
+      <p slot="intro" class="contact-form-intro">
+        {l(
+          locale,
+          'Projenizden kısaca bahsedin. Ekibimiz sizinle iletişime geçsin.',
+          'Share a few details about your project. Our team will take it from there.',
+        )}
+      </p>
+    </EnquiryForm>
+  </div>
+</section>
+<script>
+  const form = document.querySelector<HTMLFormElement>('.pressure-contact [data-enquiry-form]');
+  const art = document.querySelector<HTMLElement>('[data-contact-product-art]');
+  if (form && art) {
+    const select = form.elements.namedItem('machineId') as HTMLSelectElement;
+    const update = () => {
+      art.hidden = !!select.value;
+    };
+    select.addEventListener('change', () => queueMicrotask(update));
+    form
+      .querySelector('[data-remove-machine]')
+      ?.addEventListener('click', () => queueMicrotask(update));
+    form.addEventListener('reset', () => queueMicrotask(update));
+    new MutationObserver(update).observe(form.querySelector('[data-machine-context]')!, {
+      attributes: true,
+      attributeFilter: ['hidden'],
+    });
+    update();
+  }
+</script>

@@ -6,7 +6,8 @@
     "dev": "sanity dev --host 127.0.0.1",
     "build": "sanity build",
     "deploy": "sanity deploy",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "seed": "sanity exec seed.ts --with-user-token"
   },
   "dependencies": {
     "@sanity/image-url": "latest",

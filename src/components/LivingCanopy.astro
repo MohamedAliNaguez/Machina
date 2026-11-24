@@ -1,0 +1,218 @@
+---
+import { companyHistory } from '../data/history';
+import sprites from '../data/history-sprites.json';
+import { canopyStems, canopyNodes, ribbonAt } from '../lib/canopy-geometry';
+import { withBase } from '../lib/paths';
+import { l } from '../lib/i18n';
+import type { Locale } from '../lib/types';
+import '../styles/living-canopy.css';
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const names = [
+  l(locale, 'Kuruluş / Döküm ve kalıp', 'Founded / Casting & moulding'),
+  l(locale, 'Basınç makineleri yedek parçaları', 'Pressure machinery spare parts'),
+  l(locale, 'Kompresörler', 'Compressors'),
+  l(locale, 'Çimento silobasları ve LPG', 'Cement bulkers & LPG'),
+  l(locale, 'İlk ihracat', 'First exports'),
+  l(locale, 'Beton mikserleri', 'Concrete mixers'),
+  l(locale, 'Silolar', 'Silos'),
+];
+---
+
+<section
+  class="living-canopy"
+  data-living-canopy
+  data-locale={locale}
+  aria-labelledby="canopy-title"
+>
+  <div class="living-stage">
+    <picture class="living-background" aria-hidden="true">
+      <img
+        src={withBase('/images/history/atrium.webp')}
+        alt=""
+        width="1536"
+        height="768"
+        fetchpriority="high"
+      />
+    </picture>
+    <div class="living-copy">
+      <span class="living-eyebrow">
+        03 / {l(locale, 'ZAMANIN DALLARI', 'THE CANOPY OF TIME')}
+        <i aria-hidden="true"></i>
+      </span>
+      <h1 id="canopy-title">
+        {locale === 'en' ? (
+          <>
+            <span>From a spark</span>
+            <span>to a whole world</span>
+            <span>of pressure</span>
+          </>
+        ) : (
+          <>
+            <span>Bir kıvılcımdan</span>
+            <span>basıncın</span>
+            <span>dünyasına</span>
+          </>
+        )}
+      </h1>
+      <p>
+        {l(
+          locale,
+          'Hikâyemiz, basınç teknolojileriyle büyüyen bir yolculuk. Döküm ve kalıptan kompresörlere, taşıma ekipmanlarından mikserlere ve silolara; her yeni adım, aynı hikâyenin yeni bir dalı.',
+          'Our story is a continuous growth in pressure technologies — from casting and moulding to compressors, transport equipment, concrete mixers and silos — branching over decades into a stronger, broader world.',
+        )}
+      </p>
+    </div>
+    <div class="living-visual">
+      <svg
+        class="living-tree"
+        viewBox="0 0 1536 765"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <clipPath id="canopy-ground">
+            <rect width="1536" height="620" />
+          </clipPath>
+          <linearGradient id="ribbon-forest" x1="0" y1="1" x2="1" y2="0">
+            <stop stop-color="#001b12" />
+            <stop offset=".25" stop-color="#064b31" />
+            <stop offset=".48" stop-color="#1a6341" />
+            <stop offset=".56" stop-color="#b3c59b" />
+            <stop offset=".62" stop-color="#345c38" />
+            <stop offset=".82" stop-color="#003420" />
+            <stop offset="1" stop-color="#001b12" />
+          </linearGradient>
+          <linearGradient id="ribbon-ivory" x1="0" y1="1" x2="1" y2="0">
+            <stop stop-color="#686e45" />
+            <stop offset=".22" stop-color="#b1aa7b" />
+            <stop offset=".44" stop-color="#f0e3b9" />
+            <stop offset=".55" stop-color="#fff4d3" />
+            <stop offset=".7" stop-color="#b4af7e" />
+            <stop offset="1" stop-color="#3a5939" />
+          </linearGradient>
+          <linearGradient id="ribbon-fold" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#e1d6ab" />
+            <stop offset=".25" stop-color="#9ca77a" />
+            <stop offset=".5" stop-color="#2e5839" />
+            <stop offset=".82" stop-color="#052b1e" />
+            <stop offset="1" stop-color="#adc9a0" />
+          </linearGradient>
+        </defs>
+        <g id="canopy-live-tree">
+          <ellipse cx="835" cy="625" rx="130" ry="15" fill="#00130d" opacity=".25" />
+          <g id="canopy-live-stems" clip-path="url(#canopy-ground)">
+            {canopyStems.map((stem, index) => {
+              const shape = ribbonAt(stem.curve, 1, stem.width, stem.tip);
+              return (
+                <g data-canopy-stem={index}>
+                  <path
+                    data-surface
+                    d={shape.surface}
+                    fill={`url(#ribbon-${stem.material})`}
+                    stroke="#9cb15e"
+                    stroke-width=".8"
+                  />
+                  <path data-fold d={shape.fold} fill="url(#ribbon-fold)" />
+                  <path
+                    data-edge
+                    d={shape.edge}
+                    fill="none"
+                    stroke="#cbd790"
+                    stroke-width="1"
+                    opacity=".7"
+                  />
+                </g>
+              );
+            })}
+          </g>
+          {canopyNodes.map((node, index) => {
+            const shape = ribbonAt(node.curve, 1, node.width, 12);
+            const size = sprites[node.id as keyof typeof sprites];
+            const h = (node.spriteWidth * size.height) / size.width;
+            return (
+              <g data-canopy-limb={index}>
+                <g data-canopy-ribbon>
+                  <path
+                    data-surface
+                    d={shape.surface}
+                    fill={`url(#ribbon-${index % 2 ? 'ivory' : 'forest'})`}
+                    stroke="#a4bb64"
+                    stroke-width=".7"
+                  />
+                  <path data-fold d={shape.fold} fill="url(#ribbon-fold)" />
+                  <path data-edge d={shape.edge} fill="none" stroke="#d6dc96" stroke-width="1" />
+                </g>
+                {index > 0 && (
+                  <g
+                    data-canopy-foliage
+                    transform={`translate(${node.curve[3][0]} ${node.curve[3][1]})`}
+                  >
+                    <image
+                      href={withBase('/images/history/foliage.webp')}
+                      x={-node.spriteWidth * 0.8}
+                      y="-65"
+                      width="180"
+                      height="76"
+                      transform="rotate(-8)"
+                    />
+                    <image
+                      href={withBase('/images/history/foliage.webp')}
+                      x={node.spriteWidth * 0.25}
+                      y="-58"
+                      width="165"
+                      height="70"
+                      transform="rotate(8)"
+                    />
+                  </g>
+                )}
+                <g
+                  data-canopy-product
+                  transform={`translate(${node.curve[3][0]} ${node.curve[3][1]})`}
+                >
+                  <image
+                    href={withBase(`/images/history/${node.id}.webp`)}
+                    x={-node.spriteWidth / 2}
+                    y={-h}
+                    width={node.spriteWidth}
+                    height={h}
+                  />
+                </g>
+              </g>
+            );
+          })}
+          <g data-canopy-crown>
+            <image
+              href={withBase('/images/history/foliage.webp')}
+              x="865"
+              y="-40"
+              width="310"
+              height="132"
+            />
+          </g>
+        </g>
+      </svg>
+      <nav
+        class="living-labels"
+        aria-label={l(locale, 'Tarihçedeki kilometre taşları', 'Company history milestones')}
+      >
+        {canopyNodes.map((node, index) => (
+          <a
+            data-canopy-label={index}
+            href={`#history-${node.id}`}
+            style={`--label-x:${node.label[0] / 15.36}%;--label-y:${node.label[1] / 7.65}%`}
+          >
+            <strong>
+              {companyHistory.milestones[index].year}
+              <span aria-hidden="true"> —</span>
+            </strong>
+            <span>{names[index]}</span>
+          </a>
+        ))}
+      </nav>
+    </div>
+  </div>
+</section>
+<script src="../scripts/living-canopy.ts"></script>

@@ -1,12 +1,12 @@
 # TECHNICSAN
 
-A bilingual Astro product catalogue for TECHNICSAN, focused on exactly five types: **Cement bulker, LPG catalog, Compressors, Mixers and Silos**. Includes 155 source-referenced product entries, manufacturer photographs and galleries, three draft buyer guides, paginated category/search filters, bilingual product pages, enquiries, Sanity schemas and Cloudflare deployment configuration. Entries remain preview content until supply availability, technical data and photograph permissions are approved. See docs/REFERENCE-IMPORT.md for coverage and exceptions. No external account or paid service is needed for the local preview. Shared branding is documented in `DESIGN.md`; scalable logo assets live in `public/brand/`.
+A bilingual Astro product catalogue for TECHNICSAN, focused on exactly five types: **Cement bulker, LPG catalog, Compressors, Mixers and Silos**. The active catalogue has fourteen curated products, bilingual pages, galleries, family/search filters and a sales enquiry form. Products and guides are edited in the company's free Sanity project. Content remains a preview until technical facts, photographs and company details are approved. Shared branding is documented in `DESIGN.md`; scalable logo assets live in `public/brand/`.
 
 ## GitHub Pages preview
 
-Live preview: [Machina](https://mohamedalinaguez.github.io/Machina/en/). Public repository: [MohamedAliNaguez/Machina](https://github.com/MohamedAliNaguez/Machina).
+The owner requested republishing the current review website on 24 November 2026 at [technicsan.com](https://technicsan.com/). Content approval and noindex gates remain in place. Public repository: [MohamedAliNaguez/Machina](https://github.com/MohamedAliNaguez/Machina).
 
-The GitHub Pages workflow builds and publishes the static preview on every push to `main`, using the repository's Pages origin and base path. It needs no Cloudflare account or deployment secret. Repository settings → Pages → Source must be **GitHub Actions**.
+The GitHub Pages workflow has a **manual trigger only**. It builds published Sanity content and deploys only when explicitly run. Publishing content in Sanity or pushing code does not update the public website.
 
 The hosted version retains sample labels and `noindex` metadata. Its sales enquiry form sends to the owner-confirmed **info@technicsan.com** inbox through the company Formspree form configured in `src/data/enquiry-delivery.json`. This is separate from GitHub hosting: Formspree handles private submission storage and email notifications. The local development version still uses local SQLite and sends no email. Verified company/product content and reviewed privacy copy are still needed for the full launch.
 
@@ -32,19 +32,16 @@ Browser tests require Playwright Chromium (`npx playwright install chromium`). `
 
 ## Content editor
 
-1. When ready, create your own free Sanity project. No project has been created on your behalf.
-2. Copy `studio/.env.example` to `studio/.env` and enter its public project ID and dataset. Never put write/read tokens in `SANITY_STUDIO_*` variables.
-3. Run `npm --prefix studio ci`, then `npm run studio`.
-4. The authenticated Studio contains company settings, categories, brands, new models, used machines and guides. The **Bilingual preview** tab previews draft content within the signed-in editor.
-5. Enter categories first, then products and articles. Stable IDs must be unique across categories/products/articles. Brand navigation appears only for verified brands.
-6. To use real content on the website, copy `.env.example` to `.env`, set `CONTENT_SOURCE=sanity`, project ID and dataset, then rebuild. Failed CMS requests stop the build instead of silently replacing real content with examples.
+Open **[TECHNICSAN Content Studio](https://technicsan-content.sanity.studio/)** and sign in with the owner account used during setup. Sanity Free is connected, with five families, fourteen products and company settings imported. The guide collection is empty until reviewed articles are published. See [the editing guide](docs/SANITY-EDITOR.md).
+
+Run `npm --prefix studio ci`, then `npm run studio` for a local editor. `npm run content:check` checks the published content connection. Public project defaults live in `src/data/sanity.json`; never put secrets in `SANITY_STUDIO_*` or `PUBLIC_*` variables. `CONTENT_SOURCE=repository` uses the retained local catalogue for offline recovery. Failed CMS requests stop the build instead of silently substituting sample content.
 
 For full-site draft preview builds, see [operations](docs/OPERATIONS.md). Draft tokens are server/build secrets. Preview access must be restricted at the hosting layer before uploading company drafts.
 
 ## Architecture
 
 - Astro static rendering; small TypeScript interactions, no React bundle on public pages.
-- Self-hosted Anton for the approved steel display typography, Barlow Condensed for supporting headings, and Source Sans 3 for body text, including Turkish characters.
+- Self-hosted Barlow Condensed headings and Source Sans 3 body text, including Turkish characters; Anton remains only for legacy design studies.
 - Sanity authenticated editor; published content fetched at build time.
 - Cloudflare Pages Functions implement `POST /api/enquiries`; D1 holds private submissions and an email outbox.
 - Resend sends notifications after durable storage; a scheduled Worker retries failures.
