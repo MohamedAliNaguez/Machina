@@ -1305,72 +1305,22 @@
     ],
     "images": [
       {
-        "src": "/images/products/lpg/lpg-bulk-storage-tank-technicsan.webp",
+        "src": "/images/products/lpg/lpg-bulk-storage-tank-workshop.webp",
         "alt": {
-          "en": "White LPG bulk storage tanks transported on a flatbed truck outside a workshop",
-          "tr": "Atölye önünde açık kasa araç üzerinde taşınan beyaz LPG dökme depolama tankları"
+          "en": "TECHNICSAN LPG bulk storage tank — full side view inside the workshop",
+          "tr": "TECHNICSAN LPG dökme depolama tankı — atölyede tam yan görünüm"
         },
-        "illustrative": false,
+        "illustrative": true,
         "placeholder": false,
         "rightsStatus": "pending"
       },
       {
-        "src": "/images/products/lpg/lpg-bulk-storage-tank-2.webp",
+        "src": "/images/products/lpg/lpg-bulk-storage-tank-transport.webp",
         "alt": {
-          "tr": "Referans fotoğraf: LPG büyük hacimli depolama tankı — görünüm 2",
-          "en": "Reference photograph: LPG bulk storage tank — view 2"
+          "en": "LPG bulk storage tank secured on a flatbed trailer inside the workshop",
+          "tr": "Atölyede açık kasa treylere sabitlenmiş LPG dökme depolama tankı"
         },
-        "illustrative": false,
-        "placeholder": false,
-        "rightsStatus": "pending"
-      },
-      {
-        "src": "/images/products/lpg/lpg-bulk-storage-tank-3.webp",
-        "alt": {
-          "tr": "Referans fotoğraf: LPG büyük hacimli depolama tankı — görünüm 3",
-          "en": "Reference photograph: LPG bulk storage tank — view 3"
-        },
-        "illustrative": false,
-        "placeholder": false,
-        "rightsStatus": "pending"
-      },
-      {
-        "src": "/images/products/lpg/lpg-bulk-storage-tank-4.webp",
-        "alt": {
-          "tr": "Referans fotoğraf: LPG büyük hacimli depolama tankı — görünüm 4",
-          "en": "Reference photograph: LPG bulk storage tank — view 4"
-        },
-        "illustrative": false,
-        "placeholder": false,
-        "rightsStatus": "pending"
-      },
-      {
-        "src": "/images/products/lpg/lpg-bulk-storage-tank-5.webp",
-        "alt": {
-          "tr": "Referans fotoğraf: LPG büyük hacimli depolama tankı — görünüm 5",
-          "en": "Reference photograph: LPG bulk storage tank — view 5"
-        },
-        "illustrative": false,
-        "placeholder": false,
-        "rightsStatus": "pending"
-      },
-      {
-        "src": "/images/products/lpg/lpg-bulk-storage-tank-6.webp",
-        "alt": {
-          "tr": "Referans fotoğraf: LPG büyük hacimli depolama tankı — görünüm 6",
-          "en": "Reference photograph: LPG bulk storage tank — view 6"
-        },
-        "illustrative": false,
-        "placeholder": false,
-        "rightsStatus": "pending"
-      },
-      {
-        "src": "/images/products/lpg/lpg-bulk-storage-tank-7.webp",
-        "alt": {
-          "tr": "Referans fotoğraf: LPG büyük hacimli depolama tankı — görünüm 7",
-          "en": "Reference photograph: LPG bulk storage tank — view 7"
-        },
-        "illustrative": false,
+        "illustrative": true,
         "placeholder": false,
         "rightsStatus": "pending"
       }

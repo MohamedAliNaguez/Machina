@@ -15,34 +15,49 @@ async function main() {
     `../.local/sanity/bulk-storage-image-before-${Date.now()}.json`,
     JSON.stringify(docs, null, 2),
   );
-  const asset = await client.assets.upload(
-    'image',
-    await readFile('../public/images/products/lpg/lpg-bulk-storage-tank-technicsan.webp'),
-    { filename: 'lpg-bulk-storage-tank-technicsan.webp', extract: [] },
+  const replacements = [
+    {
+      filename: 'lpg-bulk-storage-tank-workshop.webp',
+      alt: {
+        en: 'TECHNICSAN LPG bulk storage tank — full side view inside the workshop',
+        tr: 'TECHNICSAN LPG dökme depolama tankı — atölyede tam yan görünüm',
+      },
+    },
+    {
+      filename: 'lpg-bulk-storage-tank-transport.webp',
+      alt: {
+        en: 'LPG bulk storage tank secured on a flatbed trailer inside the workshop',
+        tr: 'Atölyede açık kasa treylere sabitlenmiş LPG dökme depolama tankı',
+      },
+    },
+  ];
+  const images = await Promise.all(
+    replacements.map(async ({ filename, alt }, index) => {
+      const asset = await client.assets.upload(
+        'image',
+        await readFile('../public/images/products/lpg/' + filename),
+        { filename, extract: [] },
+      );
+      return {
+        _key: 'bulk-storage-' + index,
+        _type: 'machineImage',
+        asset: { _type: 'reference', _ref: asset._id },
+        alt,
+        placeholder: false,
+        illustrative: true,
+        rightsStatus: 'pending',
+      };
+    }),
   );
-  const alt = {
-    en: 'White LPG bulk storage tanks transported on a flatbed truck outside a workshop',
-    tr: 'Atölye önünde açık kasa araç üzerinde taşınan beyaz LPG dökme depolama tankları',
-  };
   let transaction = client.transaction();
   for (const doc of docs) {
-    const images = [...doc.images];
-    images[0] = {
-      ...images[0],
-      _type: 'machineImage',
-      asset: { _type: 'reference', _ref: asset._id },
-      alt,
-      placeholder: false,
-      illustrative: true,
-      rightsStatus: 'pending',
-    };
     transaction = transaction.patch(doc._id, (patch) =>
       patch.ifRevisionId(doc._rev).set({ images }),
     );
   }
   await transaction.commit();
   console.log(
-    `Updated bulk storage main image in ${docs.length} document(s); remaining gallery and content preserved.`,
+    `Replaced bulk storage gallery with two supplied photos in ${docs.length} document(s); product facts and search approvals preserved.`,
   );
 }
 main().catch((error) => {
