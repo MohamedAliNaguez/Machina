@@ -23,6 +23,8 @@ if (scene) {
     last = 0,
     frame = 0;
   let visible = true;
+  const compact = matchMedia('(max-width: 900px)');
+  let lastVectorPaint = -100;
   let branchRenderer:
     { render: (progress: number, time: number) => void; dispose: () => void } | undefined;
   const disabled = () => reduced.matches || contrast.matches;
@@ -32,21 +34,26 @@ if (scene) {
     group.querySelector('[data-edge]')!.setAttribute('d', shape.edge);
   }
   function render(progress: number) {
-    stems.forEach((group, i) => {
-      const stem = canopyStems[i];
-      const growth = ease(clamp(progress * 1.55 - i * 0.055));
-      const bend = disabled() ? 0 : Math.sin(life / 3300 + i * 0.6) * 1.1 * growth;
-      applyRibbon(group, ribbonAt(bendCurve(stem.curve, bend), growth, stem.width, stem.tip));
-    });
+    const paintVectors =
+      root.dataset.renderer !== 'webgl' || disabled() || life - lastVectorPaint >= 100;
+    if (paintVectors) lastVectorPaint = life;
+    if (paintVectors)
+      stems.forEach((group, i) => {
+        const stem = canopyStems[i];
+        const growth = ease(clamp(progress * 1.55 - i * 0.055));
+        const bend = disabled() ? 0 : Math.sin(life / 3300 + i * 0.6) * 1.1 * growth;
+        applyRibbon(group, ribbonAt(bendCurve(stem.curve, bend), growth, stem.width, stem.tip));
+      });
     limbs.forEach((group, i) => {
       const node = canopyNodes[i];
       const growth = ease(clamp((progress - (i === 0 ? 0 : 0.075 + i * 0.105)) / 0.22));
       const bend = disabled() ? 0 : Math.sin(life / 2700 + i * 0.7) * 2.1 * growth;
       const curve = bendCurve(node.curve, bend);
-      applyRibbon(
-        group.querySelector<SVGGElement>('[data-canopy-ribbon]')!,
-        ribbonAt(curve, growth, node.width, 12),
-      );
+      if (paintVectors)
+        applyRibbon(
+          group.querySelector<SVGGElement>('[data-canopy-ribbon]')!,
+          ribbonAt(curve, growth, node.width, 12),
+        );
       const unfold = ease(clamp((growth - 0.35) / 0.65));
       const product = group.querySelector<SVGGElement>('[data-canopy-product]')!;
       const tip = arcSampler(curve)(growth);
@@ -74,7 +81,7 @@ if (scene) {
       `translate(1020 40) rotate(${disabled() ? 0 : Math.sin(life / 2400) * 0.7}) scale(${canopy}) translate(-1020 -40)`,
     );
     root.dataset.progress = progress.toFixed(4);
-    branchRenderer?.render(progress, disabled() ? 0 : life);
+    if (root.dataset.renderer === 'webgl') branchRenderer?.render(progress, disabled() ? 0 : life);
   }
   function stop() {
     cancelAnimationFrame(frame);
@@ -93,12 +100,12 @@ if (scene) {
       frame = requestAnimationFrame(tick);
       return;
     }
-    if (root.dataset.renderer === 'loading') {
-      last = now;
+    const delta = last ? Math.max(0, now - last) : 0;
+    // Keep the mobile artwork fluid within a 30 fps budget, leaving time for input.
+    if (compact.matches && last && delta < 1000 / 30) {
       frame = requestAnimationFrame(tick);
       return;
     }
-    const delta = last ? Math.max(0, now - last) : 0;
     last = now;
     elapsed = Math.min(duration, elapsed + delta);
     // Growth follows visible elapsed time even on slower renderers; settled sway stays gentle.
@@ -139,10 +146,17 @@ if (scene) {
   window.addEventListener('pagehide', stop);
   window.addEventListener('pageshow', start);
   preference();
-  if (!contrast.matches) {
-    root.dataset.renderer = 'loading';
+  let rendererRequested = false;
+  const loadRenderer = () => {
+    if (rendererRequested || disabled() || !visible || document.hidden) return;
+    rendererRequested = true;
+    // Keep the animated vector scene running while the optional WebGL enhancement loads.
     import('./canopy-webgl.js')
       .then(async ({ createCanopyRenderer }) => {
+        if (disabled()) {
+          rendererRequested = false;
+          return;
+        }
         try {
           branchRenderer = await createCanopyRenderer(root);
           render(disabled() ? 1 : elapsed / duration);
@@ -153,5 +167,27 @@ if (scene) {
       .catch(() => {
         root.dataset.renderer = 'svg';
       });
-  }
+  };
+  root.dataset.renderer = 'svg';
+  const scheduleRenderer = () => {
+    // Yield the first readable paint and primary actions; no artificial intro delay.
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        if ('requestIdleCallback' in window)
+          window.requestIdleCallback(loadRenderer, { timeout: 1200 });
+        else setTimeout(loadRenderer, 0);
+      }),
+    );
+  };
+  if (document.readyState === 'complete') scheduleRenderer();
+  else window.addEventListener('load', scheduleRenderer, { once: true });
+  reduced.addEventListener('change', scheduleRenderer);
+  contrast.addEventListener('change', scheduleRenderer);
+  document.addEventListener('visibilitychange', scheduleRenderer);
+  new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) scheduleRenderer();
+    },
+    { threshold: 0.05 },
+  ).observe(root);
 }

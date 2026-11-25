@@ -1237,3 +1237,7 @@
     border: 2px solid Highlight;
   }
 }
+
+.pressure-site .product-photo-stage .product-photo-caption {
+  color: #4b6255;
+}

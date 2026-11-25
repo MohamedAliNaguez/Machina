@@ -30,7 +30,7 @@ The TECHNICSAN name/logo, Ankara location and five product types were supplied b
 
 Legal company details, exact address, represented brands, certifications, history, customer names and business claims remain unverified. Do not infer these from reference sites.
 
-The three buyer guides are labelled drafts about preparing enquiries, compressor requirements, and storage/mixing requirements. They do not contain operating pressures, safety procedures or technical settings. Before publication, add the actual author/reviewer, review date and sources supporting any technical claims. Review Turkish and English terminology and image rights. Do not invent reviews, prices or endorsements.
+Five private bilingual buyer-guide drafts are prepared in Sanity, one per family: cement bulker quotations, LPG enquiries, compressor selection, mixer/chassis matching and cement silo planning. Complete actual authorship, sources, image descriptions and technical review before publishing. Search approval also requires real publication and review dates. Do not invent operating parameters, certificates, reviews, prices or endorsements.
 
 ## Search and publishing
 
@@ -50,4 +50,4 @@ The panel is automatically excluded from every production build (`import.meta.en
 
 ## Repository publishing
 
-Sanity Free is now the default content source. The signed-in editor is https://technicsan-content.sanity.studio/; see [SANITY-EDITOR.md](SANITY-EDITOR.md). The five families, fourteen products and public contact settings were imported without changing approval flags. `CONTENT_SOURCE=repository` remains a recovery mode using the retained local snapshots, with the same live validation as Sanity. It does not automatically receive CMS edits. Settings remain unverified and the published guide collection is empty until owner review. GitHub Pages uses the configured Formspree delivery path; Cloudflare challenge settings apply only to the Cloudflare delivery path. Keep manual-only website deployment and the public website offline.
+Sanity Free is now the default content source. The signed-in editor is https://technicsan-content.sanity.studio/; see [SANITY-EDITOR.md](SANITY-EDITOR.md). The five families, fourteen products and public contact settings were imported without changing approval flags. `CONTENT_SOURCE=repository` remains a recovery mode using the retained local snapshots, with the same live validation as Sanity. It does not automatically receive CMS edits. Settings remain unverified and the published guide collection is empty until owner review. GitHub Pages uses the configured Formspree delivery path; Cloudflare challenge settings apply only to the Cloudflare delivery path. Keep manual-only website deployment. Review deployments remain noindex; approved pages can be released individually after the shared company and HTTPS preflight passes. See [SEO release](SEO-RELEASE.md).

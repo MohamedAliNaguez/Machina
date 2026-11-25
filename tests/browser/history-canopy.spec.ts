@@ -33,6 +33,8 @@ test('desktop branches animate automatically without motion buttons', async ({ p
 test('Turkish mobile reduced motion uses full geometry with no overflow', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
+  const requests: string[] = [];
+  page.on('request', (request) => requests.push(request.url()));
   await page.goto('/tr/hakkimizda/');
   await expect(page.locator('[data-living-canopy]')).toHaveAttribute('data-animation', 'reduced');
   await expect(page.locator('[data-living-canopy]')).toHaveAttribute('data-progress', '1.0000');
@@ -40,6 +42,7 @@ test('Turkish mobile reduced motion uses full geometry with no overflow', async 
   await expect(page.locator('.history-reading-list')).toContainText('Kompresör üretimi');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: 'test-results/history-mobile.png', fullPage: true });
+  expect(requests.some((url) => /canopy-webgl|three\.module|trunk-skin/.test(url))).toBe(false);
 });
 
 test('mobile branches animate automatically', async ({ page }) => {

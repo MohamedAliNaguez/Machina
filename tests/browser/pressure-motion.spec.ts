@@ -34,7 +34,13 @@ test('reduced motion preserves the Turkish artwork and high contrast exposes the
   await expect(artwork).toBeVisible();
   await expect(artwork).not.toHaveAttribute('data-motion', 'running');
   await expect(page.getByRole('button', { name: 'Animasyonu tekrar oynat' })).toBeHidden();
-  await expect(page.getByRole('heading', { name: 'BASINÇ', exact: true })).toHaveCount(1);
+  await expect(
+    page.getByRole('heading', {
+      level: 1,
+      name: 'Çimento silobası, LPG ekipmanları, kompresörler, mikserler ve silolar',
+      exact: true,
+    }),
+  ).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
   await expect(artwork).toBeHidden();

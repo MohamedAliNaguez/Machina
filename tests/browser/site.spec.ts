@@ -146,7 +146,11 @@ test('preview metadata, source photographs, attribution and desktop screenshot',
 }) => {
   await page.goto('/en/');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
-  await expect(page.locator('link[hreflang="tr"]')).toHaveAttribute('href', /\/tr\/$/);
+  await expect(page.locator('link[hreflang]')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'TR', exact: true })).toHaveAttribute(
+    'href',
+    /\/tr\/$/,
+  );
   expect(
     await page
       .locator('img')

@@ -2,6 +2,7 @@ import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { schemaTypes } from './schema';
 import { ContentPreview } from './ContentPreview';
+import { SearchReadiness } from './SearchReadiness';
 import config from '../src/data/sanity.json';
 import { productTypes } from '../src/data/product-types';
 
@@ -49,6 +50,7 @@ export default defineConfig({
         S.document().views([
           S.view.form(),
           S.view.component(ContentPreview).title('Bilingual preview'),
+          S.view.component(SearchReadiness).title('Search readiness'),
         ]),
     }),
   ],

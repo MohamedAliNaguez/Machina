@@ -1,0 +1,7 @@
+name = "technicsan"
+compatibility_date = "2026-10-19"
+pages_build_output_dir = "../../dist"
+
+# Dedicated static deployment root: no Functions, D1 bindings or email-service secrets.
+# Sales enquiries use the existing Formspree service configured at build time.
+# The root wrangler.toml remains an optional local/native-backend rehearsal.

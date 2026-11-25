@@ -7,7 +7,6 @@ const localeFields = (type: string) =>
       name: code,
       title: code === 'tr' ? 'Türkçe' : 'English',
       type,
-      validation: required,
     }),
   );
 const localeString = defineType({
@@ -131,11 +130,67 @@ const machineImage = defineType({
     }),
   ],
 });
+const seoApproval = defineType({
+  name: 'seoApproval',
+  title: 'Search approval by language',
+  type: 'object',
+  fields: ['en', 'tr'].map((name) =>
+    defineField({
+      name,
+      title: name.toUpperCase(),
+      type: 'string',
+      options: { list: ['pending', 'approved'] },
+      initialValue: 'pending',
+    }),
+  ),
+});
+const seoFields = () => [
+  defineField({
+    name: 'seoTitle',
+    title: 'Search title (without TECHNICSAN suffix)',
+    type: 'companyCopy',
+  }),
+  defineField({ name: 'seoDescription', title: 'Search description', type: 'companyCopy' }),
+  defineField({
+    name: 'seoApproval',
+    type: 'seoApproval',
+    initialValue: { en: 'pending', tr: 'pending' },
+    description:
+      'Publishing is separate from search approval. Use the Search readiness tab. Missing evidence always keeps a page noindex.',
+  }),
+];
+const pageSeo = defineType({
+  name: 'pageSeo',
+  title: 'Page search settings',
+  type: 'object',
+  fields: seoFields(),
+});
+const editorialSection = {
+  type: 'object',
+  fields: [
+    defineField({ name: 'heading', type: 'localeString' }),
+    defineField({ name: 'text', type: 'localeText' }),
+  ],
+};
 const machineFields = (used: boolean) => [
+  ...seoFields(),
   id(),
   slug(),
   defineField({ name: 'name', type: 'localeString', validation: required }),
   defineField({ name: 'model', type: 'string', validation: required }),
+  defineField({
+    name: 'modelVerified',
+    title: 'Real TECHNICSAN model identifier verified',
+    type: 'boolean',
+    initialValue: false,
+  }),
+  defineField({
+    name: 'sku',
+    title: 'Actual company SKU (optional)',
+    type: 'string',
+    description:
+      'Leave blank if no genuine company identifier exists. Never use an imported supplier code or internal CMS ID.',
+  }),
   defineField({
     name: 'category',
     type: 'reference',
@@ -268,12 +323,40 @@ const machineFields = (used: boolean) => [
   }),
   published(),
 ];
+const translatedDocument = (rule: any) =>
+  rule.custom((doc: any) => {
+    if (!doc) return true;
+    for (const locale of doc.published || ['en', 'tr']) {
+      const required =
+        doc._type === 'article'
+          ? ['title', 'excerpt', 'tag']
+          : doc._type === 'category'
+            ? ['name', 'description']
+            : ['name', 'summary', 'description'];
+      if (required.some((field) => !doc[field]?.[locale]?.trim()))
+        return `Complete required ${locale} text or remove that language from publication.`;
+      if (
+        doc._type === 'article' &&
+        doc.sections?.some((s: any) => !s.heading?.[locale] || !s.text?.[locale])
+      )
+        return `Complete ${locale} article sections.`;
+      if (
+        ['newModel', 'usedMachine'].includes(doc._type) &&
+        (doc.images?.some((i: any) => !i.alt?.[locale]) ||
+          doc.specs?.some((s: any) => !s.label?.[locale]) ||
+          !doc.applications?.[locale]?.length)
+      )
+        return `Complete ${locale} image descriptions, specification labels and applications.`;
+    }
+    return true;
+  });
 const preview = { select: { title: 'name.en', subtitle: 'model', media: 'images.0' } };
 const newModel = defineType({
   name: 'newModel',
   title: 'Products',
   type: 'document',
   fields: machineFields(false),
+  validation: translatedDocument,
   preview,
 });
 const usedMachine = defineType({
@@ -281,13 +364,47 @@ const usedMachine = defineType({
   title: 'Legacy used-product records',
   type: 'document',
   fields: machineFields(true),
+  validation: translatedDocument,
   preview,
 });
 const category = defineType({
   name: 'category',
   title: 'Product types (fixed five)',
+  validation: translatedDocument,
   type: 'document',
   fields: [
+    ...seoFields(),
+    published(),
+    defineField({
+      name: 'editorial',
+      title: 'Category landing page',
+      type: 'object',
+      fields: [
+        defineField({ name: 'heading', title: 'Descriptive page heading', type: 'localeString' }),
+        defineField({ name: 'overview', type: 'localeText' }),
+        defineField({ name: 'sections', type: 'array', of: [editorialSection] }),
+        defineField({
+          name: 'questions',
+          type: 'array',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                defineField({ name: 'question', type: 'localeString' }),
+                defineField({ name: 'answer', type: 'localeText' }),
+              ],
+            },
+          ],
+        }),
+        defineField({
+          name: 'evidence',
+          title: 'Reviewed production evidence',
+          type: 'companyCopy',
+          description:
+            'Only original, verifiable manufacturing information for this family. Do not infer capabilities from imported catalogue entries. Required for search approval.',
+        }),
+      ],
+    }),
     defineField({
       name: 'id',
       title: 'Approved product type',
@@ -335,14 +452,27 @@ const brand = defineType({
 const article = defineType({
   name: 'article',
   title: 'Guides & articles',
+  validation: translatedDocument,
   type: 'document',
   fields: [
+    ...seoFields(),
+    defineField({
+      name: 'publishedAt',
+      title: 'Actual publication date',
+      type: 'datetime',
+      description: 'Record the first public release date; do not backdate a draft.',
+    }),
     id(),
     slug(),
     defineField({ name: 'title', type: 'localeString', validation: required }),
     defineField({ name: 'excerpt', type: 'localeText', validation: required }),
     defineField({ name: 'tag', type: 'localeString', validation: required }),
-    defineField({ name: 'image', type: 'image', validation: required }),
+    defineField({
+      name: 'image',
+      type: 'image',
+      fields: [defineField({ name: 'alt', title: 'Image description', type: 'localeString' })],
+      validation: required,
+    }),
     defineField({
       name: 'category',
       type: 'reference',
@@ -430,6 +560,24 @@ const siteSettings = defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'pageSeo',
+      title: 'Home, About and Contact search approval',
+      type: 'object',
+      fields: ['home', 'about', 'contact'].map((name) => defineField({ name, type: 'pageSeo' })),
+    }),
+    defineField({
+      name: 'manufacturerVerified',
+      title: 'Manufacturing role verified against company evidence',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'historyApproved',
+      title: 'Visible company history reviewed and approved',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({
       name: 'name',
       title: 'Display name',
       type: 'string',
@@ -444,9 +592,9 @@ const siteSettings = defineType({
       validation: (rule) =>
         rule.custom((value, context) => {
           const copy = value as { tr?: string; en?: string } | undefined;
-          return !context.document?.identityVerified || (copy?.tr?.trim() && copy?.en?.trim())
+          return !context.document?.identityVerified || copy?.tr?.trim() || copy?.en?.trim()
             ? true
-            : 'Approved identity requires company copy in both languages.';
+            : 'Add approved company copy. Each language is released separately.';
         }),
     }),
     defineField({
@@ -456,9 +604,9 @@ const siteSettings = defineType({
       validation: (rule) =>
         rule.custom((value, context) => {
           const copy = value as { tr?: string; en?: string } | undefined;
-          return !context.document?.privacyReviewed || (copy?.tr?.trim() && copy?.en?.trim())
+          return !context.document?.privacyReviewed || copy?.tr?.trim() || copy?.en?.trim()
             ? true
-            : 'Privacy approval requires reviewed copy in both languages.';
+            : 'Add the reviewed notice. Each searchable language needs its own approved notice.';
         }),
     }),
     defineField({ name: 'heroImage', title: 'Approved homepage photograph', type: 'machineImage' }),
@@ -487,6 +635,8 @@ const siteSettings = defineType({
   preview: { select: { title: 'name' } },
 });
 export const schemaTypes = [
+  seoApproval,
+  pageSeo,
   localeString,
   localeText,
   companyCopy,

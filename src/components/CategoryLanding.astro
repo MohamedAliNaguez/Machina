@@ -1,0 +1,144 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MachineCard from './MachineCard.astro';
+import { getContent } from '../lib/content';
+import { l, labels, url, otherLocale } from '../lib/i18n';
+import type { Category, Locale } from '../lib/types';
+import '../styles/category-editorial.css';
+interface Props {
+  category: Category;
+  locale: Locale;
+}
+const { category, locale } = Astro.props;
+const { categories: allCategories, machines, articles } = await getContent();
+const categories = allCategories.filter((c) => (c.published ?? ['en', 'tr']).includes(locale));
+const editorial = category.editorial;
+const products = machines.filter(
+  (p) => p.categoryId === category.id && p.published.includes(locale),
+);
+const guides = articles.filter((a) => a.categoryId === category.id && a.published.includes(locale));
+---
+
+<Layout
+  locale={locale}
+  title={editorial?.heading[locale] || category.name[locale]}
+  description={category.description[locale]}
+  section="machines"
+  alternate={
+    (category.published ?? ['en', 'tr']).includes(otherLocale(locale))
+      ? url(otherLocale(locale), 'categories', category.slug[otherLocale(locale)])
+      : undefined
+  }
+  breadcrumbs={[
+    { name: labels(locale).machines, href: url(locale, 'machines') },
+    { name: category.name[locale] },
+  ]}
+>
+  <section class="family-introduction">
+    <div class="container">
+      <span class="eyebrow">TECHNICSAN / {category.name[locale]}</span>
+      <h1>{editorial?.heading[locale] || category.name[locale]}</h1>
+      <p>{editorial?.overview[locale] || category.description[locale]}</p>
+      <div class="family-actions">
+        <a class="button" href={url(locale, 'contact')}>
+          {l(locale, 'Gereksinimlerinizi görüşün', 'Discuss your requirements')}
+        </a>
+        <a class="text-link" href={url(locale, 'machines') + '?category=' + category.id}>
+          {l(locale, 'Katalogda arayın ve filtreleyin', 'Search and filter the catalogue')}
+        </a>
+      </div>
+    </div>
+  </section>
+  <nav
+    class="container family-navigation"
+    aria-label={l(locale, 'Ürün grupları', 'Product families')}
+  >
+    {categories.map((c) => (
+      <a
+        href={url(locale, 'categories', c.slug[locale])}
+        aria-current={c.id === category.id ? 'page' : undefined}
+      >
+        {c.name[locale]}
+      </a>
+    ))}
+  </nav>
+  {editorial && (
+    <section
+      class="container family-editorial"
+      aria-label={l(locale, 'Seçim bilgileri', 'Selection information')}
+    >
+      {editorial.sections.map((s) => (
+        <article>
+          <h2>{s.heading[locale]}</h2>
+          <p>{s.text[locale]}</p>
+        </article>
+      ))}
+      {editorial.evidence?.[locale] && (
+        <article class="family-evidence">
+          <span class="eyebrow">{l(locale, 'ÜRETİM BİLGİLERİ', 'PRODUCTION INFORMATION')}</span>
+          <h2>
+            {l(
+              locale,
+              'Bu ürün grubu için üretim bilgileri',
+              'Production information for this family',
+            )}
+          </h2>
+          <p>{editorial.evidence[locale]}</p>
+        </article>
+      )}
+    </section>
+  )}
+  <section class="container family-products" aria-labelledby="family-products-title">
+    <div class="section-heading">
+      <h2 id="family-products-title">{category.name[locale]}</h2>
+      <span>
+        {products.length} {l(locale, 'ürün', 'products')}
+      </span>
+    </div>
+    <div class="machine-grid">
+      {products.map((p) => (
+        <MachineCard machine={p} locale={locale} />
+      ))}
+    </div>
+    {products.some((p) => p.sample || p.technicalReview !== 'approved') && (
+      <p class="section-note">
+        {l(
+          locale,
+          'Bazı ürün kayıtlarının teknik incelemesi sürüyor. Konfigürasyonu satış ekibiyle teyit edin.',
+          'Some product records are under technical review. Confirm the configuration with sales.',
+        )}
+      </p>
+    )}
+  </section>
+  {editorial && (
+    <section class="container family-questions">
+      <h2>{l(locale, 'Teklif öncesi sorular', 'Before requesting a quotation')}</h2>
+      {editorial.questions.map((q) => (
+        <details>
+          <summary>{q.question[locale]}</summary>
+          <p>{q.answer[locale]}</p>
+        </details>
+      ))}
+      {category.requirements?.[locale]?.length && (
+        <div class="family-checklist">
+          <h3>{l(locale, 'Paylaşılacak bilgiler', 'Information to share')}</h3>
+          <ul>
+            {category.requirements[locale].map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {guides.map((g) => (
+        <p>
+          <a class="text-link" href={url(locale, 'guides', g.slug[locale])}>
+            {g.title[locale]}
+          </a>
+        </p>
+      ))}
+      <a class="button" href={url(locale, 'contact')}>
+        {labels(locale).quote}
+      </a>
+    </section>
+  )}
+</Layout>

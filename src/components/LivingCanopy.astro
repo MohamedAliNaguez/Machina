@@ -1,4 +1,5 @@
 ---
+import HistorySprite from './HistorySprite.astro';
 import { companyHistory } from '../data/history';
 import sprites from '../data/history-sprites.json';
 import { canopyStems, canopyNodes, ribbonAt } from '../lib/canopy-geometry';
@@ -29,6 +30,7 @@ const names = [
 >
   <div class="living-stage">
     <picture class="living-background" aria-hidden="true">
+      <source srcset={withBase('/images/history/atrium.avif')} type="image/avif" />
       <img
         src={withBase('/images/history/atrium.webp')}
         alt=""
@@ -150,20 +152,20 @@ const names = [
                     data-canopy-foliage
                     transform={`translate(${node.curve[3][0]} ${node.curve[3][1]})`}
                   >
-                    <image
-                      href={withBase('/images/history/foliage.webp')}
+                    <HistorySprite
+                      name="foliage"
                       x={-node.spriteWidth * 0.8}
-                      y="-65"
-                      width="180"
-                      height="76"
+                      y={-65}
+                      width={180}
+                      height={76}
                       transform="rotate(-8)"
                     />
-                    <image
-                      href={withBase('/images/history/foliage.webp')}
+                    <HistorySprite
+                      name="foliage"
                       x={node.spriteWidth * 0.25}
-                      y="-58"
-                      width="165"
-                      height="70"
+                      y={-58}
+                      width={165}
+                      height={70}
                       transform="rotate(8)"
                     />
                   </g>
@@ -172,8 +174,8 @@ const names = [
                   data-canopy-product
                   transform={`translate(${node.curve[3][0]} ${node.curve[3][1]})`}
                 >
-                  <image
-                    href={withBase(`/images/history/${node.id}.webp`)}
+                  <HistorySprite
+                    name={node.id}
                     x={-node.spriteWidth / 2}
                     y={-h}
                     width={node.spriteWidth}
@@ -184,13 +186,7 @@ const names = [
             );
           })}
           <g data-canopy-crown>
-            <image
-              href={withBase('/images/history/foliage.webp')}
-              x="865"
-              y="-40"
-              width="310"
-              height="132"
-            />
+            <HistorySprite name="foliage" x={865} y={-40} width={310} height={132} />
           </g>
         </g>
       </svg>

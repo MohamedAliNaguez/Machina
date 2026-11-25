@@ -89,6 +89,7 @@ if (gallery) {
     toggleZoom();
   });
   function sync(photo: GalleryPhoto) {
+    main.removeAttribute('srcset');
     main.src = photo.src;
     main.alt = photo.alt;
     const selectedCaption = document.querySelector('[data-product-caption]');

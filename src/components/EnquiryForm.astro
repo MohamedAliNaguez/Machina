@@ -3,7 +3,7 @@ import { withBase } from '../lib/paths';
 import { getContent } from '../lib/content';
 import { l, url, labels } from '../lib/i18n';
 import type { Locale } from '../lib/types';
-import { hostedEnquiryEndpoint } from '../lib/sales-email';
+import { hostedEnquiryEndpoint, enquiryProvider } from '../lib/sales-email';
 import { getCountries, getCountryCallingCode } from 'libphonenumber-js/min';
 interface Props {
   locale: Locale;
@@ -13,7 +13,7 @@ interface Props {
 const { locale, machineId, heading } = Astro.props;
 const { machines, settings, categories } = await getContent();
 const selected = machines.find((machine) => machine.id === machineId);
-const staticHosting = import.meta.env.PUBLIC_HOSTING === 'github-pages';
+const staticHosting = enquiryProvider === 'formspree';
 const emailDelivery = !!hostedEnquiryEndpoint;
 const disabled = staticHosting && !emailDelivery;
 const regionNames = new Intl.DisplayNames([locale], { type: 'region' });

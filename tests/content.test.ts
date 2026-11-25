@@ -1,3 +1,4 @@
+import { productSearchIssues } from '../src/lib/seo-policy';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { sampleContent } from '../src/data/sample';
@@ -134,7 +135,11 @@ test('source attribution, table shape and pending publication approvals are enfo
     image.illustrative = false;
     image.placeholder = false;
   });
-  assert.throws(() => validateContent(pending, true), /unapproved source content/);
+  assert.ok(
+    productSearchIssues(pending.machines[0], 'en').some((issue) =>
+      issue.includes('technical information'),
+    ),
+  );
 });
 
 test('public catalogue contains no supplier names, external brochures or private source metadata', () => {

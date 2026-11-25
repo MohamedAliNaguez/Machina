@@ -30,14 +30,18 @@ export async function getStaticPaths() {
         params: { locale, section: paths.machines[locale], slug: machine.slug[locale] },
         props: { kind: 'machine', machine },
       })),
-    ...content.categories.map((category) => ({
-      params: { locale, section: paths.categories[locale], slug: category.slug[locale] },
-      props: { kind: 'category', category },
-    })),
-    ...content.categories.map((category) => ({
-      params: { locale, section: paths.machines[locale], slug: category.slug[locale] },
-      props: { kind: 'family-alias', category },
-    })),
+    ...content.categories
+      .filter((c) => (c.published ?? ['en', 'tr']).includes(locale))
+      .map((category) => ({
+        params: { locale, section: paths.categories[locale], slug: category.slug[locale] },
+        props: { kind: 'category', category },
+      })),
+    ...content.categories
+      .filter((c) => (c.published ?? ['en', 'tr']).includes(locale))
+      .map((category) => ({
+        params: { locale, section: paths.machines[locale], slug: category.slug[locale] },
+        props: { kind: 'family-alias', category },
+      })),
     ...content.articles
       .filter((a) => a.published.includes(locale))
       .map((article) => ({

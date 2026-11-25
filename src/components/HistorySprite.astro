@@ -1,0 +1,26 @@
+---
+import { withBase } from '../lib/paths';
+interface Props {
+  name: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  transform?: string;
+}
+const { name, x, y, width, height, transform } = Astro.props;
+---
+
+<foreignObject x={x} y={y} width={width} height={height} transform={transform} aria-hidden="true">
+  <picture style="display:block;width:100%;height:100%">
+    <source srcset={withBase(`/images/history/${name}.avif`)} type="image/avif" />
+    <img
+      src={withBase(`/images/history/${name}.webp`)}
+      alt=""
+      width={width}
+      height={height}
+      decoding="async"
+      style="display:block;width:100%;height:100%;object-fit:contain"
+    />
+  </picture>
+</foreignObject>

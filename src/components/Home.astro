@@ -14,7 +14,8 @@ interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
-const { categories, articles, machines } = await getContent();
+const { categories: allCategories, articles, machines, settings } = await getContent();
+const categories = allCategories.filter((c) => (c.published ?? ['en', 'tr']).includes(locale));
 const families = categories.map((category) => ({
   category,
   product:
@@ -28,11 +29,7 @@ const copy = labels(locale);
 <Layout
   locale={locale}
   appearance="theatre"
-  title={l(
-    locale,
-    'Basınç odağında beş ürün grubu',
-    'Five product types with pressure at the core',
-  )}
+  title={l(locale, 'Endüstriyel Ekipman Kataloğu', 'Industrial Equipment Catalogue')}
   description={l(
     locale,
     'TECHNICSAN: çimento silobası, LPG kataloğu, kompresörler, mikserler ve silolar. Ürün gruplarını keşfedin ve ihtiyaçlarınızı paylaşın.',
@@ -43,9 +40,16 @@ const copy = labels(locale);
   <div class="home-refined">
     <section class="pressure-hero" aria-labelledby="pressure-title">
       <div class="container pressure-hero-inner">
-        <h1 id="pressure-title" class="pressure-heading">
+        <div class="pressure-heading" aria-label={l(locale, 'BASINÇ', 'PRESSURE')}>
           <span class="sr-only pressure-heading-text">{l(locale, 'BASINÇ', 'PRESSURE')}</span>
           <PressureWordmark />
+        </div>
+        <h1 id="pressure-title" class="home-equipment-title">
+          {l(
+            locale,
+            'Çimento silobası, LPG ekipmanları, kompresörler, mikserler ve silolar',
+            'Cement bulkers, LPG equipment, compressors, mixers and silos',
+          )}
         </h1>
         <div class="pressure-hero-copy">
           <p class="pressure-signature" lang="en">
@@ -55,8 +59,12 @@ const copy = labels(locale);
           <p class="pressure-hero-description">
             {l(
               locale,
-              'Çimento silobası, LPG kataloğu, kompresörler, mikserler ve silolar',
-              'Cement bulker, LPG catalog, compressors, mixers and silos',
+              settings.manufacturerVerified
+                ? 'Ankara, Türkiye merkezli endüstriyel ekipman üreticisi. Uygulamanızı paylaşın; ürün gereksinimlerini birlikte netleştirelim.'
+                : 'Ankara, Türkiye. Beş ürün grubumuzu inceleyin ve uygulama gereksinimlerinizi paylaşın.',
+              settings.manufacturerVerified
+                ? 'Industrial equipment manufacturer based in Ankara, Turkey. Share your application to discuss product requirements.'
+                : 'Based in Ankara, Turkey. Explore our five product families and discuss your application requirements.',
             )}
           </p>
           <div class="pressure-actions">
@@ -90,7 +98,12 @@ const copy = labels(locale);
             <span class="pressure-family-number">0{index + 1}</span>
             <div class="home-family-visual">
               {product && !product.images[0].placeholder ? (
-                <ProductVisual src={product.images[0].src} alt="" locale={locale} />
+                <ProductVisual
+                  sizes="(max-width: 640px) 80vw, 20vw"
+                  src={product.images[0].src}
+                  alt=""
+                  locale={locale}
+                />
               ) : (
                 <FamilyIllustration family={category.id} />
               )}

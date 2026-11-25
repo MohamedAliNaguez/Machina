@@ -1,13 +1,30 @@
 export type Locale = 'en' | 'tr';
 export type Localized<T = string> = Record<Locale, T>;
 export type Status = 'available' | 'reserved' | 'sold';
-export interface Category {
+export interface SeoFields {
+  seoTitle?: Partial<Localized>;
+  seoDescription?: Partial<Localized>;
+  seoApproval?: Partial<Localized<'pending' | 'approved'>>;
+}
+export interface EditorialSection {
+  heading: Localized;
+  text: Localized;
+}
+export interface Category extends SeoFields {
   id: string;
   slug: Localized;
   name: Localized;
   description: Localized;
   icon: string;
   requirements?: Localized<string[]>;
+  published?: Locale[];
+  editorial?: {
+    heading: Localized;
+    overview: Localized;
+    sections: EditorialSection[];
+    questions: { question: Localized; answer: Localized }[];
+    evidence?: Partial<Localized>;
+  };
 }
 export interface Brand {
   id: string;
@@ -15,11 +32,13 @@ export interface Brand {
   verified: boolean;
   description: Localized;
 }
-export interface Machine {
+export interface Machine extends SeoFields {
   id: string;
   slug: Localized;
   name: Localized;
   model: string;
+  modelVerified?: boolean;
+  sku?: string;
   brandId?: string;
   categoryId: string;
   kind: 'new' | 'used';
@@ -59,13 +78,14 @@ export interface Machine {
   technicalReview?: 'pending' | 'approved';
   published: Locale[];
 }
-export interface Article {
+export interface Article extends SeoFields {
   id: string;
   slug: Localized;
   title: Localized;
   excerpt: Localized;
   tag: Localized;
   image: string;
+  imageAlt?: Partial<Localized>;
   categoryId: string;
   minutes: number;
   sections: { heading: Localized; text: Localized }[];
@@ -73,6 +93,7 @@ export interface Article {
   author?: string;
   reviewer?: string;
   reviewedAt?: string;
+  publishedAt?: string;
   sample: boolean;
   published: Locale[];
 }
@@ -87,6 +108,9 @@ export interface Settings {
   email?: string;
   turnstileSiteKey?: string;
   privacyReviewed: boolean;
+  manufacturerVerified?: boolean;
+  historyApproved?: boolean;
+  pageSeo?: Partial<Record<'home' | 'about' | 'contact', SeoFields>>;
   about?: Localized;
   privacyNotice?: Localized;
   heroImage?: { src: string; alt: Localized; illustrative: boolean };

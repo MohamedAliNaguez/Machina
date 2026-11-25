@@ -20,6 +20,9 @@ import '../styles/pressure.css';
 import '@fontsource/anton/latin-400.css';
 import '@fontsource/anton/latin-ext-400.css';
 import { getContent, launchReady, isDraftPreview } from '../lib/content';
+import { seoHeadState } from '../lib/seo-head';
+import SearchMeasurement from '../components/SearchMeasurement.astro';
+import headingFont from '@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff2?url';
 import { labels, l, otherLocale, url, type Section } from '../lib/i18n';
 import type { Locale } from '../lib/types';
 interface Props {
@@ -46,11 +49,28 @@ const {
   appearance = 'steel',
   socialImage,
 } = Astro.props;
-const { settings, brands } = await getContent();
+const content = await getContent();
+const { settings, brands } = content;
 const copy = labels(locale);
 const origin = new URL(import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321');
 const canonical = new URL(Astro.url.pathname, origin).href;
-const indexing = launchReady && settings.identityVerified && !isDraftPreview && !noindex;
+const {
+  page,
+  indexing,
+  approvedAlternate,
+  englishDefault: defaultPath,
+} = seoHeadState(content, Astro.url.pathname, alternate, {
+  releaseReady: launchReady,
+  preview: isDraftPreview,
+  noindex,
+});
+const englishDefault = defaultPath ? new URL(defaultPath, origin).href : undefined;
+const pageTitle =
+  (page.seo?.seoApproval?.[locale] === 'approved' && page.seo?.seoTitle?.[locale]?.trim()) || title;
+const pageDescription =
+  (page.seo?.seoApproval?.[locale] === 'approved' && page.seo?.seoDescription?.[locale]?.trim()) ||
+  description;
+const fullTitle = `${pageTitle} | ${settings.name}`;
 const nav: ('machines' | 'brands' | 'guides' | 'about' | 'contact')[] = [
   'machines',
   ...(brands.some((b) => b.verified) ? ['brands' as const] : []),
@@ -58,14 +78,16 @@ const nav: ('machines' | 'brands' | 'guides' | 'about' | 'contact')[] = [
   'about',
   'contact',
 ];
-const baseSchema = settings.identityVerified
+const baseSchema = indexing
   ? [
       {
         '@context': 'https://schema.org',
         '@type': 'Organization',
+        '@id': new URL('/#organization', origin).href,
         name: settings.legalName || settings.name,
+        alternateName: settings.legalName !== settings.name ? settings.name : undefined,
         url: origin.href,
-        logo: new URL(withBase('/brand/technicsan.svg'), origin).href,
+        logo: new URL(withBase('/brand/technicsan-white-4k.png'), origin).href,
         email: settings.email,
         telephone: settings.phone,
         address: settings.address
@@ -79,11 +101,47 @@ const baseSchema = settings.identityVerified
       },
     ]
   : [];
+const pageSchema = indexing
+  ? [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        '@id': new URL('/#website', origin).href,
+        name: settings.name,
+        url: new URL(url('en'), origin).href,
+        publisher: { '@id': new URL('/#organization', origin).href },
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type':
+          page.kind === 'category' || page.kind === 'guides'
+            ? 'CollectionPage'
+            : page.kind === 'about'
+              ? 'AboutPage'
+              : page.kind === 'contact'
+                ? 'ContactPage'
+                : 'WebPage',
+        '@id': canonical + '#webpage',
+        url: canonical,
+        name: fullTitle,
+        description: pageDescription,
+        inLanguage: locale,
+        isPartOf: { '@id': new URL('/#website', origin).href },
+        about: { '@id': new URL('/#organization', origin).href },
+        breadcrumb: breadcrumbs.length ? { '@id': canonical + '#breadcrumbs' } : undefined,
+        mainEntity:
+          page.kind === 'product' || page.kind === 'article'
+            ? { '@id': canonical + '#' + page.kind }
+            : undefined,
+      },
+    ]
+  : [];
 const crumbSchema = breadcrumbs.length
   ? [
       {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
+        '@id': canonical + '#breadcrumbs',
         itemListElement: [{ name: copy.home, href: url(locale) }, ...breadcrumbs].map((c, i) => ({
           '@type': 'ListItem',
           position: i + 1,
@@ -100,27 +158,53 @@ const crumbSchema = breadcrumbs.length
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title} | {settings.name}</title>
-    <meta name="description" content={description} />
+    <title>{fullTitle}</title>
+    <meta name="description" content={pageDescription} />
     <meta name="robots" content={indexing ? 'index,follow' : 'noindex,follow'} />
     <meta name="theme-color" content="#003B27" />
+    {page.kind === 'about' && (
+      <>
+        <link
+          rel="preload"
+          as="image"
+          href={withBase('/images/history/atrium.avif')}
+          type="image/avif"
+          fetchpriority="high"
+        />
+        <link rel="preload" as="font" href={headingFont} type="font/woff2" crossorigin />
+      </>
+    )}
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang={locale} href={canonical} />
-    {alternate && (
-      <link rel="alternate" hreflang={otherLocale(locale)} href={new URL(alternate, origin).href} />
+    {indexing && <link rel="alternate" hreflang={locale} href={canonical} />}
+    {approvedAlternate && (
+      <link
+        rel="alternate"
+        hreflang={otherLocale(locale)}
+        href={new URL(approvedAlternate, origin).href}
+      />
     )}
-    <meta property="og:type" content="website" />
+    {englishDefault && <link rel="alternate" hreflang="x-default" href={englishDefault} />}
+    <meta property="og:type" content={page.kind === 'article' ? 'article' : 'website'} />
+    {import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION && (
+      <meta
+        name="google-site-verification"
+        content={import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION}
+      />
+    )}
+    {import.meta.env.PUBLIC_BING_SITE_VERIFICATION && (
+      <meta name="msvalidate.01" content={import.meta.env.PUBLIC_BING_SITE_VERIFICATION} />
+    )}
     <meta property="og:site_name" content={settings.name} />
-    <meta property="og:title" content={`${title} | ${settings.name}`} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonical} />
     <meta
       property="og:image"
       content={new URL(withBase(socialImage || '/brand/technicsan-social.png'), origin).href}
     />
     <meta property="og:locale" content={locale === 'tr' ? 'tr_TR' : 'en_GB'} />
-    {[...baseSchema, ...crumbSchema, ...schema].map((item) => (
+    {[...baseSchema, ...pageSchema, ...crumbSchema, ...(indexing ? schema : [])].map((item) => (
       <script type="application/ld+json" set:html={JSON.stringify(item).replace(/</g, '\\u003c')} />
     ))}
   </head>
@@ -132,6 +216,11 @@ const crumbSchema = breadcrumbs.length
     }}
   >
     <SteelLoader locale={locale} brand={settings.name} />
+    <SearchMeasurement
+      locale={locale}
+      family={page.family}
+      enabled={launchReady && !isDraftPreview}
+    />
     <a class="skip-link" href="#main">
       {l(locale, 'İçeriğe geç', 'Skip to content')}
     </a>
@@ -228,8 +317,6 @@ const crumbSchema = breadcrumbs.length
         });
         alternateLink.href = target.href;
       }
-      if (location.search && /\/(products|urunler)\/$/.test(location.pathname))
-        document.querySelector('meta[name="robots"]')?.setAttribute('content', 'noindex,follow');
     </script>
   </body>
 </html>

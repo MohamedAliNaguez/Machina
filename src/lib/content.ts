@@ -1,7 +1,9 @@
 import { repositoryContent } from '../data/repository';
-import { validateHistoryApproval } from '../data/history';
+import { companySearchIssues } from './seo';
+import { verifySearchTransport } from './search-transport';
 import delivery from '../data/enquiry-delivery.json';
 import { validateEnquirySetup } from './launch-enquiries';
+import { resolveEnquiryProvider } from './enquiry-provider';
 import { sampleContent } from '../data/sample';
 import { productTypeIds } from '../data/product-types';
 import type { Content, Locale } from './types';
@@ -25,12 +27,19 @@ export function getContent(): Promise<Content> {
   return pending;
 }
 async function load(): Promise<Content> {
-  if (launchReady) validateHistoryApproval();
+  if (launchReady) await verifySearchTransport(buildEnv.PUBLIC_SITE_URL || '');
   const source = buildEnv.CONTENT_SOURCE || 'sanity';
-  const provider = buildEnv.PUBLIC_HOSTING === 'github-pages' ? 'formspree' : 'cloudflare';
+  const provider =
+    resolveEnquiryProvider({
+      hosting: buildEnv.PUBLIC_HOSTING || 'local',
+      provider: buildEnv.PUBLIC_ENQUIRY_PROVIDER,
+    }) === 'formspree'
+      ? 'formspree'
+      : 'cloudflare';
   if (launchReady)
     validateEnquirySetup({
       hosting: buildEnv.PUBLIC_HOSTING || '',
+      provider: buildEnv.PUBLIC_ENQUIRY_PROVIDER,
       formId: buildEnv.PUBLIC_FORMSPREE_FORM_ID ?? delivery.formspreeFormId,
     });
   if (source === 'repository') {
@@ -92,27 +101,12 @@ export function validateContent(
     productTypeIds.some((id) => !value.categories.some((category) => category.id === id))
   )
     throw new Error('Catalogue must contain exactly the five approved TECHNICSAN product types.');
-  if (
-    live &&
-    (!value.settings.identityVerified ||
-      !value.settings.privacyReviewed ||
-      !value.settings.legalName ||
-      !value.settings.email)
-  )
-    throw new Error('Launch blocked: verify identity, contact information and privacy review.');
-  if (
-    live &&
-    (!value.settings.about?.tr ||
-      !value.settings.about?.en ||
-      !value.settings.privacyNotice?.tr ||
-      !value.settings.privacyNotice?.en ||
-      (options.enquiryProvider !== 'formspree' && !value.settings.turnstileSiteKey))
-  )
-    throw new Error(
-      'Launch blocked: approved bilingual company/privacy copy and challenge configuration are required.',
-    );
-  if (live && !value.machines.length)
-    throw new Error('Launch blocked: at least one approved product is required.');
+  if (live) {
+    const issues = companySearchIssues(value);
+    if (options.enquiryProvider !== 'formspree' && !value.settings.turnstileSiteKey)
+      issues.push('Configure the enquiry challenge');
+    if (issues.length) throw new Error(`Launch blocked: ${issues.join('; ')}.`);
+  }
   const ids = new Set<string>();
   for (const item of [...value.machines, ...value.categories, ...value.articles]) {
     if (!item.id || ids.has(item.id)) throw new Error('Content IDs must be unique.');
@@ -120,6 +114,20 @@ export function validateContent(
     if (!item.slug?.tr || !item.slug?.en) throw new Error(`Missing slugs on ${item.id}.`);
     for (const slug of Object.values(item.slug))
       if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw new Error(`Invalid slug on ${item.id}.`);
+    if (
+      item.seoApproval &&
+      Object.values(item.seoApproval).some((status) => !['pending', 'approved'].includes(status))
+    )
+      throw new Error(`Invalid search approval on ${item.id}.`);
+  }
+  for (const category of value.categories) {
+    for (const locale of category.published ?? (['en', 'tr'] as Locale[]))
+      if (
+        !['en', 'tr'].includes(locale) ||
+        !category.name?.[locale] ||
+        !category.description?.[locale]
+      )
+        throw new Error(`Incomplete ${locale} category ${category.id}.`);
   }
   for (const machine of value.machines) {
     if (
@@ -128,8 +136,6 @@ export function validateContent(
       !Array.isArray(machine.specs) ||
       (!machine.sample && !machine.specs.length) ||
       !machine.source ||
-      !machine.name?.tr ||
-      !machine.name?.en ||
       !value.categories.some((c) => c.id === machine.categoryId)
     )
       throw new Error(`Incomplete machine ${machine.id}.`);
@@ -150,10 +156,17 @@ export function validateContent(
         !machine.summary?.[locale] ||
         !machine.description?.[locale] ||
         !machine.applications?.[locale]?.length ||
+        (machine.kind === 'used' && !machine.condition?.[locale]) ||
         machine.images.some((i) => !i.alt?.[locale]) ||
         machine.specs.some((s) => !s.label?.[locale] || !s.value)
       )
         throw new Error(`Incomplete ${locale} translation on ${machine.id}.`);
+      if (
+        !(
+          value.categories.find((c) => c.id === machine.categoryId)?.published ?? ['en', 'tr']
+        ).includes(locale)
+      )
+        throw new Error(`Publish the ${locale} category before ${machine.id}.`);
     }
     if (
       machine.images.some((i) => !safeMediaUrl(i.src)) ||
@@ -162,8 +175,6 @@ export function validateContent(
         !safeExternalUrl(machine.brochure.url))
     )
       throw new Error(`Invalid media URL on ${machine.id}.`);
-    if (live && (machine.sample || machine.images.some((i) => i.illustrative || i.placeholder)))
-      throw new Error(`Launch blocked: sample machine or illustrative image ${machine.id}.`);
     if (
       machine.reference &&
       (!safeExternalUrl(machine.reference.url) ||
@@ -195,27 +206,7 @@ export function validateContent(
         ))
     )
       throw new Error(`Invalid specification table ${machine.id}.`);
-    if (
-      live &&
-      (machine.technicalReview !== 'approved' ||
-        machine.reference?.reviewStatus === 'pending' ||
-        machine.images.some((image) => image.rightsStatus !== 'approved'))
-    )
-      throw new Error(`Launch blocked: unapproved source content ${machine.id}.`);
   }
-  if (
-    live &&
-    value.machines.some(
-      (product) =>
-        product.published.length !== 2 ||
-        !product.published.includes('tr') ||
-        !product.published.includes('en') ||
-        new Set(product.images.map((image) => image.src)).size < 2,
-    )
-  )
-    throw new Error(
-      'Launch blocked: every product requires both languages and two distinct approved photographs.',
-    );
   for (const article of value.articles) {
     if (!article.published?.length || !article.sections?.length || !safeMediaUrl(article.image))
       throw new Error(`Incomplete article ${article.id}.`);
@@ -226,23 +217,9 @@ export function validateContent(
         article.sections.some((s) => !s.heading?.[locale] || !s.text?.[locale])
       )
         throw new Error(`Incomplete ${locale} article ${article.id}.`);
+    if (article.sources?.some((source) => !source.title || !safeExternalUrl(source.url)))
+      throw new Error(`Invalid article source ${article.id}.`);
   }
-  if (
-    live &&
-    value.articles.some(
-      (a) =>
-        a.sample ||
-        !a.author?.trim() ||
-        !a.reviewer?.trim() ||
-        !a.reviewedAt ||
-        !Number.isFinite(Date.parse(a.reviewedAt)) ||
-        !a.sources?.length ||
-        a.sources.some((source) => !source.title || !safeExternalUrl(source.url)),
-    )
-  )
-    throw new Error(
-      'Launch blocked: articles require an author, reviewer, valid review date and supporting sources.',
-    );
   for (const group of [value.machines, value.categories, value.articles])
     for (const locale of ['tr', 'en'] as Locale[]) {
       const slugs = group.map((item) => item.slug[locale]);

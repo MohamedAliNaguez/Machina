@@ -1,0 +1,68 @@
+name: Deploy TECHNICSAN
+on:
+  workflow_dispatch:
+    inputs:
+      search_release:
+        description: 'Release only approved pages to search (requires readiness checks)'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - name: Read GitHub Pages configuration
+        id: pages
+        uses: actions/configure-pages@v5
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - name: Check search release readiness
+        if: inputs.search_release
+        run: npm run verify:launch
+        env:
+          PUBLIC_SITE_URL: https://technicsan.com
+          PUBLIC_HOSTING: github-pages
+          CONTENT_SOURCE: sanity
+      - name: Build published Sanity content
+        run: npm run build
+        env:
+          PUBLIC_SITE_URL: https://technicsan.com
+          PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          PUBLIC_HOSTING: github-pages
+          PUBLIC_LAUNCH_READY: ${{ inputs.search_release && 'true' || 'false' }}
+          PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
+          PUBLIC_BING_SITE_VERIFICATION: ${{ vars.PUBLIC_BING_SITE_VERIFICATION }}
+          PUBLIC_GA4_MEASUREMENT_ID: ${{ vars.PUBLIC_GA4_MEASUREMENT_ID }}
+          PUBLIC_ANALYTICS_REVIEWED: ${{ vars.PUBLIC_ANALYTICS_REVIEWED }}
+          CONTENT_SOURCE: sanity
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish website
+        id: deployment
+        uses: actions/deploy-pages@v4

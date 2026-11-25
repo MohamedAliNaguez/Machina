@@ -485,3 +485,15 @@
     color: CanvasText;
   }
 }
+
+.home-refined .home-equipment-title {
+  max-width: 1000px;
+  margin: 16px 0 24px;
+  color: #f4f4ea;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: clamp(1.25rem, 2.3vw, 2rem);
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  text-transform: none;
+}

@@ -2,7 +2,7 @@
 
 ## Edit the focused catalogue
 
-**Sanity is now the primary editor.** Use https://technicsan-content.sanity.studio/ for products, guides, the five families and company settings. Follow [SANITY-EDITOR.md](SANITY-EDITOR.md). The local JSON files below remain recovery/seed snapshots, not a bidirectional mirror of subsequent CMS edits. Website deployment remains manual and the public website remains offline.
+**Sanity is now the primary editor.** Use https://technicsan-content.sanity.studio/ for products, guides, the five families and company settings. Follow [SANITY-EDITOR.md](SANITY-EDITOR.md). The local JSON files below remain recovery/seed snapshots, not a bidirectional mirror of subsequent CMS edits. Website deployment remains manual; the current public review website is excluded from indexing.
 
 Use `src/data/catalogue-products.json` for the fourteen retained products. Keep their IDs and bilingual slugs stable. There is one cement bulker, seven LPG products, two compressors, two mixers and two silos. Search and family filters show every match without pagination. Do not restore imported components merely to fill the catalogue.
 
@@ -12,12 +12,12 @@ For each product:
 
 - Confirm the supplied model/configuration and right to offer it. Record supporting specifications and image permissions in the private provenance folder.
 - Review Turkish and English names, useful purpose statements, application context, configuration questions and image descriptions. Specifications must match actual documentation; questions are not specifications.
-- Target four genuinely different photographs: overall, opposite side, connections/controls and a useful detail. Launch requires at least two distinct approved photographs of the product. Mark illustrative imagery honestly; it is not eligible as exact product photography.
+- Target four genuinely different photographs: overall, opposite side, connections/controls and a useful detail. Search approval requires at least one genuine approved photograph; extra distinct views are optional. Mark illustrative imagery honestly; it is not eligible as exact product photography.
 - Use consistent neutral backgrounds, uncropped machinery, reserved image dimensions and responsive compressed images. Keep the source originals privately. Do not generate unseen views or replace technical details during retouching.
-- Approve image rights explicitly and set `technicalReview=approved` only after checking evidence. Remove `sample` only when the page is genuine, complete and reviewed. Both languages must be ready.
+- Approve image rights explicitly and set `technicalReview=approved` only after checking evidence. Remove `sample` only when the page is genuine, complete and reviewed. Approve each language separately when its required facts and translation are ready.
 - Add only an approved brochure. A missing brochure gets an explanation, not a download or navigation link.
 
-For guides, supply useful original content, supporting sources, an actual author, reviewer and review date. Approved guides go in the repository article file; draft guides remain sample fixtures. Empty guide collections show an honest empty state and no empty homepage section.
+For guides, supply useful original content, supporting sources, an actual author/reviewer and actual publication/review dates. Five private bilingual drafts are prepared in Sanity, one per family. Complete the Search readiness checklist before approving a language. Repository articles are an offline recovery snapshot. Empty guide collections show an honest empty state and no empty homepage section.
 
 ## Company and sales information
 
@@ -43,7 +43,9 @@ Review an exportable GLB against the photographs for silhouette, axle/fitting pl
 
 1. Run formatting, type checks, unit/browser/accessibility checks and a production-style preview build. Verify retained and removed routes, reciprocal translations, metadata, structured data and sitemap. Confirm private sources and local design routes are absent from output.
 2. Check mobile photographs/specifications, reserved image space and keyboard focus. Measure LCP/CLS and interaction responsiveness in a real browser; targets remain LCP ≤2.5s, INP ≤200ms and CLS ≤0.1. Field INP requires real usage and cannot be certified by a build.
-3. Complete `npm run verify:launch` with the actual HTTPS origin, production hosting, `CONTENT_SOURCE=repository` and approved content. Pending business or product evidence must fail this check.
+3. Complete `npm run verify:launch` with the actual HTTPS origin, production hosting, `CONTENT_SOURCE=sanity` and approved company/page content. Pending business evidence blocks release; pending products remain excluded individually.
 4. Verify real inbox delivery, domain/HTTPS, privacy approval and restore/export. Test recovery locally from a copy of the backup. Before publishing, document the known-good commit/artifact and rehearse its build; only a later authorised deployment can verify hosted rollback.
-5. Keep `PUBLIC_LAUNCH_READY=false` and the public site offline until explicit publication instructions. The workflow remains manual-only. Do not publish or enable indexing just to test configuration.
+5. Keep `PUBLIC_LAUNCH_READY=false` for review deployments. Only select the manual `search_release` option after the preflight and page approvals pass. The workflow remains manual-only. Do not publish or enable indexing just to test configuration.
 6. At authorised launch, configure Search Console using the owner's account, submit the approved sitemap and measure aggregate product/enquiry events without contact values. Review search queries, useful enquiries and field performance after sufficient usage; SEO/GEO visibility is an outcome, not a guarantee.
+
+The page-level policy, category editorial workflow and search-account activation steps are documented in [SEO-RELEASE.md](SEO-RELEASE.md).

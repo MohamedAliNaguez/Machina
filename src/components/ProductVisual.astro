@@ -1,4 +1,5 @@
 ---
+import { productImageUrl, productImageSrcset } from '../lib/image-delivery';
 import { withBase } from '../lib/paths';
 import { l } from '../lib/i18n';
 import type { Locale } from '../lib/types';
@@ -9,6 +10,7 @@ interface Props {
   locale: Locale;
   placeholder?: boolean;
   priority?: boolean;
+  sizes?: string;
   class?: string;
 }
 const {
@@ -18,6 +20,7 @@ const {
   locale,
   placeholder = false,
   priority = false,
+  sizes = '(max-width: 900px) 90vw, 60vw',
   class: className,
 } = Astro.props;
 ---
@@ -25,7 +28,9 @@ const {
 <div class:list={['product-visual', className, { 'product-visual-pending': placeholder }]}>
   <img
     id={id}
-    src={withBase(src)}
+    src={withBase(productImageUrl(src, 960))}
+    srcset={productImageSrcset(src)}
+    sizes={sizes}
     alt={alt}
     width="900"
     height="560"

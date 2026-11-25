@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { productImageUrl } from '../lib/image-delivery';
 import Breadcrumbs from './Breadcrumbs.astro';
 import MachineCard from './MachineCard.astro';
 import ProductVisual from './ProductVisual.astro';
@@ -57,13 +58,27 @@ const schema = product.sample
       {
         '@context': 'https://schema.org',
         '@type': 'Product',
+        '@id': new URL(url(locale, 'machines', product.slug[locale]), origin).href + '#product',
+        url: new URL(url(locale, 'machines', product.slug[locale]), origin).href,
+        manufacturer: { '@id': new URL('/#organization', origin).href },
+        mainEntityOfPage: {
+          '@id': new URL(url(locale, 'machines', product.slug[locale]), origin).href + '#webpage',
+        },
         name: product.name[locale],
         description: product.summary[locale],
         image: product.images
-          .filter((image) => !image.placeholder)
+          .filter(
+            (image) =>
+              !image.placeholder && !image.illustrative && image.rightsStatus === 'approved',
+          )
           .map((image) => new URL(withBase(image.src), origin).href),
-        model: product.model,
-        sku: product.id,
+        model: product.modelVerified ? product.model : undefined,
+        sku: product.sku || undefined,
+        additionalProperty: product.specs.map((spec) => ({
+          '@type': 'PropertyValue',
+          name: spec.label[locale],
+          value: spec.value,
+        })),
       },
     ];
 ---
@@ -166,7 +181,13 @@ const schema = product.sample
                     aria-pressed={index === 0}
                     aria-label={l(locale, 'Fotoğraf ', 'Photo ') + (index + 1)}
                   >
-                    <img src={withBase(image.src)} alt="" width="220" height="137" loading="lazy" />
+                    <img
+                      src={withBase(productImageUrl(image.src, 220))}
+                      alt=""
+                      width="220"
+                      height="137"
+                      loading="lazy"
+                    />
                     <span>{l(locale, 'Fotoğraf ', 'Photo ') + (index + 1)}</span>
                   </button>
                 ))}
@@ -353,9 +374,10 @@ const schema = product.sample
         )}
         <div id="documents">
           <h3>{l(locale, 'Belgeler', 'Documents')}</h3>
-          {product.brochure?.url.startsWith('/images/') ? (
+          {product.brochure ? (
             <a
               class="text-link"
+              data-brochure
               href={withBase(product.brochure.url)}
               target="_blank"
               rel="noopener noreferrer"

@@ -1,4 +1,5 @@
 ---
+import { productImageUrl } from '../lib/image-delivery';
 import { withBase } from '../lib/paths';
 import { l } from '../lib/i18n';
 import type { Locale, Machine } from '../lib/types';
@@ -121,7 +122,13 @@ const photos = product.images.map((image) => ({
             aria-pressed={index === 0}
             aria-label={l(locale, 'Fotoğrafı görüntüle ', 'View photo ') + (index + 1)}
           >
-            <img src={image.src} width="100" height="64" alt="" loading="lazy" />
+            <img
+              src={productImageUrl(image.src, 220)}
+              width="100"
+              height="64"
+              alt=""
+              loading="lazy"
+            />
           </button>
         ))}
       </div>

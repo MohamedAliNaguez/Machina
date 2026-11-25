@@ -3,7 +3,7 @@ import { url } from '../lib/i18n';
 ---
 
 <!doctype html>
-<html lang="tr">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
@@ -11,11 +11,15 @@ import { url } from '../lib/i18n';
       name="description"
       content="TECHNICSAN ürün kataloğu / Cement bulker, LPG catalog, Compressors, Mixers and Silos"
     />
-    <meta http-equiv="refresh" content={'0;url=' + url('tr')} />
+    <meta http-equiv="refresh" content={'0;url=' + url('en')} />
+    <link
+      rel="canonical"
+      href={new URL(url('en'), import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321').href}
+    />
     <meta name="robots" content="noindex,follow" />
     <title>TECHNICSAN product catalogue</title>
   </head>
   <body>
-    <a href={url('tr')}>Türkçe</a> · <a href={url('en')}>English</a>
+    <a href={url('en')}>Continue in English</a> · <a href={url('tr')}>Türkçe</a>
   </body>
 </html>

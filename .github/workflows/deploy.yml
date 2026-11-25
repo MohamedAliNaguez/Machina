@@ -1,52 +1,61 @@
-name: Deploy TECHNICSAN
+name: Deploy TECHNICSAN to Cloudflare
 on:
   workflow_dispatch:
+    inputs:
+      search_release:
+        description: 'Release only approved pages to search (requires readiness checks)'
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
-  group: github-pages
+  group: cloudflare-pages
   cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pages: read
+    env:
+      PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
+      PUBLIC_BING_SITE_VERIFICATION: ${{ vars.PUBLIC_BING_SITE_VERIFICATION }}
+      PUBLIC_GA4_MEASUREMENT_ID: ${{ vars.PUBLIC_GA4_MEASUREMENT_ID }}
+      PUBLIC_ANALYTICS_REVIEWED: ${{ vars.PUBLIC_ANALYTICS_REVIEWED }}
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: npm
-      - name: Read GitHub Pages configuration
-        id: pages
-        uses: actions/configure-pages@v5
       - run: npm ci
       - run: npm run check
       - run: npm test
-      - name: Build published Sanity content (manual preview deployment)
-        run: npm run build
-        env:
-          PUBLIC_SITE_URL: https://technicsan.com
-          PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
-          PUBLIC_HOSTING: github-pages
-          PUBLIC_LAUNCH_READY: 'false'
-          CONTENT_SOURCE: sanity
-      - uses: actions/upload-pages-artifact@v4
+      - name: Build published Sanity content
+        run: npm run cloudflare:build -- ${{ inputs.search_release && '--search-release' || '' }}
+      - uses: actions/upload-artifact@v4
         with:
+          name: cloudflare-site
           path: dist
+          retention-days: 7
   deploy:
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      actions: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Publish website
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: cloudflare-site
+          path: dist
+      - name: Publish verified artifact
+        run: npm run cloudflare:deploy -- --skip-build ${{ inputs.search_release && '--search-release' || '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT || 'technicsan' }}

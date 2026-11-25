@@ -21,6 +21,13 @@ const base = '/' + (process.env.PUBLIC_BASE_PATH || '').split('/').filter(Boolea
 const stripBase = (path) =>
   base !== '/' && path.startsWith(base + '/') ? path.slice(base.length) : path;
 let checkedLinks = 0;
+const indexed = new Set();
+assert.ok(
+  !files.some((file) => file.startsWith('dist/design/')),
+  'Design review routes shipped to production',
+);
+const rootHtml = documents.get('dist/index.html');
+assert.ok(rootHtml?.includes('/en/'), 'The domain root must lead to English');
 for (const [file, html] of documents) {
   assert.match(html, /<title>.+<\/title>/, `Title missing: ${file}`);
   if (file === 'dist/index.html') continue;
@@ -51,6 +58,11 @@ for (const [file, html] of documents) {
   );
   const canonical = html.match(/rel="canonical" href="([^"]+)"/)?.[1];
   assert.ok(canonical, `Canonical missing: ${file}`);
+  assert.equal(new URL(canonical).origin, new URL(origin).origin, `Wrong canonical host: ${file}`);
+  const isIndexed = /name="robots" content="index,follow"/.test(html);
+  if (isIndexed) indexed.add(canonical);
+  if (/dist\/(en\/products|tr\/urunler)\/index.html$/.test(file))
+    assert.ok(!isIndexed, `Interactive catalogue must stay noindex: ${file}`);
   for (const script of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g))
     JSON.parse(script[1]);
   for (const link of html.matchAll(/(?:href|src)="(\/[^"#]*)"/g)) {
@@ -73,11 +85,29 @@ for (const [file, html] of documents) {
         : `dist${pathname.endsWith('/') ? pathname : `${pathname}/`}index.html`,
     );
     assert.ok(other, `Missing alternate: ${link[2]}`);
-    assert.ok(other.includes(`href="${canonical}"`), `Non-reciprocal language link: ${file}`);
+    assert.match(
+      other,
+      /name="robots" content="index,follow"/,
+      `Alternate points to an excluded page: ${file}`,
+    );
+    if (link[1] !== 'x-default')
+      assert.ok(other.includes(`href="${canonical}"`), `Non-reciprocal language link: ${file}`);
   }
   if (process.env.PUBLIC_LAUNCH_READY !== 'true')
     assert.match(html, /content="noindex,follow"/, `Preview is indexable: ${file}`);
 }
+const sitemap = await readFile('dist/sitemap.xml', 'utf8');
+const listed = new Set(
+  [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replaceAll('&amp;', '&')),
+);
+assert.deepEqual(listed, indexed, 'Sitemap must contain exactly the indexable canonical URLs');
+const robots = await readFile('dist/robots.txt', 'utf8');
+assert.ok(
+  process.env.PUBLIC_LAUNCH_READY === 'true'
+    ? robots.includes('Allow: /\n') && !robots.includes('Disallow: /\n')
+    : robots.includes('Disallow: /\n'),
+  'Crawl rules do not match release mode',
+);
 console.log(
   `Built-site verification passed: ${files.length} pages, ${checkedLinks} internal link/asset references, valid JSON-LD and reciprocal language links.`,
 );

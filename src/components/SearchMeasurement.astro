@@ -1,0 +1,97 @@
+---
+import type { Locale } from '../lib/types';
+import { getContent } from '../lib/content';
+import { l } from '../lib/i18n';
+interface Props {
+  locale: Locale;
+  family?: string;
+  enabled: boolean;
+}
+const { locale, family, enabled } = Astro.props;
+const id = import.meta.env.PUBLIC_GA4_MEASUREMENT_ID || '';
+// Activation requires an owner-controlled property with enhanced measurement disabled.
+const active =
+  enabled && import.meta.env.PUBLIC_ANALYTICS_REVIEWED === 'true' && /^G-[A-Z0-9]+$/.test(id);
+const { machines } = await getContent();
+---
+
+{active && (
+  <aside
+    class="measurement-choice"
+    data-measurement
+    data-canonical-origin={
+      new URL(import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321').origin
+    }
+    data-id={id}
+    data-language={locale}
+    data-family={family}
+    data-path={Astro.url.pathname}
+    data-products={JSON.stringify(Object.fromEntries(machines.map((m) => [m.id, m.categoryId])))}
+    aria-label={l(locale, 'İstatistik tercihleri', 'Analytics preferences')}
+  >
+    <div data-consent-notice hidden>
+      <p>
+        {l(
+          locale,
+          'Ziyaret ve iletişim etkileşimlerini ölçmek için isteğe bağlı Google Analytics kullanımına izin verir misiniz? Form içeriğiniz istatistiklere gönderilmez.',
+          'Allow optional Google Analytics to measure visits and contact interactions? Your form contents are never sent to analytics.',
+        )}
+      </p>
+      <div>
+        <button type="button" data-consent-accept>
+          {l(locale, 'İzin ver', 'Allow analytics')}
+        </button>
+        <button type="button" data-consent-decline>
+          {l(locale, 'Reddet', 'Decline')}
+        </button>
+      </div>
+    </div>
+    <button class="measurement-settings" type="button" data-consent-settings hidden>
+      {l(locale, 'İstatistik tercihleri', 'Analytics preferences')}
+    </button>
+  </aside>
+)}
+<script>
+  import { initMeasurement } from '../scripts/measurement';
+  initMeasurement();
+</script>
+<style>
+  .measurement-choice {
+    position: fixed;
+    z-index: 90;
+    bottom: 16px;
+    left: 16px;
+    max-width: min(440px, calc(100vw - 32px));
+    font-size: 14px;
+    color: #003b27;
+  }
+  .measurement-choice [data-consent-notice] {
+    padding: 22px;
+    background: #fff;
+    border: 1px solid #a7b8ad;
+    box-shadow: 0 8px 40px #001b1526;
+  }
+  .measurement-choice p {
+    margin: 0 0 16px;
+    line-height: 1.5;
+  }
+  .measurement-choice [data-consent-notice] div {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .measurement-choice button {
+    background: #eef2ee;
+    color: #003b27;
+    border: 1px solid #85998c;
+    padding: 10px 16px;
+    cursor: pointer;
+    font: inherit;
+  }
+  .measurement-choice [data-consent-accept] {
+    background: #9bc900;
+  }
+  .measurement-settings {
+    font-size: 12px !important;
+  }
+</style>

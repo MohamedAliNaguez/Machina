@@ -14,7 +14,8 @@ interface Props {
   section: Section;
 }
 const { locale, section } = Astro.props;
-const { settings, articles, brands, categories } = await getContent();
+const { settings, articles, brands, categories: allCategories } = await getContent();
+const categories = allCategories.filter((c) => (c.published ?? ['en', 'tr']).includes(locale));
 const copy = labels(locale),
   visibleArticles = articles.filter((a) => a.published.includes(locale));
 const featured = visibleArticles[0];
@@ -138,7 +139,7 @@ const privacySections = [
             <a href={url(locale, 'guides', featured.slug[locale])}>
               <img
                 src={withBase(featured.image)}
-                alt={l(locale, 'Ürün fotoğrafı için yer tutucu', 'Product photography placeholder')}
+                alt={featured.imageAlt?.[locale] || ''}
                 width="1200"
                 height="500"
                 loading="eager"

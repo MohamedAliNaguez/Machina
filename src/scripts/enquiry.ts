@@ -158,7 +158,11 @@ export function initEnquiryForm() {
       status.className = 'form-status success';
       window.dispatchEvent(
         new CustomEvent('enquiry:accepted', {
-          detail: { language: data.language, machineId: data.machineId || null },
+          detail: {
+            language: data.language,
+            machineId: data.machineId || null,
+            preview: !!result.preview,
+          },
         }),
       );
       form.reset();

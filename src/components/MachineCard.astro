@@ -38,6 +38,7 @@ const href = url(locale, 'machines', machine.slug[locale]);
       <span class="product-model-badge">{l(locale, '3D önizleme', '3D preview')}</span>
     )}
     <ProductVisual
+      sizes="(max-width: 640px) 90vw, (max-width: 1024px) 44vw, 30vw"
       src={machine.images[0].src}
       alt={machine.images[0].alt[locale]}
       locale={locale}

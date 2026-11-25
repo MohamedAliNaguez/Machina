@@ -6,7 +6,7 @@ Open **https://technicsan-content.sanity.studio/** and sign in with the Google a
 
 - **Products:** fourteen catalogue entries, bilingual descriptions, photographs, specifications, configuration tables, brochures and review status.
 - **Guides & articles:** create a guide, add Turkish and English text, a cover image, product-family reference, reading time, sources and actual author/reviewer details.
-- **Five product families:** edit the existing family descriptions and buyer requirements. The five families are fixed.
+- **Five product families:** edit landing-page explanations, selection advice, buyer questions, production evidence, metadata and buyer requirements. The five families are fixed.
 - **Company & launch settings:** public contact details and approved company/privacy copy. Review switches remain off until approval.
 
 The approved logo, slogan, visual design, history animation and product-3D registry remain in the website project. They are not arbitrary editorial fields.
@@ -14,13 +14,13 @@ The approved logo, slogan, visual design, history animation and product-3D regis
 ## Write, review and publish
 
 1. Open a product or create a guide. Changes save as a draft automatically.
-2. Fill both languages and their URL fields. Keep existing URLs stable after publication.
+2. Complete the languages selected for publication and keep both stable URL fields. Each language has a separate SEO approval; incomplete translations stay excluded.
 3. Upload genuine product images, describe each in both languages and record rights/illustrative status honestly. Generic placeholder images remain labelled.
 4. Use **Bilingual preview** to inspect the saved draft inside your signed-in Studio. This is a content preview, not a full website layout preview.
 5. Resolve validation errors, then select **Publish** to make the approved content available to the website build.
 6. Refresh the local website after a few seconds to see published changes. Unpublished drafts do not appear on it.
 
-The latest three published guides appear on the homepage automatically. Each guide gets its own page and appears in Guides. A guide can be saved as a draft without publishing it. No sample articles were added to the published collection.
+The latest three published guides appear on the homepage automatically. Each guide gets its own page and appears in Guides. A guide can be saved as a draft without publishing it. Five private guide drafts are prepared, one per product family. No draft articles were added to the published collection.
 
 ## Publishing content and deploying the website
 
@@ -43,3 +43,7 @@ Sanity Free uses a public dataset. Treat published fields and uploaded assets as
 - Backup including assets: from `studio/`, use the authenticated Sanity CLI `npx sanity datasets export production ../exports/technicsan-backup.tar.gz`. Use a unique dated filename for each backup and keep it private. Export before migrations; restore into a separate test dataset before considering production recovery.
 
 Published content is fetched at build time. Production is static and requires a new manual deployment to reflect edits. Local development refreshes its content cache after two seconds. Missing or invalid CMS content fails the build; it does not silently substitute sample data.
+
+## Search approval
+
+Use the **Search readiness** tab on a product, category, article or company settings document. It reports company prerequisites and language-specific missing facts, metadata, evidence, genuine photography and author/reviewer dates. Publishing does not automatically approve a page for search. See [SEO release](SEO-RELEASE.md) before selecting the manual search-release deployment option.

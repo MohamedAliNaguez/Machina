@@ -1,14 +1,18 @@
 # Operations and deployment
 
+## Current Cloudflare deployment
+
+Cloudflare Pages now serves technicsan.com with valid HTTPS. Namecheap retains registration and Private Email; Formspree retains sales enquiries. See [the current migration runbook](CLOUDFLARE-MIGRATION.md). Use `npm run cloudflare:build` / `npm run cloudflare:deploy`; production keeps indexing disabled. The older GitHub and native D1 instructions below are historical/optional, not the current deployment path.
+
 ## Free development
 
 Use `npm run dev`. Local API storage lives in `.local/enquiries.sqlite` and is ignored by Git. Only enter test data. No vendor account, email destination or billing setup is required. Astro telemetry is disabled for project scripts through an environment flag, without changing global machine settings.
 
-## GitHub-only hosted preview
+## Previous GitHub-only hosted preview (archived)
 
-The owner chose free GitHub Pages hosting in the public `MohamedAliNaguez/Machina` repository. `.github/workflows/deploy.yml` builds with Node 24, runs type checks and unit tests, and publishes a Pages artifact. GitHub's own deployment token is used; no provider secrets are required. Changes to `main` redeploy automatically. Pages must use **GitHub Actions** as its source.
+The owner chose free GitHub Pages hosting in the public `MohamedAliNaguez/Machina` repository. `.github/workflows/deploy.yml` builds with Node 24, runs type checks and unit tests, and publishes a Pages artifact. GitHub's own deployment token is used; no provider secrets are required. Deployment is manual-only; pushes run verification without publishing. Pages must use **GitHub Actions** as its source.
 
-The build sets `PUBLIC_HOSTING=github-pages`, `PUBLIC_LAUNCH_READY=false`, `CONTENT_SOURCE=sample`, `PUBLIC_SITE_URL` to Pages' origin and `PUBLIC_BASE_PATH` to its repository path. `withBase` prefixes native routes and public image paths; Astro prefixes bundled scripts, styles, fonts and CSS artwork. The build verifier rejects root-relative links that escape that repository prefix. The root HTML redirects to the repository's Turkish homepage; the custom 404 also retains the prefix.
+The build sets `PUBLIC_HOSTING=github-pages`, `CONTENT_SOURCE=sanity` and `PUBLIC_SITE_URL=https://technicsan.com`. Its manual `search_release` input defaults to false. Enabling it requires the shared company/HTTPS preflight and only indexes individually approved language versions. `PUBLIC_BASE_PATH` remains derived from Pages. `withBase` prefixes native routes and public image paths; Astro prefixes bundled scripts, styles, fonts and CSS artwork. The build verifier rejects root-relative links that escape that repository prefix. The root HTML redirects to the English homepage; the custom 404 also retains the prefix.
 
 GitHub Pages serves static files only. It does not execute the Cloudflare Functions or notification Worker. The hosted sales form uses the company Formspree form **TECHNICSAN Sales Enquiries**, directed to the verified **info@technicsan.com** recipient. Its public form ID lives in `src/data/enquiry-delivery.json`; no API key or mailbox password belongs in the site or repository. The Free plan was selected; do not enable paid upgrades automatically. Monitor its submission allowance in the company Formspree account.
 
@@ -22,7 +26,7 @@ The phone field pairs a native country-code selector with the number input. Tür
 
 All preview pages retain `noindex` metadata and sample/draft labels. A repository-scoped robots.txt cannot control the root github.io host; per-page metadata is the indexing control. Neither prevents access: both the website and repository are public by the owner's choice. Private `.env`, `.local`, database, export, generated workspace and credential files are ignored by Git. Build output includes `.nojekyll` and omits Cloudflare-specific `_headers`/`_redirects` files.
 
-For rollback, rerun the successful GitHub Pages workflow for a known revision or revert the offending change on `main`. Keep the successful deployment run and commit reference. A custom domain can be configured later; the workflow derives its origin/base from Pages so paths remain correct after rebuilding.
+For rollback, rerun the successful GitHub Pages workflow for a known revision or revert the offending change on `main`. Keep the successful deployment run and commit reference. The current custom domain is technicsan.com. Valid HTTPS, canonical-host redirects and the page-level release checks are required for indexing. See [SEO release](SEO-RELEASE.md).
 
 Official setup references: [GitHub Pages custom workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages) and [Astro GitHub Pages guide](https://docs.astro.build/en/guides/deploy/github/).
 

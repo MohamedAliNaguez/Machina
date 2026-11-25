@@ -1,5 +1,7 @@
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile, rm } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import delivery from '../src/data/enquiry-delivery.json' with { type: 'json' };
+import { createSecurityHeaders } from '../deployment/cloudflare/worker.mjs';
 try {
   process.loadEnvFile();
 } catch {}
@@ -9,7 +11,7 @@ const base = '/' + (process.env.PUBLIC_BASE_PATH || '').split('/').filter(Boolea
 const hostedOnGitHub = process.env.PUBLIC_HOSTING === 'github-pages';
 if (
   live &&
-  hostedOnGitHub &&
+  (hostedOnGitHub || process.env.PUBLIC_ENQUIRY_PROVIDER === 'formspree') &&
   !/^[a-z0-9]{6,32}$/.test(process.env.PUBLIC_FORMSPREE_FORM_ID ?? delivery.formspreeFormId ?? '')
 )
   throw new Error('Live static hosting requires a configured Formspree endpoint.');
@@ -34,11 +36,25 @@ async function walk(dir) {
     )
   ).flat();
 }
+// Development experiments must never be shipped, even in review-mode deployments.
+await rm('dist/design', { recursive: true, force: true });
 const files = await walk('dist');
+const xml = (value) =>
+  value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
 const urls = [];
 const redirects = [];
+const inlineScriptHashes = new Set();
 for (const file of files.filter((f) => f.endsWith('.html'))) {
   let html = await readFile(file, 'utf8');
+  // Astro inlines small modules. Authorize their exact contents without unsafe-inline.
+  for (const [, attributes, source] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) {
+    if (!source.trim() || /\bsrc\s*=|application\/ld\+json/.test(attributes)) continue;
+    inlineScriptHashes.add(`'sha256-${createHash('sha256').update(source).digest('base64')}'`);
+  }
   const redirect = html.match(/http-equiv="refresh" content="0;url=([^\"]+)"/);
   if (redirect && file !== 'dist/index.html') {
     // Legacy route names remain technical aliases; never repeat retired supplier names in the page body.
@@ -55,12 +71,13 @@ for (const file of files.filter((f) => f.endsWith('.html'))) {
     const canonical = html.match(/rel="canonical" href="([^"]+)"/)?.[1];
     if (canonical) {
       const alternates = [...html.matchAll(/rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)]
-        .map((m) => `<xhtml:link rel="alternate" hreflang="${m[1]}" href="${m[2]}"/>`)
+        .map((m) => `<xhtml:link rel="alternate" hreflang="${xml(m[1])}" href="${xml(m[2])}"/>`)
         .join('');
-      urls.push(`<url><loc>${canonical}</loc>${alternates}</url>`);
+      urls.push(`<url><loc>${xml(canonical)}</loc>${alternates}</url>`);
     }
   }
 }
+if (live && !urls.length) throw new Error('Search release blocked: no approved indexable pages.');
 await writeFile(
   'dist/sitemap.xml',
   `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${urls.join('')}</urlset>`,
@@ -71,13 +88,43 @@ await writeFile(
     ? `User-agent: *\nAllow: /\nDisallow: /api/\nSitemap: ${new URL((base === '/' ? '' : base) + '/sitemap.xml', site).href}\n`
     : 'User-agent: *\nDisallow: /\n',
 );
+const securityHeaders = createSecurityHeaders([...inlineScriptHashes]);
 await writeFile(
   'dist/_headers',
-  `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  Content-Security-Policy: default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://cdn.sanity.io; font-src 'self'; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'\n${live ? '' : '  X-Robots-Tag: noindex, follow\n'}`,
+  '/*\n' +
+    Object.entries(securityHeaders)
+      .map(([name, value]) => `  ${name}: ${value}\n`)
+      .join('') +
+    (live ? '' : '  X-Robots-Tag: noindex, follow\n'),
 );
+if (
+  process.env.PUBLIC_HOSTING === 'cloudflare' &&
+  process.env.PUBLIC_ENQUIRY_PROVIDER === 'formspree'
+) {
+  const source = await readFile('deployment/cloudflare/worker.mjs', 'utf8');
+  const aliases = Object.fromEntries(redirects.map((line) => line.split(' ').slice(0, 2)));
+  await writeFile(
+    'dist/_worker.js',
+    source
+      .replace('/*__TECHNICSAN_SEARCH_RELEASE__*/ false', String(live))
+      .replace('/*__TECHNICSAN_ALIASES__*/ {}', JSON.stringify(aliases))
+      .replace('/*__TECHNICSAN_SCRIPT_HASHES__*/ []', JSON.stringify([...inlineScriptHashes])),
+  );
+  await writeFile(
+    'dist/_routes.json',
+    JSON.stringify({
+      version: 1,
+      include: ['/*'],
+      exclude: ['/_astro/*', '/images/*', '/brand/*', '/icons/*', '/favicon.svg'],
+    }),
+  );
+} else {
+  await rm('dist/_worker.js', { force: true });
+  await rm('dist/_routes.json', { force: true });
+}
 await writeFile(
   'dist/_redirects',
-  '/ ' + (base === '/' ? '' : base) + '/tr/ 302\n' + redirects.join('\n') + '\n',
+  '/ ' + (base === '/' ? '' : base) + '/en/ 302\n' + redirects.join('\n') + '\n',
 );
 if (hostedOnGitHub) {
   await writeFile('dist/.nojekyll', '');

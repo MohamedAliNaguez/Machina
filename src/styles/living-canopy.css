@@ -418,3 +418,9 @@
     position: absolute;
   }
 }
+
+@media (min-width: 901px) and (max-width: 1500px) {
+  .pressure-site .living-copy > p {
+    max-width: calc(22vw - 8px);
+  }
+}

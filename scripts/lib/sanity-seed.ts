@@ -76,13 +76,13 @@ export async function prepareSanitySeed(
   for (const article of content.articles) {
     const _id = articleDocumentId(article.id);
     if (!absent(_id)) continue;
-    const { categoryId, image: src, ...fields } = article;
+    const { categoryId, image: src, imageAlt, ...fields } = article;
     documents.push({
       _id,
       _type: 'article',
       ...fields,
       category: ref(categoryDocumentId(categoryId)),
-      image: { _type: 'image', asset: ref(await upload(src, 'image')) },
+      image: { _type: 'image', alt: imageAlt, asset: ref(await upload(src, 'image')) },
     });
   }
   return documents.map(keyed);

@@ -11,7 +11,7 @@ interface Props {
   article: Article;
 }
 const { locale, article } = Astro.props;
-const { settings, categories, machines } = await getContent();
+const { categories, machines } = await getContent();
 const category = categories.find((c) => c.id === article.categoryId);
 const related = machines.find(
   (m) => m.categoryId === article.categoryId && m.kind === 'new' && m.published.includes(locale),
@@ -23,13 +23,24 @@ const schema = article.sample
       {
         '@context': 'https://schema.org',
         '@type': 'Article',
+        '@id': new URL(url(locale, 'guides', article.slug[locale]), origin).href + '#article',
+        mainEntityOfPage: {
+          '@id': new URL(url(locale, 'guides', article.slug[locale]), origin).href + '#webpage',
+        },
+        datePublished: article.publishedAt,
         headline: article.title[locale],
         description: article.excerpt[locale],
         image: new URL(withBase(article.image), origin).href,
         author: article.author ? { '@type': 'Person', name: article.author } : undefined,
-        dateModified: article.reviewedAt,
+        dateModified:
+          article.publishedAt && article.reviewedAt
+            ? Date.parse(article.reviewedAt) >= Date.parse(article.publishedAt)
+              ? article.reviewedAt
+              : article.publishedAt
+            : undefined,
+        contributor: article.reviewer ? { '@type': 'Person', name: article.reviewer } : undefined,
         inLanguage: locale,
-        publisher: { '@type': 'Organization', name: settings.legalName || settings.name },
+        publisher: { '@id': new URL('/#organization', origin).href },
       },
     ];
 const title = article.title[locale].toLocaleUpperCase(locale === 'tr' ? 'tr-TR' : 'en-GB');
@@ -91,6 +102,19 @@ const answer = article.excerpt[locale];
               }).format(new Date(article.reviewedAt))}
         </div>
       )}
+      {article.publishedAt && !article.sample && (
+        <p>
+          {l(locale, 'Yayımlanma: ', 'Published: ')}
+          <time datetime={article.publishedAt}>
+            {new Date(article.publishedAt).toLocaleDateString(locale)}
+          </time>
+        </p>
+      )}
+      {category && (
+        <a class="text-link" href={url(locale, 'categories', category.slug[locale])}>
+          {category.name[locale]}
+        </a>
+      )}
       <div class="article-answer">
         <h2>{answerTitle}</h2>
         <p>{answer}</p>
@@ -106,7 +130,7 @@ const answer = article.excerpt[locale];
               <img
                 class="article-inline-image"
                 src={withBase(article.image)}
-                alt={l(locale, 'Ürün fotoğrafı için yer tutucu', 'Product photography placeholder')}
+                alt={article.imageAlt?.[locale] || ''}
                 width="1200"
                 height="500"
                 loading="eager"

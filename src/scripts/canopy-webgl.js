@@ -12,6 +12,7 @@ import { withBase } from '../lib/paths';
 
 /** Independently skinned CGI surfaces; every branch is a deforming mesh, not a page image. */
 export async function createCanopyRenderer(root) {
+  const mobile = matchMedia('(max-width: 900px)').matches;
   const host = root.querySelector('.living-visual'),
     svg = root.querySelector('.living-tree');
   const renderer = new THREE.WebGLRenderer({
@@ -34,7 +35,9 @@ export async function createCanopyRenderer(root) {
     textures = await Promise.all(
       ['trunk-skin', ...canopyNodes.slice(1).map((_, i) => 'branch-skin-' + (i + 1))].map(
         async (name) => {
-          const texture = await loader.loadAsync(withBase('/images/history/' + name + '.webp'));
+          const texture = await loader.loadAsync(
+            withBase('/images/history/' + name + (mobile ? '-mobile' : '') + '.webp'),
+          );
           texture.colorSpace = THREE.SRGBColorSpace;
           texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
           return texture;
@@ -45,8 +48,13 @@ export async function createCanopyRenderer(root) {
     renderer.dispose();
     throw error;
   }
-  const columns = 88,
-    rows = 20;
+  // Upload textures in separate tasks so one first frame cannot monopolize input.
+  for (const texture of textures) {
+    renderer.initTexture(texture);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+  }
+  const columns = mobile ? 60 : 88,
+    rows = mobile ? 16 : 20;
   function makeSurface(name, index, trunk) {
     const geometry = new THREE.BufferGeometry(),
       positions = new Float32Array((columns + 1) * (rows + 1) * 3),
@@ -85,6 +93,18 @@ export async function createCanopyRenderer(root) {
     makeSurface('trunk-skin', 0, true),
     ...canopyNodes.slice(1).map((_, i) => makeSurface('branch-skin-' + (i + 1), i + 1, false)),
   ];
+  // Precompile without stalling the first displayed frame when the GPU supports it.
+  try {
+    await renderer.compileAsync(scene, camera);
+  } catch (error) {
+    surfaces.forEach((surface) => {
+      surface.geometry.dispose();
+      surface.material.dispose();
+    });
+    textures.forEach((texture) => texture.dispose());
+    renderer.dispose();
+    throw error;
+  }
   function profile(values, t) {
     const x = clamp(t) * 80,
       i = Math.min(79, Math.floor(x));
@@ -166,7 +186,7 @@ export async function createCanopyRenderer(root) {
   root.dataset.renderer = 'webgl';
   renderer.domElement.addEventListener('webglcontextlost', (event) => {
     event.preventDefault();
-    delete root.dataset.renderer;
+    root.dataset.renderer = 'svg';
     renderer.domElement.style.display = 'none';
   });
   return {
