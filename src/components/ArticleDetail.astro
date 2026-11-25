@@ -74,11 +74,14 @@ const answer = article.excerpt[locale];
   socialImage={article.image}
 >
   <header class="guide-article-hero">
+    <div class="container guide-cover-bar">
+      <a class="guide-back" href={url(locale, 'guides')}>
+        {l(locale, 'TECHNICSAN / REHBERLER', 'TECHNICSAN / GUIDES')}
+      </a>
+      <span>{l(locale, 'DAHA İYİ KARARLAR İÇİN', 'KNOWLEDGE FOR BETTER DECISIONS')}</span>
+    </div>
     <div class="container guide-hero-grid">
       <div class="guide-hero-copy">
-        <a class="guide-back" href={url(locale, 'guides')}>
-          {l(locale, 'TECHNICSAN / REHBERLER', 'TECHNICSAN / GUIDES')}
-        </a>
         <div class="guide-hero-label">
           <span>{category?.name[locale] || article.tag[locale]}</span>
           {article.sample && (
@@ -88,15 +91,7 @@ const answer = article.excerpt[locale];
           )}
         </div>
         <h1>{article.title[locale]}</h1>
-        <div class="guide-hero-meta">
-          <span>
-            {readingMinutes(article, locale)} {l(locale, 'dakika okuma', 'minute read')}
-          </span>
-          <span>
-            {article.sections.length} {l(locale, 'bölüm', 'sections')}
-          </span>
-          <span>{l(locale, 'Satın alma rehberi', 'Buyer’s guide')}</span>
-        </div>
+        <p class="guide-hero-deck">{answer}</p>
       </div>
       <figure class="guide-hero-visual">
         <img
@@ -112,9 +107,37 @@ const answer = article.excerpt[locale];
         </figcaption>
       </figure>
     </div>
+    <div class="guide-facts-band">
+      <div class="container guide-facts">
+        <div>
+          <span>{l(locale, 'ÜRÜN GRUBU', 'PRODUCT FAMILY')}</span>
+          <strong>{category?.name[locale]}</strong>
+        </div>
+        <div>
+          <span>{l(locale, 'OKUMA SÜRESİ', 'READING TIME')}</span>
+          <strong>
+            {readingMinutes(article, locale)} {l(locale, 'dakika', 'minutes')}
+          </strong>
+        </div>
+        <div>
+          <span>{l(locale, 'REHBER İÇERİĞİ', 'GUIDE STRUCTURE')}</span>
+          <strong>
+            {article.sections.length} {l(locale, 'odaklı bölüm', 'focused sections')}
+          </strong>
+        </div>
+      </div>
+    </div>
   </header>
   <div class="container guide-reader">
     <aside class="guide-sidebar">
+      <div class="guide-rail-heading">
+        <span class="guide-rail-mark" aria-hidden="true"></span>
+        <span>
+          TECHNICSAN
+          <br />
+          {l(locale, 'BİLGİ REHBERİ', 'FIELD GUIDE')}
+        </span>
+      </div>
       <details class="guide-outline" open>
         <summary>
           {l(locale, 'Bu rehberde', 'Inside this guide')}
@@ -162,10 +185,6 @@ const answer = article.excerpt[locale];
           </time>
         </p>
       )}
-      <div class="article-answer">
-        <h2>{l(locale, 'Kısa yanıt', 'At a glance')}</h2>
-        <p>{answer}</p>
-      </div>
       {article.sections.map((section, index) => (
         <section class="guide-section" id={'article-section-' + index}>
           <h2>
