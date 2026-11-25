@@ -36,3 +36,27 @@ test('rich bilingual guides provide mobile tables, checklists, related products 
     await page.emulateMedia({ media: 'screen' });
   }
 });
+
+test('guide reader keeps editorial typography, responsive contents and working section navigation', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/design/guides/en/cement-bulker-quotation-checklist/');
+  const outline = page.locator('.guide-outline');
+  await expect(outline).toHaveAttribute('open', '');
+  expect(
+    await page
+      .locator('.guide-section h2')
+      .first()
+      .evaluate((node) => getComputedStyle(node).fontFamily),
+  ).toContain('Source Sans 3');
+  const target = page.locator('.guide-outline nav a').nth(2);
+  await target.click();
+  await expect(page).toHaveURL(/#article-section-2$/);
+  await expect(target).toHaveAttribute('aria-current', 'location');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.reload();
+  await expect(outline).not.toHaveAttribute('open');
+  await outline.locator('summary').click();
+  await expect(outline.locator('nav')).toBeVisible();
+});

@@ -73,29 +73,74 @@ const answer = article.excerpt[locale];
   schema={schema}
   socialImage={article.image}
 >
-  <header class="guide-hub-intro">
-    <div class="container">
-      <span class="eyebrow">
-        TECHNICSAN / {article.tag[locale]}
-        {article.sample ? l(locale, ' · TASLAK', ' · DRAFT') : ''}
-      </span>
-      <h1>{article.title[locale]}</h1>
+  <header class="guide-article-hero">
+    <div class="container guide-hero-grid">
+      <div class="guide-hero-copy">
+        <a class="guide-back" href={url(locale, 'guides')}>
+          {l(locale, 'TECHNICSAN / REHBERLER', 'TECHNICSAN / GUIDES')}
+        </a>
+        <div class="guide-hero-label">
+          <span>{category?.name[locale] || article.tag[locale]}</span>
+          {article.sample && (
+            <span class="guide-review-label">
+              {l(locale, 'İnceleme nüshası', 'Review edition')}
+            </span>
+          )}
+        </div>
+        <h1>{article.title[locale]}</h1>
+        <div class="guide-hero-meta">
+          <span>
+            {readingMinutes(article, locale)} {l(locale, 'dakika okuma', 'minute read')}
+          </span>
+          <span>
+            {article.sections.length} {l(locale, 'bölüm', 'sections')}
+          </span>
+          <span>{l(locale, 'Satın alma rehberi', 'Buyer’s guide')}</span>
+        </div>
+      </div>
+      <figure class="guide-hero-visual">
+        <img
+          src={withBase(article.image)}
+          alt={article.imageAlt?.[locale] || ''}
+          width="1200"
+          height="800"
+          fetchpriority="high"
+        />
+        <figcaption>
+          <span>TECHNICSAN</span>
+          <span>{l(locale, 'ÜRÜN VE UYGULAMA', 'EQUIPMENT & APPLICATION')}</span>
+        </figcaption>
+      </figure>
     </div>
   </header>
   <div class="container guide-reader">
-    <nav class="reading-outline" aria-label={l(locale, 'Bu sayfada', 'On this page')}>
-      <span>{l(locale, 'BU SAYFADA', 'ON THIS PAGE')}</span>
-      {article.sections.map((section, index) => (
-        <a href={'#article-section-' + index}>{section.heading[locale]}</a>
-      ))}
-    </nav>
-    <article class="steel-prose" data-guide-id={article.id} data-guide-family={article.categoryId}>
-      <p>
-        {readingMinutes(article, locale)} {l(locale, 'dakika okuma', 'minute read')}
-      </p>
-      <button type="button" class="guide-print">
-        {l(locale, 'Rehberi yazdır', 'Print guide')}
-      </button>
+    <aside class="guide-sidebar">
+      <details class="guide-outline" open>
+        <summary>
+          {l(locale, 'Bu rehberde', 'Inside this guide')}
+          <span>{String(article.sections.length).padStart(2, '0')}</span>
+        </summary>
+        <nav aria-label={l(locale, 'Bu sayfada', 'On this page')}>
+          {article.sections.map((section, index) => (
+            <a href={'#article-section-' + index}>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              {section.heading[locale]}
+            </a>
+          ))}
+        </nav>
+      </details>
+      <div class="guide-sidebar-tools">
+        <button type="button" class="guide-print">
+          {l(locale, 'Rehberi yazdır', 'Print this guide')}
+        </button>
+        {category && (
+          <a href={url(locale, 'categories', category.slug[locale])}>
+            {l(locale, 'Ürün grubunu inceleyin', 'Explore the product family')}
+          </a>
+        )}
+      </div>
+    </aside>
+    <article class="guide-prose" data-guide-id={article.id} data-guide-family={article.categoryId}>
       {!article.sample && (article.author || article.reviewedAt) && (
         <div class="article-byline">
           {article.author}
@@ -117,39 +162,22 @@ const answer = article.excerpt[locale];
           </time>
         </p>
       )}
-      {category && (
-        <a class="text-link" href={url(locale, 'categories', category.slug[locale])}>
-          {category.name[locale]}
-        </a>
-      )}
       <div class="article-answer">
         <h2>{l(locale, 'Kısa yanıt', 'At a glance')}</h2>
         <p>{answer}</p>
       </div>
       {article.sections.map((section, index) => (
-        <section id={'article-section-' + index}>
-          <h2>{section.heading[locale]}</h2>
+        <section class="guide-section" id={'article-section-' + index}>
+          <h2>
+            <span class="guide-section-no" aria-hidden="true">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            {section.heading[locale]}
+          </h2>
           {section.blocks?.length ? (
             <GuideBlocks blocks={section.blocks} locale={locale} />
           ) : (
             section.text[locale].split('\n\n').map((paragraph) => <p>{paragraph}</p>)
-          )}
-          {index === 0 && (
-            <>
-              <img
-                class="article-inline-image guide-cover"
-                src={withBase(article.image)}
-                alt={article.imageAlt?.[locale] || ''}
-                width="1200"
-                height="500"
-                loading="eager"
-              />
-              {article.sample && (
-                <p class="article-image-caption">
-                  {l(locale, 'Ürün fotoğrafı eklenecek', 'Product photography pending')}
-                </p>
-              )}
-            </>
           )}
         </section>
       ))}
@@ -172,7 +200,7 @@ const answer = article.excerpt[locale];
           <h2>{l(locale, 'İlgili ekipmanlar', 'Related equipment')}</h2>
           {related.map((machine) => (
             <div data-guide-product={article.id}>
-              <MachineCard machine={machine} locale={locale} compact />
+              <MachineCard machine={machine} locale={locale} />
             </div>
           ))}
         </div>
@@ -183,6 +211,7 @@ const answer = article.excerpt[locale];
         </a>
       )}
       <aside class="guide-enquiry">
+        <span class="guide-kicker">{l(locale, 'BİR SONRAKİ ADIM', 'THE NEXT STEP')}</span>
         <h2>{l(locale, 'Gereksinimlerinizi görüşün', 'Discuss your requirements')}</h2>
         <p>
           {l(
@@ -201,4 +230,24 @@ const answer = article.excerpt[locale];
 
 <script>
   document.querySelector('.guide-print')?.addEventListener('click', () => window.print());
+  const outline = document.querySelector<HTMLDetailsElement>('.guide-outline');
+  if (outline && matchMedia('(max-width: 900px)').matches) outline.open = false;
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('.guide-section'));
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.guide-outline nav a'));
+  if (sections.length && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries
+          .filter((item) => item.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (!entry) return;
+        links.forEach((link) => {
+          if (link.hash === '#' + entry.target.id) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+      },
+      { rootMargin: '-120px 0px -45% 0px', threshold: 0 },
+    );
+    sections.forEach((section) => observer.observe(section));
+  }
 </script>
