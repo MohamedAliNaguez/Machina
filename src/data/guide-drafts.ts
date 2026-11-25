@@ -1,3 +1,4 @@
+import { cementProcurementGuide } from './cement-procurement';
 import type { Article, Localized } from '../lib/types';
 const bi = (en: string, tr: string): Localized => ({ en, tr });
 const configs: Record<
@@ -306,6 +307,8 @@ const configs: Record<
   },
 };
 export function enhanceGuideDraft(article: Article): Article {
+  if (article.id === 'guide-cement-bulker-enquiry')
+    return cementProcurementGuide({ ...article, relatedProductIds: ['v-type-silobas'] });
   const c = configs[article.categoryId];
   if (!c) return article;
   const text = bi(

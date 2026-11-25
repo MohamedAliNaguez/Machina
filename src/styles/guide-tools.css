@@ -1,0 +1,328 @@
+/* Tools are contained workspaces. Their forms never share values with analytics. */
+.buyer-tool {
+  margin: 32px 0;
+  border: 1px solid #bdcdb3;
+  background: #f0f4e9;
+  padding: 32px;
+}
+.buyer-tool-heading {
+  border-bottom: 1px solid #c4d2bb;
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+}
+.buyer-tool-label {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: #4b642e;
+  font-weight: 600;
+}
+.steel-page .guide-reader .guide-prose .buyer-tool-heading h3 {
+  font-family: var(--body);
+  font-size: 26px;
+  font-weight: 600;
+  margin-top: 8px;
+  line-height: 1.2;
+  color: #143e25;
+}
+.tool-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+.tool-fields label {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-width: 0;
+  font-size: 14px;
+  color: #21492c;
+}
+.tool-fields label > span {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+}
+.tool-fields small {
+  font-size: 11px;
+  color: #536843;
+}
+.tool-fields input {
+  width: 100%;
+  min-width: 0;
+  background: #fff;
+  color: #153922;
+  border: 1px solid #a9bca0;
+  padding: 12px 14px;
+  min-height: 48px;
+  font: inherit;
+  border-radius: 0;
+}
+.tool-fields input[aria-invalid='true'] {
+  border-color: #a22920;
+  outline: 1px solid #a22920;
+}
+.tool-example {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 10px 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  color: #254d2b;
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  min-height: 44px;
+}
+.tool-result {
+  margin-top: 24px;
+  padding: 24px;
+  background: #123e29;
+  color: #f0f5e7;
+  font-size: 15px;
+}
+.tool-result > span {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+}
+.tool-result strong {
+  display: block;
+  font-family: var(--display);
+  font-size: 56px;
+  line-height: 1.1;
+  font-weight: 600;
+  margin: 12px 0;
+}
+.steel-page .guide-reader .guide-prose .tool-result p {
+  color: #d3e2c3;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 10px;
+}
+.steel-page .guide-reader .guide-prose .tool-note {
+  color: #536548;
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 20px 0 0;
+}
+.steel-page .guide-reader .guide-prose .tool-intro {
+  font-size: 15px;
+  margin-bottom: 24px;
+}
+.equipment-map {
+  background: #e8efdf;
+  border-bottom: 1px solid #b9c9af;
+}
+.equipment-map svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.equipment-map .part-active circle {
+  fill: #e7f5b9;
+  stroke-width: 3;
+}
+.equipment-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 22px;
+}
+.equipment-tabs button {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+  border: 1px solid #b3c3a6;
+  background: transparent;
+  color: #294d2d;
+  text-align: left;
+  font: inherit;
+  font-size: 13px;
+}
+.equipment-tabs button span {
+  font-size: 10px;
+}
+.equipment-tabs [aria-pressed='true'] {
+  background: #21482e;
+  color: #f0f4e8;
+  border-color: #21482e;
+}
+.equipment-description {
+  padding: 22px 0 0;
+}
+.steel-page .guide-reader .guide-prose .equipment-description p {
+  font-size: 16px;
+  line-height: 1.7;
+  margin: 0;
+}
+.comparison-table {
+  max-width: 100%;
+  overflow: auto;
+}
+.comparison-table table {
+  width: 100%;
+  min-width: 510px;
+  border-collapse: collapse;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.steel-page .guide-reader .guide-prose .comparison-table th,
+.steel-page .guide-reader .guide-prose .comparison-table td {
+  background: transparent;
+  color: #284c2b;
+  text-align: left;
+  padding: 14px 8px;
+  border: 0;
+  border-bottom: 1px solid #c5d2ba;
+}
+.comparison-table thead {
+  background: #e0eacd;
+}
+.comparison-table th:first-child {
+  width: 35%;
+}
+.comparison-table select {
+  width: 100%;
+  min-width: 130px;
+  padding: 10px 4px;
+  border: 1px solid #a4b79b;
+  background: white;
+  color: #214628;
+  font: inherit;
+  min-height: 44px;
+}
+.tool-action {
+  background: #234d2e;
+  color: #f5f7ee;
+  border: 1px solid #234d2e;
+  padding: 14px 20px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  min-height: 48px;
+  margin-top: 20px;
+}
+.tool-action:hover {
+  background: #0e3520;
+}
+.tool-actions {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+.rfq-preview {
+  margin-top: 28px;
+  border-block: 1px solid #bfceb2;
+}
+.rfq-preview summary {
+  padding: 18px 0;
+  font-size: 14px;
+  color: #264a2b;
+  cursor: pointer;
+}
+.rfq-preview pre {
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  padding: 0 0 20px;
+  color: #315036;
+}
+.rfq-sales {
+  border-top: 1px solid #bccdb1;
+  padding-top: 32px;
+  margin-top: 32px;
+}
+.steel-page .guide-reader .guide-prose .rfq-sales .enquiry-form {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  width: 100%;
+  max-width: none;
+}
+.steel-page .guide-reader .guide-prose .rfq-sales h2 {
+  font-family: var(--body);
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+.rfq-sales .enquiry-machine-context {
+  display: none;
+}
+@media (max-width: 640px) {
+  .buyer-tool {
+    padding: 22px 18px;
+    margin-inline: 0;
+  }
+  .tool-fields,
+  .equipment-tabs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .buyer-tool-heading {
+    margin-bottom: 22px;
+  }
+  .steel-page .guide-reader .guide-prose .buyer-tool-heading h3 {
+    font-size: 23px;
+  }
+  .tool-result {
+    padding: 20px;
+  }
+  .tool-actions {
+    gap: 8px 20px;
+  }
+}
+@media print {
+  .buyer-tool {
+    break-inside: auto;
+    background: white;
+    border-color: #aaa;
+    padding: 18px;
+  }
+  .tool-example,
+  .tool-action,
+  .rfq-sales,
+  .rfq-fields,
+  .rfq-preview {
+    display: none !important;
+  }
+  .tool-result {
+    background: white;
+    color: black;
+    border: 1px solid #777;
+  }
+  .steel-page .guide-reader .guide-prose .tool-result p {
+    color: black;
+  }
+  .equipment-tabs {
+    display: none;
+  }
+  .equipment-description [hidden] {
+    display: block !important;
+  }
+  .comparison-table {
+    overflow: visible;
+  }
+  .comparison-table table {
+    min-width: 0;
+  }
+}
+.guide-sidebar {
+  max-height: calc(100svh - 140px);
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .guide-sidebar {
+    max-height: none;
+    overflow: visible;
+  }
+}
+.steel-page .guide-reader .guide-prose .rfq-sales .enquiry-form > h2 {
+  grid-column: 1/-1;
+  width: 100%;
+  max-width: none;
+}

@@ -558,10 +558,43 @@ const article = defineType({
               type: 'localeText',
             }),
             defineField({ name: 'blocks', type: 'array', of: [{ type: 'guideBlock' }] }),
+            defineField({
+              name: 'tool',
+              title: 'Cement bulker buyer tool',
+              type: 'string',
+              description:
+                'Optional cement bulker procurement tool, shown after this section’s text.',
+              validation: (rule) =>
+                rule.custom(
+                  (value, context) =>
+                    !value ||
+                    (context.document?.category as any)?._ref === 'category-cement-bulker' ||
+                    'These tools currently support the cement bulker category only.',
+                ),
+              options: {
+                list: [
+                  { title: 'Payload estimator', value: 'payload' },
+                  { title: 'Equipment diagram', value: 'components' },
+                  { title: 'Unloading time estimator', value: 'unloading' },
+                  { title: 'Quotation comparison', value: 'comparison' },
+                  { title: 'RFQ builder and sales form', value: 'rfq' },
+                ],
+              },
+            }),
           ],
         }),
       ],
-      validation: (rule) => rule.required().min(1),
+      validation: (rule) =>
+        rule
+          .required()
+          .min(1)
+          .custom((sections: any) => {
+            const tools = (sections || []).map((s: any) => s.tool).filter(Boolean);
+            return (
+              new Set(tools).size === tools.length ||
+              'Use each interactive tool only once per guide.'
+            );
+          }),
     }),
     defineField({
       name: 'sources',

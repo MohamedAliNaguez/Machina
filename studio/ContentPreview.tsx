@@ -117,6 +117,11 @@ export function ContentPreview(props: { document: { displayed: Record<string, an
             ) : (
               <Text>{section.text?.[locale]}</Text>
             )}
+            {section.tool && (
+              <Text size={1} muted>
+                Interactive buyer tool: {section.tool} (available on the website)
+              </Text>
+            )}
           </Stack>
         ))}
       </Stack>

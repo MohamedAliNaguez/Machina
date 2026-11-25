@@ -31,6 +31,8 @@ export function blockComplete(block: GuideBlock, locale: Locale): boolean {
 export function sectionComplete(section: Article['sections'][number], locale: Locale) {
   return (
     !!section.heading?.[locale]?.trim() &&
+    (!section.tool ||
+      ['payload', 'components', 'unloading', 'comparison', 'rfq'].includes(section.tool)) &&
     (section.blocks?.length
       ? section.blocks.every((block) => blockComplete(block, locale))
       : !!section.text?.[locale]?.trim())

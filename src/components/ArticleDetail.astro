@@ -1,6 +1,7 @@
 ---
 import { withBase } from '../lib/paths';
 import GuideBlocks from './GuideBlocks.astro';
+import GuideTool from './GuideTool.astro';
 import { readingMinutes } from '../lib/guides';
 import '../styles/guides.css';
 import Layout from '../layouts/Layout.astro';
@@ -198,6 +199,7 @@ const answer = article.excerpt[locale];
           ) : (
             section.text[locale].split('\n\n').map((paragraph) => <p>{paragraph}</p>)
           )}
+          {section.tool && <GuideTool kind={section.tool} locale={locale} guideId={article.id} />}
         </section>
       ))}
       {article.sources.length > 0 && (
@@ -229,20 +231,22 @@ const answer = article.excerpt[locale];
           {l(locale, 'İlgili ürünleri inceleyin', 'Explore related products')}
         </a>
       )}
-      <aside class="guide-enquiry">
-        <span class="guide-kicker">{l(locale, 'BİR SONRAKİ ADIM', 'THE NEXT STEP')}</span>
-        <h2>{l(locale, 'Gereksinimlerinizi görüşün', 'Discuss your requirements')}</h2>
-        <p>
-          {l(
-            locale,
-            'Uygulamanızı, hedef ülkeyi ve bilinen gereksinimleri paylaşın.',
-            'Share your application, destination and known requirements.',
-          )}
-        </p>
-        <a class="button" href={enquiryHref}>
-          {l(locale, 'Projeniz hakkında konuşalım', 'Discuss your project')}
-        </a>
-      </aside>
+      {!article.sections.some((section) => section.tool === 'rfq') && (
+        <aside class="guide-enquiry">
+          <span class="guide-kicker">{l(locale, 'BİR SONRAKİ ADIM', 'THE NEXT STEP')}</span>
+          <h2>{l(locale, 'Gereksinimlerinizi görüşün', 'Discuss your requirements')}</h2>
+          <p>
+            {l(
+              locale,
+              'Uygulamanızı, hedef ülkeyi ve bilinen gereksinimleri paylaşın.',
+              'Share your application, destination and known requirements.',
+            )}
+          </p>
+          <a class="button" href={enquiryHref}>
+            {l(locale, 'Projeniz hakkında konuşalım', 'Discuss your project')}
+          </a>
+        </aside>
+      )}
     </article>
   </div>
 </Layout>

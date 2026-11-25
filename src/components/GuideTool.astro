@@ -1,0 +1,418 @@
+---
+import { l } from '../lib/i18n';
+import type { Locale } from '../lib/types';
+import type { GuideTool } from '../lib/procurement';
+import EnquiryForm from './EnquiryForm.astro';
+import '../styles/guide-tools.css';
+const { kind, locale, guideId } = Astro.props as {
+  kind: GuideTool;
+  locale: Locale;
+  guideId?: string;
+};
+const tr = locale === 'tr';
+const payloadFields = [
+  ['volume', 'Nominal tank volume', 'Nominal tank hacmi', 'm³'],
+  ['density', 'Actual bulk density', 'Gerçek yığın yoğunluğu', 't/m³'],
+  ['fill', 'Assumed usable volume', 'Varsayılan kullanılabilir hacim', '%'],
+  ['tractor', 'Tractor operating tare', 'Çekici çalışma darası', 't'],
+  ['trailer', 'Trailer operating tare', 'Römork çalışma darası', 't'],
+  ['gross', 'Combination weight limit', 'Katar ağırlık sınırı', 't'],
+];
+const parts = [
+  [
+    'Vessel & loading',
+    'Tank ve dolum',
+    'Confirm the actual capacity, construction material, loading openings and approved design documentation.',
+    'Gerçek kapasiteyi, yapı malzemesini, dolum açıklıklarını ve onaylı tasarım belgelerini teyit edin.',
+  ],
+  [
+    'Air supply',
+    'Hava beslemesi',
+    'Ask for air delivery at the proposed operating conditions and confirm the power source and installation scope.',
+    'Önerilen çalışma koşullarında hava debisini isteyin; güç kaynağını ve kurulum kapsamını teyit edin.',
+  ],
+  [
+    'Discharge connection',
+    'Boşaltma bağlantısı',
+    'Share the hose, coupling, route and receiving-site information. Verify the complete system with the supplier.',
+    'Hortum, kaplin, güzergâh ve alıcı saha bilgilerini paylaşın. Tüm sistemi tedarikçiyle doğrulayın.',
+  ],
+  [
+    'Running gear',
+    'Yürüyen aksam',
+    'Confirm axles, brakes, suspension, tyres and the proposed weight distribution for the actual tractor.',
+    'Gerçek çekici için aks, fren, süspansiyon, lastik ve önerilen ağırlık dağılımını teyit edin.',
+  ],
+  [
+    'Protection & documentation',
+    'Koruma ve belgeler',
+    'Request rated protection-device information, relevant inspection records and approved operating instructions. No pressure setting is specified here.',
+    'Koruma cihazlarının anma bilgilerini, ilgili muayene kayıtlarını ve onaylı işletme talimatlarını isteyin. Burada basınç ayarı belirtilmez.',
+  ],
+];
+const criteria = tr
+  ? [
+      'Kesin konfigürasyon ve çalışma ağırlığı',
+      'Kompresör ve yardımcı ekipman',
+      'Araç uyumluluğu ve belgeler',
+      'Muayene, garanti ve servis',
+      'Teslim esası ve varış maliyetleri',
+      'İstisnalar ve kabul koşulları',
+    ]
+  : [
+      'Exact configuration and operating weight',
+      'Compressor and auxiliary equipment',
+      'Vehicle compatibility and documents',
+      'Inspection, warranty and service',
+      'Delivery basis and destination costs',
+      'Exclusions and acceptance terms',
+    ];
+const rfq = [
+  ['material', 'Material and actual bulk density', 'Malzeme ve gerçek yığın yoğunluğu'],
+  ['destination', 'Destination country / delivery place', 'Hedef ülke / teslim yeri'],
+  ['quantity', 'Quantity and required timing', 'Adet ve istenen zamanlama'],
+  ['payload', 'Target payload / volume', 'Hedef yük / hacim'],
+  ['tractor', 'Tractor and coupling details', 'Çekici ve bağlantı bilgileri'],
+  ['site', 'Loading and receiving arrangements', 'Dolum ve alıcı saha düzeni'],
+  ['power', 'Available power source', 'Mevcut güç kaynağı'],
+  ['documents', 'Documents and open questions', 'Belgeler ve açık sorular'],
+];
+---
+
+<div class="buyer-tool" data-buyer-tool={kind} data-locale={locale}>
+  <div class="buyer-tool-heading">
+    <span class="buyer-tool-label">{l(locale, 'ALICI ÇALIŞMA ALANI', 'BUYER WORKSPACE')}</span>
+    <h3>
+      {
+        {
+          payload: l(locale, 'Yük ön değerlendirmesi', 'Payload screening'),
+          components: l(locale, 'Ekipmanı keşfedin', 'Explore the equipment'),
+          unloading: l(locale, 'Süre senaryosu', 'Time scenario'),
+          comparison: l(locale, 'Teklif kapsamı çalışma tablosu', 'Quotation coverage worksheet'),
+          rfq: l(locale, 'Teklif özetinizi hazırlayın', 'Build your quotation brief'),
+        }[kind]
+      }
+    </h3>
+  </div>
+  {kind === 'payload' && (
+    <>
+      <form class="tool-fields" data-calculator novalidate>
+        {payloadFields.map(([name, en, tt, unit]) => (
+          <label>
+            <span>
+              {tr ? tt : en} <small>{unit}</small>
+            </span>
+            <input
+              name={name}
+              type="number"
+              inputmode="decimal"
+              step="any"
+              min={name === 'fill' ? '1' : '0.001'}
+              max={name === 'fill' ? '100' : undefined}
+              required
+              aria-describedby="payload-note"
+            />
+          </label>
+        ))}
+        <button type="button" class="tool-example" data-example>
+          {l(locale, 'Örnek varsayımları yükle', 'Load illustrative example')}
+        </button>
+      </form>
+      <div class="tool-result" aria-live="polite" aria-atomic="true" data-result>
+        <span>
+          {l(locale, 'Hesaplamak için tüm değerleri girin.', 'Enter all values to calculate.')}
+        </span>
+      </div>
+      <p class="tool-note" id="payload-note">
+        {l(
+          locale,
+          'Ön değerlendirme; izin verilen taşıma yükü değildir. Dolum seviyesi, tam çalışma ağırlıkları, aks/kaplin/yapısal sınırlar ve yerel mevzuat ayrıca doğrulanmalıdır. Örnek değerler ürün teknik bilgisi değildir.',
+          'Screening only—not a permitted payload. Approved filling level, complete operating weights, axle/coupling/structural limits and local requirements need separate verification. Example values are not product specifications.',
+        )}
+      </p>
+    </>
+  )}
+  {kind === 'unloading' && (
+    <>
+      <form class="tool-fields" data-calculator novalidate>
+        <label>
+          <span>
+            {l(locale, 'Malzeme yükü', 'Material payload')} <small>t</small>
+          </span>
+          <input
+            name="payload"
+            type="number"
+            min="0.001"
+            step="any"
+            required
+            aria-describedby="unloading-note"
+          />
+        </label>
+        <label>
+          <span>
+            {l(locale, 'Varsayılan malzeme boşaltma debisi', 'Assumed material discharge rate')}{' '}
+            <small>t/h</small>
+          </span>
+          <input
+            name="rate"
+            type="number"
+            min="0.001"
+            step="any"
+            required
+            aria-describedby="unloading-note"
+          />
+        </label>
+        <label>
+          <span>
+            {l(locale, 'Ek elleçleme süresi', 'Additional handling time')} <small>min</small>
+          </span>
+          <input
+            name="handling"
+            type="number"
+            min="0"
+            step="any"
+            required
+            aria-describedby="unloading-note"
+          />
+        </label>
+        <button type="button" class="tool-example" data-example>
+          {l(locale, 'Örnek varsayımları yükle', 'Load illustrative example')}
+        </button>
+      </form>
+      <div class="tool-result" aria-live="polite" aria-atomic="true" data-result>
+        {l(locale, 'Bir süre senaryosu için değerleri girin.', 'Enter values for a time scenario.')}
+      </div>
+      <p class="tool-note" id="unloading-note">
+        {l(
+          locale,
+          'Süre = yük ÷ varsayılan debi × 60 + ek süre. Debiyi kullanıcı belirtir; araç kompresör performansını tahmin etmez. Sonuç bir TECHNICSAN taahhüdü değildir.',
+          'Time = payload ÷ assumed rate × 60 + handling time. You supply the rate; this tool does not predict compressor performance. The result is not a TECHNICSAN commitment.',
+        )}
+      </p>
+    </>
+  )}
+  {kind === 'components' && (
+    <>
+      <div class="equipment-map">
+        <svg
+          viewBox="0 0 900 350"
+          role="img"
+          aria-label={l(
+            locale,
+            'Çimento silobasının kavramsal yan görünümü; numaralar aşağıdaki açıklamalarla eşleşir.',
+            'Conceptual cement bulker side view; numbers correspond to the descriptions below.',
+          )}
+        >
+          <defs>
+            <linearGradient id="vessel-tone" x2="0" y2="1">
+              <stop stop-color="#e7edde" />
+              <stop offset="1" stop-color="#b7c7a7" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M105 72 Q90 82 96 119 L145 187 L340 242 Q375 248 410 229 L695 161 Q750 147 754 111 L745 76 Q740 58 707 58 H145 Q112 58 105 72Z"
+            fill="url(#vessel-tone)"
+            stroke="#3d6548"
+            stroke-width="2"
+          />
+          <path
+            d="M145 187 L340 242 Q375 248 410 229 L695 161 M125 113 L704 113"
+            fill="none"
+            stroke="#789367"
+            stroke-width="1"
+          />
+          <path
+            d="M132 244 H745 M210 245 V286 H236 M720 244 V268 M160 194 L184 244 M660 170 L686 244"
+            fill="none"
+            stroke="#123e29"
+            stroke-width="9"
+          />
+          {[535, 615, 695].map((x) => (
+            <g>
+              <circle cx={x} cy="269" r="36" fill="#183d2b" />
+              <circle cx={x} cy="269" r="20" fill="#e4ebda" />
+              <circle cx={x} cy="269" r="8" fill="#789367" />
+            </g>
+          ))}
+          {[220, 425, 630].map((x) => (
+            <path
+              d={`M${x - 23} 58 V45 H${x + 23} V58`}
+              fill="#c8d7b9"
+              stroke="#3d6548"
+              stroke-width="2"
+            />
+          ))}
+          <rect x="112" y="215" width="63" height="34" rx="3" fill="#315a3d" />
+          <path
+            d="M175 224 H270 L345 213 V240 H455"
+            fill="none"
+            stroke="#97b932"
+            stroke-width="6"
+          />
+          <path d="M50 308 H810" stroke="#a3b79a" stroke-width="1" />
+          {[
+            [1, 400, 113],
+            [2, 141, 231],
+            [3, 445, 235],
+            [4, 614, 270],
+            [5, 630, 44],
+          ].map(([n, x, y]) => (
+            <g data-map-part={n - 1} class:list={{ 'part-active': n === 1 }}>
+              <circle cx={x} cy={y} r="17" fill="#c1df70" stroke="#234c31" />
+              <text
+                x={x}
+                y={y + 5}
+                text-anchor="middle"
+                font-size="14"
+                font-family="sans-serif"
+                fill="#143b23"
+              >
+                {n}
+              </text>
+            </g>
+          ))}
+        </svg>
+      </div>
+      <div
+        class="equipment-tabs"
+        role="group"
+        aria-label={l(locale, 'Bileşen açıklamaları', 'Component descriptions')}
+      >
+        {parts.map(([en, tt], i) => (
+          <button
+            type="button"
+            data-part={i}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+            aria-controls="equipment-description"
+          >
+            <span>{String(i + 1).padStart(2, '0')}</span>
+            {tr ? tt : en}
+          </button>
+        ))}
+      </div>
+      <div class="equipment-description" id="equipment-description" aria-live="polite">
+        {parts.map(([, , bodyEn, bodyTr], i) => (
+          <p data-part-description={i} hidden={i !== 0}>
+            {tr ? bodyTr : bodyEn}
+          </p>
+        ))}
+      </div>
+      <p class="tool-note">
+        {l(
+          locale,
+          'Kavramsal şema; ölçekli değildir. Yapı, konumlar ve boru düzeni konfigürasyona göre değişir. Bir işletme veya montaj çizimi değildir.',
+          'Conceptual schematic, not to scale. Construction, positions and piping vary by configuration. This is not an operating or installation drawing.',
+        )}
+      </p>
+    </>
+  )}
+  {kind === 'comparison' && (
+    <>
+      <p class="tool-intro">
+        {l(
+          locale,
+          'Her seçenek için teklifin açıkça ne söylediğini işaretleyin. Bilgiler bu sekmede kalır; tedarikçi sıralaması yapılmaz.',
+          'Record what each quotation explicitly states. Entries stay in this tab; no supplier ranking is produced.',
+        )}
+      </p>
+      <div
+        class="comparison-table"
+        role="region"
+        tabindex="0"
+        aria-label={l(locale, 'Teklif karşılaştırması', 'Quotation comparison')}
+      >
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">{l(locale, 'Kontrol edilecek kapsam', 'Scope to check')}</th>
+              {['A', 'B'].map((v) => (
+                <th scope="col">
+                  {l(locale, 'Seçenek', 'Option')} {v}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {criteria.map((criterion, i) => (
+              <tr>
+                <th scope="row">{criterion}</th>
+                {['A', 'B'].map((v) => (
+                  <td>
+                    <select
+                      data-coverage={v}
+                      data-criterion={i}
+                      aria-label={`${criterion} — ${l(locale, 'Seçenek', 'Option')} ${v}`}
+                    >
+                      <option value="unknown">{l(locale, 'Belirtilmemiş', 'Not stated')}</option>
+                      <option value="confirmed">
+                        {l(locale, 'Açıkça dahil', 'Explicitly included')}
+                      </option>
+                      <option value="excluded">{l(locale, 'Kapsam dışı', 'Excluded')}</option>
+                      <option value="clarify">{l(locale, 'Netleştirilecek', 'Clarify')}</option>
+                    </select>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="tool-note" data-coverage-summary aria-live="polite"></p>
+      <button type="button" class="tool-action" data-download-comparison>
+        {l(locale, 'Çalışma tablosunu indir', 'Download worksheet')}
+      </button>
+    </>
+  )}
+  {kind === 'rfq' && (
+    <>
+      <div class="tool-fields rfq-fields">
+        {rfq.map(([name, en, tt]) => (
+          <label>
+            <span>{tr ? tt : en}</span>
+            <input type="text" data-rfq-field={name} maxlength="300" autocomplete="off" />
+          </label>
+        ))}
+      </div>
+      <details class="rfq-preview">
+        <summary>{l(locale, 'Hazırlanan özeti inceleyin', 'Review the prepared brief')}</summary>
+        <pre data-rfq-preview></pre>
+      </details>
+      <div class="tool-actions">
+        <button type="button" class="tool-action" data-use-brief>
+          {l(locale, 'Özeti satış formuna aktar', 'Use brief in sales form')}
+        </button>
+        <button type="button" class="tool-example" data-download-rfq>
+          {l(locale, 'Metin olarak indir', 'Download as text')}
+        </button>
+      </div>
+      <p class="tool-note" data-rfq-status aria-live="polite">
+        {l(
+          locale,
+          'Alanları doldurmak bilgilerinizi göndermez. Satış formundaki iletişim bilgilerini tamamlayın, mesajı inceleyin ve kendiniz gönderin.',
+          'Filling these fields does not send your information. Complete your contact details in the sales form, review the message and submit it yourself.',
+        )}
+      </p>
+      <div class="rfq-sales">
+        <EnquiryForm
+          locale={locale}
+          machineId="v-type-silobas"
+          guideId={guideId}
+          heading={l(locale, 'Özetinizi satış ekibiyle paylaşın', 'Share your brief with sales')}
+        />
+      </div>
+    </>
+  )}
+  <noscript>
+    <p>
+      {l(
+        locale,
+        'Etkileşimli araçlar JavaScript gerektirir. Metni okuyabilir ve iletişim sayfasından teklif isteyebilirsiniz.',
+        'Interactive tools require JavaScript. You can still read the guide and request a quotation through Contact.',
+      )}
+    </p>
+  </noscript>
+</div>
+<script>
+  import { initProcurementTools } from '../scripts/procurement';
+  initProcurementTools();
+</script>

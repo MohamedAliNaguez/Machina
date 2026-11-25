@@ -90,7 +90,12 @@ export interface Article extends SeoFields {
   imageAlt?: Partial<Localized>;
   categoryId: string;
   minutes: number;
-  sections: { heading: Localized; text: Localized; blocks?: import('./guides').GuideBlock[] }[];
+  sections: {
+    heading: Localized;
+    text: Localized;
+    blocks?: import('./guides').GuideBlock[];
+    tool?: import('./procurement').GuideTool;
+  }[];
   sources: { title: string; url: string }[];
   author?: string;
   reviewer?: string;

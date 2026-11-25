@@ -10,8 +10,9 @@ interface Props {
   locale: Locale;
   machineId?: string;
   heading?: string;
+  guideId?: string;
 }
-const { locale, machineId, heading } = Astro.props;
+const { locale, machineId, heading, guideId } = Astro.props;
 const { machines, settings, categories, articles } = await getContent();
 const selected = machines.find((machine) => machine.id === machineId);
 const staticHosting = enquiryProvider === 'formspree';
@@ -32,6 +33,7 @@ const phoneCountries = getCountries()
   class="enquiry-form"
   data-enquiry-form
   data-locale={locale}
+  data-default-guide={guideId}
   data-guide-options={JSON.stringify(
     articles
       .filter((a) => !a.sample && a.published.includes(locale))

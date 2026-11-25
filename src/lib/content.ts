@@ -218,6 +218,11 @@ export function validateContent(
       throw new Error(`Invalid specification table ${machine.id}.`);
   }
   for (const article of value.articles) {
+    const tools = (article.sections || []).flatMap((s) => (s.tool ? [s.tool] : []));
+    if (tools.length && article.categoryId !== 'cement-bulker')
+      throw new Error(`Procurement tools require the cement-bulker category: ${article.id}.`);
+    if (new Set(tools).size !== tools.length)
+      throw new Error(`Duplicate interactive tool in article ${article.id}.`);
     if (!article.published?.length || !article.sections?.length || !safeMediaUrl(article.image))
       throw new Error(`Incomplete article ${article.id}.`);
     for (const locale of article.published)

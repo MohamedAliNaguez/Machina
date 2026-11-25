@@ -24,7 +24,9 @@ export function initEnquiryForm() {
   const guides: { guideId: string; family: string; title: string }[] = JSON.parse(
     form.dataset.guideOptions || '[]',
   );
-  const guide = guides.find((g) => g.guideId === params.get('guide'));
+  const guide = guides.find(
+    (g) => g.guideId === (params.get('guide') || form.dataset.defaultGuide),
+  );
   const context = form.querySelector<HTMLElement>('[data-guide-context]');
   if (guide && context) {
     context.hidden = false;
