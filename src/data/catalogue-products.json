@@ -323,7 +323,8 @@
     "source": "Technical documentation retained privately; confirmation pending.",
     "sample": true,
     "published": ["tr", "en"],
-    "technicalReview": "pending"
+    "technicalReview": "pending",
+    "catalogueOrder": 1
   },
   {
     "id": "lpg-bobtail",
@@ -520,7 +521,8 @@
     "source": "Technical documentation retained privately; confirmation pending.",
     "sample": true,
     "published": ["tr", "en"],
-    "technicalReview": "pending"
+    "technicalReview": "pending",
+    "catalogueOrder": 2
   },
   {
     "id": "bnb-72-e",
@@ -1127,7 +1129,8 @@
         "placeholder": false,
         "rightsStatus": "pending"
       }
-    ]
+    ],
+    "catalogueOrder": 3
   },
   {
     "id": "lpg-scale-skid-system",
@@ -1234,7 +1237,8 @@
         "placeholder": false,
         "rightsStatus": "pending"
       }
-    ]
+    ],
+    "catalogueOrder": 4
   },
   {
     "id": "lpg-bulk-storage-tank",
@@ -1324,7 +1328,8 @@
         "placeholder": false,
         "rightsStatus": "pending"
       }
-    ]
+    ],
+    "catalogueOrder": 5
   },
   {
     "id": "lpg-domestic-tank",
@@ -1524,7 +1529,8 @@
         "placeholder": false,
         "rightsStatus": "pending"
       }
-    ]
+    ],
+    "catalogueOrder": 6
   },
   {
     "id": "lpg-vaporiser",
@@ -1545,8 +1551,8 @@
       "en": "Vaporiser equipment for LPG projects"
     },
     "description": {
-      "tr": "Gerekli buharlaştırma kapasitesini ve uygulama koşullarını satış ekibiyle görüşün. Kaynak sayfadaki hacim değeri kapasite ölçüsü olarak doğrulanmadığından burada yayımlanmamıştır; kapasite, enerji kaynağı ve teknik kapsam üretici belgeleriyle teyit edilmelidir.",
-      "en": "Discuss the required vaporisation capacity and application conditions with sales. The source page’s volume entry has not been verified as a capacity measure and is omitted here; confirm throughput, energy source and technical scope against product documentation."
+      "en": "The reference table lists a vertical arrangement and a vessel volume of 1–10 m³. This volume is not a verified vaporisation output. Confirm throughput, energy source, material and the project documentation with sales before selection.",
+      "tr": "Referans tablosunda dikey yerleşim ve 1–10 m³ tank hacmi belirtilir. Bu hacim doğrulanmış bir buharlaştırma kapasitesi değildir. Seçim öncesinde debi, enerji kaynağı, malzeme ve proje belgelerini satış ekibiyle teyit edin."
     },
     "applications": {
       "tr": ["LPG buharlaştırma projesi", "Uygulamaya uygun kapasite değerlendirmesi"],
@@ -1557,6 +1563,13 @@
     "technicalReview": "pending",
     "published": ["tr", "en"],
     "specs": [
+      {
+        "label": {
+          "en": "Source-listed volume — technical review pending",
+          "tr": "Referansta belirtilen hacim — teknik inceleme bekliyor"
+        },
+        "value": "1 - 10 m³"
+      },
       {
         "label": {
           "tr": "Tip",
@@ -1630,6 +1643,7 @@
         "placeholder": false,
         "rightsStatus": "pending"
       }
-    ]
+    ],
+    "catalogueOrder": 7
   }
 ]

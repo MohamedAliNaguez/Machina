@@ -179,6 +179,12 @@ const machineFields = (used: boolean) => [
   defineField({ name: 'name', type: 'localeString', validation: required }),
   defineField({ name: 'model', type: 'string', validation: required }),
   defineField({
+    name: 'catalogueOrder',
+    title: 'Catalogue display order',
+    type: 'number',
+    validation: (rule) => rule.integer().min(1),
+  }),
+  defineField({
     name: 'modelVerified',
     title: 'Real TECHNICSAN model identifier verified',
     type: 'boolean',

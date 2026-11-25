@@ -33,6 +33,7 @@ export interface Brand {
   description: Localized;
 }
 export interface Machine extends SeoFields {
+  catalogueOrder?: number;
   id: string;
   slug: Localized;
   name: Localized;

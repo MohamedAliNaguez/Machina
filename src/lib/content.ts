@@ -46,7 +46,12 @@ async function load(): Promise<Content> {
     if (isDraftPreview)
       throw new Error('Repository content does not support Sanity draft previews.');
     validateContent(repositoryContent, launchReady, { enquiryProvider: provider });
-    return repositoryContent;
+    return {
+      ...repositoryContent,
+      machines: [...repositoryContent.machines].sort(
+        (a, b) => (a.catalogueOrder ?? 1000) - (b.catalogueOrder ?? 1000),
+      ),
+    };
   }
   if (source !== 'sanity' && source !== 'sample') throw new Error('Unknown content source.');
   if (source === 'sample') {
@@ -80,6 +85,10 @@ async function load(): Promise<Content> {
   result.categories.sort(
     (a: Content['categories'][number], b: Content['categories'][number]) =>
       productTypeIds.indexOf(a.id) - productTypeIds.indexOf(b.id),
+  );
+  result.machines.sort(
+    (a: Content['machines'][number], b: Content['machines'][number]) =>
+      (a.catalogueOrder ?? 1000) - (b.catalogueOrder ?? 1000),
   );
   return result;
 }

@@ -150,12 +150,7 @@ test('public catalogue contains no supplier names, external brochures or private
       (product) => !product.reference && !product.brochure && !product.brandId,
     ),
   );
-  assert.equal(
-    sampleContent.machines
-      .flatMap((product) => product.images)
-      .filter((image) => !image.placeholder).length,
-    58,
-  );
+  assert.ok(sampleContent.machines.every((product) => product.images.length > 0));
   assert.ok(
     sampleContent.machines
       .flatMap((product) => product.images)

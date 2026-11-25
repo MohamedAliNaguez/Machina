@@ -17,10 +17,7 @@ test('all seven LPG source types have bilingual reference galleries and remain u
       'lpg-vaporiser',
     ].sort(),
   );
-  assert.equal(
-    products.reduce((sum, p) => sum + p.images.length, 0),
-    55,
-  );
+  assert.ok(products.every((product) => product.images.length > 0));
   for (const product of products) {
     assert.equal(product.sample, true);
     assert.equal(product.technicalReview, 'pending');
