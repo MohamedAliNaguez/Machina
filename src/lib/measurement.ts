@@ -5,7 +5,8 @@ export type Interaction =
   | 'whatsapp_click'
   | 'email_click'
   | 'brochure_click'
-  | 'page_view';
+  | 'page_view'
+  | 'guide_product_click';
 export function measurementPayload(language: string, path: string, family?: string) {
   return {
     language: language === 'tr' ? 'tr' : 'en',

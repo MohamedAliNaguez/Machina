@@ -49,3 +49,15 @@ Review an exportable GLB against the photographs for silhouette, axle/fitting pl
 6. At authorised launch, configure Search Console using the owner's account, submit the approved sitemap and measure aggregate product/enquiry events without contact values. Review search queries, useful enquiries and field performance after sufficient usage; SEO/GEO visibility is an outcome, not a guarantee.
 
 The page-level policy, category editorial workflow and search-account activation steps are documented in [SEO-RELEASE.md](SEO-RELEASE.md).
+
+## Practical Guides workflow
+
+The Guides hub highlights the guide selected under Company & launch settings → Featured guide. Only available translations appear. Family filters show only families with published articles; search appears at fifteen guides. Reading time is calculated from the article, including its tables and checklists.
+
+Edit sections using paragraph, list, comparison table, figure or checklist blocks. An empty blocks array uses the original text field for compatibility. Fill both languages required by the publication selection. Tables need the same number of cells in every row; figures need an image description and explanatory caption. Bilingual preview renders these blocks inside the authenticated editor. Choose Related products explicitly; there is no automatic first-product recommendation.
+
+Five reworked drafts remain private. They contain different practical comparisons and preparation checklists, but still need original expert input, actual authorship/reviewer names, supporting sources, reviewed translations and real dates. The migration backs up drafts privately and skips documents with an actual author or reviewer. Do not rerun it after editorial work starts without checking its backup and proposed changes.
+
+Publish one reviewed guide per month after the initial five. Start with real buyer questions and later Search Console/Bing queries. Review existing guides every six months and when equipment information changes. Never fabricate capabilities, certifications, customer examples or safety procedures. Publishing and search approval remain separate.
+
+Contextual enquiry links carry a controlled guide reference; only published, non-sample guide IDs are accepted by the form. Formspree notifications include this reference and product family. Optional consented analytics record guide-to-product clicks and accepted enquiries with known guide IDs; no form values or query strings are sent. Analytics remains inactive until its existing account and privacy requirements are completed.

@@ -1,3 +1,4 @@
+import { sectionComplete } from './guides';
 import { repositoryContent } from '../data/repository';
 import { companySearchIssues } from './seo';
 import { verifySearchTransport } from './search-transport';
@@ -223,7 +224,7 @@ export function validateContent(
       if (
         !article.title?.[locale] ||
         !article.excerpt?.[locale] ||
-        article.sections.some((s) => !s.heading?.[locale] || !s.text?.[locale])
+        article.sections.some((s) => !sectionComplete(s, locale))
       )
         throw new Error(`Incomplete ${locale} article ${article.id}.`);
     if (article.sources?.some((source) => !source.title || !safeExternalUrl(source.url)))

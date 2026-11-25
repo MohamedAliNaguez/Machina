@@ -80,6 +80,7 @@ export interface Machine extends SeoFields {
   published: Locale[];
 }
 export interface Article extends SeoFields {
+  relatedProductIds?: string[];
   id: string;
   slug: Localized;
   title: Localized;
@@ -89,7 +90,7 @@ export interface Article extends SeoFields {
   imageAlt?: Partial<Localized>;
   categoryId: string;
   minutes: number;
-  sections: { heading: Localized; text: Localized }[];
+  sections: { heading: Localized; text: Localized; blocks?: import('./guides').GuideBlock[] }[];
   sources: { title: string; url: string }[];
   author?: string;
   reviewer?: string;
@@ -99,6 +100,7 @@ export interface Article extends SeoFields {
   published: Locale[];
 }
 export interface Settings {
+  featuredGuideId?: string;
   name: string;
   legalName?: string;
   identityVerified: boolean;

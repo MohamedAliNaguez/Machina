@@ -44,6 +44,7 @@ test('analytics waits for consent, ignores failures/previews and excludes privat
       language: 'en',
       path: '/en/contact/',
       products: JSON.stringify({ 'v-type-silobas': 'cement-bulker' }),
+      guides: JSON.stringify({ 'guide-lpg-catalog-enquiry': 'lpg-catalog' }),
     });
     root.innerHTML =
       '<div data-consent-notice hidden><button data-consent-accept>Accept test analytics</button><button data-consent-decline>Decline test analytics</button></div><button data-consent-settings hidden>Test preferences</button>';
@@ -87,8 +88,20 @@ test('analytics waits for consent, ignores failures/previews and excludes privat
     ),
   );
   expect(await count()).toBe(1);
+  await page.evaluate(() => {
+    window.dispatchEvent(
+      new CustomEvent('enquiry:accepted', {
+        detail: { guideId: 'guide-lpg-catalog-enquiry', email: 'private@example.test' },
+      }),
+    );
+    window.dispatchEvent(
+      new CustomEvent('enquiry:accepted', { detail: { guideId: 'visitor-private@example.test' } }),
+    );
+  });
   const payload = await page.evaluate(() => JSON.stringify((window as any).dataLayer));
   expect(payload).toContain('cement-bulker');
+  expect(payload).toContain('guide-lpg-catalog-enquiry');
+  expect(payload).toContain('lpg-catalog');
   expect(payload).not.toMatch(/private@example|Private message|905555555555|\?email=/);
   await page.getByRole('button', { name: 'Test preferences' }).click();
   await page.getByRole('button', { name: 'Decline test analytics' }).click();
@@ -97,5 +110,5 @@ test('analytics waits for consent, ignores failures/previews and excludes privat
       new CustomEvent('enquiry:accepted', { detail: { machineId: 'v-type-silobas' } }),
     ),
   );
-  expect(await count()).toBe(1);
+  expect(await count()).toBe(3);
 });

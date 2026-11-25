@@ -1,7 +1,10 @@
 ---
 import { withBase } from '../lib/paths';
+import GuideBlocks from './GuideBlocks.astro';
+import { readingMinutes } from '../lib/guides';
+import '../styles/guides.css';
 import Layout from '../layouts/Layout.astro';
-import SteelIntro from './SteelIntro.astro';
+
 import MachineCard from './MachineCard.astro';
 import { getContent } from '../lib/content';
 import { labels, l, url, otherLocale } from '../lib/i18n';
@@ -13,9 +16,15 @@ interface Props {
 const { locale, article } = Astro.props;
 const { categories, machines } = await getContent();
 const category = categories.find((c) => c.id === article.categoryId);
-const related = machines.find(
-  (m) => m.categoryId === article.categoryId && m.kind === 'new' && m.published.includes(locale),
+const related = (article.relatedProductIds || []).flatMap((id) =>
+  machines.filter((m) => m.id === id && m.published.includes(locale)),
 );
+const enquiryHref =
+  url(locale, 'contact') +
+  '?guide=' +
+  encodeURIComponent(article.id) +
+  '&family=' +
+  encodeURIComponent(article.categoryId);
 const origin = import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321';
 const schema = article.sample
   ? []
@@ -43,8 +52,7 @@ const schema = article.sample
         publisher: { '@id': new URL('/#organization', origin).href },
       },
     ];
-const title = article.title[locale].toLocaleUpperCase(locale === 'tr' ? 'tr-TR' : 'en-GB');
-const answerTitle = article.title[locale];
+
 const answer = article.excerpt[locale];
 ---
 
@@ -65,30 +73,29 @@ const answer = article.excerpt[locale];
   schema={schema}
   socialImage={article.image}
 >
-  <SteelIntro
-    locale={locale}
-    title={title}
-    variant="article-intro"
-    breadcrumbs={[{ name: labels(locale).guides }]}
-    eyebrow={article.tag[locale] + (article.sample ? l(locale, ' · TASLAK', ' · DRAFT') : '')}
-    note={
-      article.sample
-        ? l(
-            locale,
-            'Örnek editoryal içerik · Temsili görseller',
-            'Sample editorial layout · Illustrative imagery',
-          )
-        : undefined
-    }
-  />
-  <div class="container steel-reading">
+  <header class="guide-hub-intro">
+    <div class="container">
+      <span class="eyebrow">
+        TECHNICSAN / {article.tag[locale]}
+        {article.sample ? l(locale, ' · TASLAK', ' · DRAFT') : ''}
+      </span>
+      <h1>{article.title[locale]}</h1>
+    </div>
+  </header>
+  <div class="container guide-reader">
     <nav class="reading-outline" aria-label={l(locale, 'Bu sayfada', 'On this page')}>
       <span>{l(locale, 'BU SAYFADA', 'ON THIS PAGE')}</span>
       {article.sections.map((section, index) => (
         <a href={'#article-section-' + index}>{section.heading[locale]}</a>
       ))}
     </nav>
-    <article class="steel-prose">
+    <article class="steel-prose" data-guide-id={article.id} data-guide-family={article.categoryId}>
+      <p>
+        {readingMinutes(article, locale)} {l(locale, 'dakika okuma', 'minute read')}
+      </p>
+      <button type="button" class="guide-print">
+        {l(locale, 'Rehberi yazdır', 'Print guide')}
+      </button>
       {!article.sample && (article.author || article.reviewedAt) && (
         <div class="article-byline">
           {article.author}
@@ -116,19 +123,21 @@ const answer = article.excerpt[locale];
         </a>
       )}
       <div class="article-answer">
-        <h2>{answerTitle}</h2>
+        <h2>{l(locale, 'Kısa yanıt', 'At a glance')}</h2>
         <p>{answer}</p>
       </div>
       {article.sections.map((section, index) => (
         <section id={'article-section-' + index}>
           <h2>{section.heading[locale]}</h2>
-          {section.text[locale].split('\n\n').map((paragraph) => (
-            <p>{paragraph}</p>
-          ))}
+          {section.blocks?.length ? (
+            <GuideBlocks blocks={section.blocks} locale={locale} />
+          ) : (
+            section.text[locale].split('\n\n').map((paragraph) => <p>{paragraph}</p>)
+          )}
           {index === 0 && (
             <>
               <img
-                class="article-inline-image"
+                class="article-inline-image guide-cover"
                 src={withBase(article.image)}
                 alt={article.imageAlt?.[locale] || ''}
                 width="1200"
@@ -158,9 +167,14 @@ const answer = article.excerpt[locale];
           </ul>
         </section>
       )}
-      {related && (
+      {related.length > 0 && (
         <div class="article-related">
-          <MachineCard machine={related} locale={locale} compact />
+          <h2>{l(locale, 'İlgili ekipmanlar', 'Related equipment')}</h2>
+          {related.map((machine) => (
+            <div data-guide-product={article.id}>
+              <MachineCard machine={machine} locale={locale} compact />
+            </div>
+          ))}
         </div>
       )}
       {category && (
@@ -168,6 +182,23 @@ const answer = article.excerpt[locale];
           {l(locale, 'İlgili ürünleri inceleyin', 'Explore related products')}
         </a>
       )}
+      <aside class="guide-enquiry">
+        <h2>{l(locale, 'Gereksinimlerinizi görüşün', 'Discuss your requirements')}</h2>
+        <p>
+          {l(
+            locale,
+            'Uygulamanızı, hedef ülkeyi ve bilinen gereksinimleri paylaşın.',
+            'Share your application, destination and known requirements.',
+          )}
+        </p>
+        <a class="button" href={enquiryHref}>
+          {l(locale, 'Projeniz hakkında konuşalım', 'Discuss your project')}
+        </a>
+      </aside>
     </article>
   </div>
 </Layout>
+
+<script>
+  document.querySelector('.guide-print')?.addEventListener('click', () => window.print());
+</script>

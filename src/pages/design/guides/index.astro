@@ -1,0 +1,11 @@
+---
+import GuidesHub from '../../../components/GuidesHub.astro';
+import { repositoryContent } from '../../../data/repository';
+import { initialGuideDrafts } from '../../../data/seo-editorial';
+const articles = initialGuideDrafts.map((a) => ({
+  ...a,
+  image: repositoryContent.machines.find((m) => m.categoryId === a.categoryId)!.images[0].src,
+}));
+---
+
+<GuidesHub locale="en" content={{ ...repositoryContent, articles }} />

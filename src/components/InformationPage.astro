@@ -1,7 +1,6 @@
 ---
 import brand from '../data/brand.json';
 import HistoryCanopy from './HistoryCanopy.astro';
-import { withBase } from '../lib/paths';
 import Layout from '../layouts/Layout.astro';
 import SteelIntro from './SteelIntro.astro';
 import ContactPressure from './ContactPressure.astro';
@@ -18,7 +17,7 @@ const { settings, articles, brands, categories: allCategories } = await getConte
 const categories = allCategories.filter((c) => (c.published ?? ['en', 'tr']).includes(locale));
 const copy = labels(locale),
   visibleArticles = articles.filter((a) => a.published.includes(locale));
-const featured = visibleArticles[0];
+
 const titles: Record<Section, string> = {
   guides: l(locale, 'REHBERLER', 'GUIDES'),
   about: l(locale, 'BASINÇ\nODAĞIMIZDA', 'PRESSURE\nAT THE CORE'),
@@ -69,7 +68,7 @@ const privacySections = [
         ? 'Form, adınızı, e-posta veya telefonunuzu, mesajınızı, isteğe bağlı ürün seçiminizi ve dili iletir. Bir talep referansı ve formun sayfa adresi de eklenir.'
         : 'Bu bölüm, talep formu aracılığıyla istenen bilgileri ve nasıl toplandığını açıklayacaktır.',
       hostedEnquiryEndpoint
-        ? 'The form submits your name, email or phone, message, optional product selection and language. An enquiry reference and the form page address are also included.'
+        ? 'The form submits your name, email or phone, message, optional product selection and language. An enquiry reference, the form page address and an optional originating guide reference and product family are also included.'
         : 'This section will describe the information requested through the enquiry form, and how it is collected.',
     ),
   },
@@ -130,75 +129,6 @@ const privacySections = [
           : undefined
       }
     />
-  )}
-  {section === 'guides' && (
-    <section class="container steel-guides">
-      {featured && (
-        <div class="editorial-grid">
-          <article class="featured-story">
-            <a href={url(locale, 'guides', featured.slug[locale])}>
-              <img
-                src={withBase(featured.image)}
-                alt={featured.imageAlt?.[locale] || ''}
-                width="1200"
-                height="500"
-                loading="eager"
-              />
-            </a>
-            <span class="story-tag">{featured.tag[locale]}</span>
-            <h2>
-              <a href={url(locale, 'guides', featured.slug[locale])}>{featured.title[locale]}</a>
-            </h2>
-            <p>{featured.excerpt[locale]}</p>
-            <a class="text-link" href={url(locale, 'guides', featured.slug[locale])}>
-              {l(locale, 'Rehberi okuyun', 'Read guide')}
-            </a>
-          </article>
-          <div class="supporting-stories">
-            {visibleArticles.slice(1).map((article) => (
-              <article>
-                <a
-                  aria-label={article.title[locale]}
-                  href={url(locale, 'guides', article.slug[locale])}
-                >
-                  <img
-                    src={withBase(article.image)}
-                    alt=""
-                    width="900"
-                    height="380"
-                    loading="lazy"
-                  />
-                </a>
-                <h2>
-                  <a href={url(locale, 'guides', article.slug[locale])}>{article.title[locale]}</a>
-                </h2>
-                <a class="text-link" href={url(locale, 'guides', article.slug[locale])}>
-                  {l(locale, 'Rehberi okuyun', 'Read guide')}
-                </a>
-              </article>
-            ))}
-          </div>
-        </div>
-      )}
-      {!featured && (
-        <div class="empty-state">
-          <h2>{l(locale, 'Rehberler hazırlanıyor', 'Guides are being prepared')}</h2>
-        </div>
-      )}
-      <div class="guide-practice">
-        <h2>{l(locale, 'Bilgiyi işe dönüştürün', 'Put the guide into practice')}</h2>
-        <p>
-          {l(
-            locale,
-            'Beş TECHNICSAN ürün grubunu inceleyin',
-            'Explore the five TECHNICSAN product types',
-          )}
-        </p>
-        <a class="button" href={url(locale, 'machines')}>
-          {l(locale, 'Ürünleri inceleyin', 'Browse products')}
-        </a>
-      </div>
-    </section>
   )}
   {section === 'about' && (
     <>

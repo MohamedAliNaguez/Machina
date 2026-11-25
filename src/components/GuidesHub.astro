@@ -1,0 +1,185 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getContent } from '../lib/content';
+import { readingMinutes } from '../lib/guides';
+import { l, url, otherLocale } from '../lib/i18n';
+import { withBase } from '../lib/paths';
+import type { Locale, Content } from '../lib/types';
+import '../styles/guides.css';
+const { locale, content: providedContent } = Astro.props as { locale: Locale; content?: Content };
+const { articles, categories, settings } = providedContent || (await getContent());
+const visible = articles
+  .filter((a) => a.published.includes(locale))
+  .sort(
+    (a, b) =>
+      (Date.parse(b.publishedAt || '') || 0) - (Date.parse(a.publishedAt || '') || 0) ||
+      a.id.localeCompare(b.id),
+  );
+const featured = visible.find((a) => a.id === settings.featuredGuideId) || visible[0];
+const families = categories.filter((c) => visible.some((a) => a.categoryId === c.id));
+const title = l(
+  locale,
+  'Endüstriyel ekipman seçimi için pratik rehberler',
+  'Practical guides for choosing industrial equipment',
+);
+---
+
+<Layout
+  locale={locale}
+  title={title}
+  description={l(
+    locale,
+    'Seçenekleri karşılaştırın, projenizi hazırlayın ve daha net bir teklif talebi oluşturun.',
+    'Compare your options, prepare your project and make a better-informed equipment enquiry.',
+  )}
+  section="guides"
+  alternate={url(otherLocale(locale), 'guides')}
+>
+  <section class="guide-hub-intro">
+    <div class="container">
+      <span class="eyebrow">
+        TECHNICSAN / {l(locale, 'BİLGİ VE UYGULAMA', 'KNOWLEDGE & APPLICATION')}
+      </span>
+      <h1>{title}</h1>
+      <p>
+        {l(
+          locale,
+          'Doğru sorularla başlayın. Ürün seçiminden teklif hazırlığına kadar kullanabileceğiniz bilgiler.',
+          'Start with the right questions. Practical information to take you from equipment selection to a well-prepared enquiry.',
+        )}
+      </p>
+    </div>
+  </section>
+  <div class="container guide-hub" data-guide-hub>
+    {featured && (
+      <article
+        class="guide-feature"
+        data-guide-card
+        data-family={featured.categoryId}
+        data-search={featured.title[locale] + ' ' + featured.excerpt[locale]}
+      >
+        <a href={url(locale, 'guides', featured.slug[locale])} tabindex="-1" aria-hidden="true">
+          <img src={withBase(featured.image)} alt="" width="1000" height="650" />
+        </a>
+        <div>
+          <span class="eyebrow">
+            {l(locale, 'ÖNE ÇIKAN REHBER', 'FEATURED GUIDE')} / {readingMinutes(featured, locale)}{' '}
+            {l(locale, 'dk', 'min')}
+          </span>
+          <h2>
+            <a href={url(locale, 'guides', featured.slug[locale])}>{featured.title[locale]}</a>
+          </h2>
+          <p>{featured.excerpt[locale]}</p>
+          <a class="button" href={url(locale, 'guides', featured.slug[locale])}>
+            {l(locale, 'Rehberi okuyun', 'Read the guide')}
+          </a>
+        </div>
+      </article>
+    )}
+    {visible.length > 0 && (
+      <>
+        <div class="guide-tools">
+          <div
+            class="guide-filters"
+            role="group"
+            aria-label={l(locale, 'Ürün grubuna göre filtreleyin', 'Filter by product family')}
+          >
+            <button type="button" data-guide-filter="" aria-pressed="true">
+              {l(locale, 'Tüm rehberler', 'All guides')}
+            </button>
+            {families.map((c) => (
+              <button type="button" data-guide-filter={c.id} aria-pressed="false">
+                {c.name[locale]}
+              </button>
+            ))}
+          </div>
+          {visible.length >= 15 && (
+            <label>
+              {l(locale, 'Rehberlerde arayın', 'Search guides')}
+              <input type="search" data-guide-search />
+            </label>
+          )}
+        </div>
+        <p class="guide-result-count" aria-live="polite" data-guide-count>
+          {visible.length} {l(locale, 'rehber', 'guides')}
+        </p>
+        <div class="guide-grid">
+          {visible
+            .filter((a) => a !== featured)
+            .map((a) => (
+              <article
+                data-guide-card
+                data-family={a.categoryId}
+                data-search={a.title[locale] + ' ' + a.excerpt[locale]}
+              >
+                <a href={url(locale, 'guides', a.slug[locale])} tabindex="-1" aria-hidden="true">
+                  <img src={withBase(a.image)} alt="" width="800" height="500" loading="lazy" />
+                </a>
+                <div>
+                  <span class="eyebrow">
+                    {categories.find((c) => c.id === a.categoryId)?.name[locale]} /{' '}
+                    {readingMinutes(a, locale)} {l(locale, 'dk', 'min')}
+                  </span>
+                  <h2>
+                    <a href={url(locale, 'guides', a.slug[locale])}>{a.title[locale]}</a>
+                  </h2>
+                  <p>{a.excerpt[locale]}</p>
+                </div>
+              </article>
+            ))}
+        </div>
+        <p hidden data-guide-empty>
+          {l(
+            locale,
+            'Bu seçim için rehber bulunamadı. Başka bir ürün grubunu deneyin.',
+            'No guides match this selection. Try another product family.',
+          )}
+        </p>
+      </>
+    )}
+    {!visible.length && (
+      <div class="guide-empty">
+        <span class="eyebrow">{l(locale, 'HAZIRLANIYOR', 'IN PREPARATION')}</span>
+        <h2>
+          {l(
+            locale,
+            'Pratik bilgiler, dikkatli inceleme',
+            'Practical knowledge, carefully reviewed',
+          )}
+        </h2>
+        <p>
+          {l(
+            locale,
+            'Rehberler teknik inceleme sonrasında burada yayımlanacak. Bu sırada ürün gruplarını inceleyebilir veya projenizi bizimle görüşebilirsiniz.',
+            'Our guides will appear here after technical review. Meanwhile, explore the product families or discuss your project with us.',
+          )}
+        </p>
+      </div>
+    )}
+    <nav
+      class="guide-family-links"
+      aria-label={l(locale, 'Ürün gruplarını inceleyin', 'Explore product families')}
+    >
+      {categories.map((c) => (
+        <a href={url(locale, 'categories', c.slug[locale])}>{c.name[locale]}</a>
+      ))}
+    </nav>
+    <aside class="guide-bottom">
+      <h2>{l(locale, 'Projeniz için sonraki adım', 'Your project’s next step')}</h2>
+      <p>
+        {l(
+          locale,
+          'Uygulamanızı, hedef ülkeyi ve ekipman ihtiyacınızı paylaşın.',
+          'Tell us about your application, destination and equipment requirements.',
+        )}
+      </p>
+      <a class="button" href={url(locale, 'contact')}>
+        {l(locale, 'Gereksinimlerinizi görüşün', 'Discuss your requirements')}
+      </a>
+    </aside>
+  </div>
+</Layout>
+<script>
+  import { initGuideFilters } from '../scripts/guides';
+  initGuideFilters();
+</script>

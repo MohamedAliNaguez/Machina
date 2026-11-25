@@ -1,3 +1,4 @@
+import { enhanceGuideDraft } from './guide-drafts';
 import type { Article, Category, Localized, SeoFields } from '../lib/types';
 
 const bi = (en: string, tr: string): Localized => ({ en, tr });
@@ -221,8 +222,8 @@ const guideNames = [
     'Silo kapasitesi, dolum düzeni ve saha gereksinimlerini planlama',
   ],
 ];
-export const initialGuideDrafts: Article[] = guideNames.map(
-  ([categoryId, en, tr, titleEn, titleTr]) => {
+export const initialGuideDrafts: Article[] = guideNames
+  .map<Article>(([categoryId, en, tr, titleEn, titleTr]) => {
     const e = categoryEditorialDrafts[categoryId];
     return {
       id: `guide-${categoryId}-enquiry`,
@@ -269,5 +270,5 @@ export const initialGuideDrafts: Article[] = guideNames.map(
       ),
       seoApproval: { en: 'pending', tr: 'pending' },
     };
-  },
-);
+  })
+  .map(enhanceGuideDraft);

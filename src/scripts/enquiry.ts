@@ -21,6 +21,16 @@ export function initEnquiryForm() {
   let previousPayload = '';
   let busy = false;
   const params = new URLSearchParams(location.search);
+  const guides: { guideId: string; family: string; title: string }[] = JSON.parse(
+    form.dataset.guideOptions || '[]',
+  );
+  const guide = guides.find((g) => g.guideId === params.get('guide'));
+  const context = form.querySelector<HTMLElement>('[data-guide-context]');
+  if (guide && context) {
+    context.hidden = false;
+    context.textContent = (tr ? 'İlgili rehber: ' : 'Related guide: ') + guide.title;
+  }
+
   const selected = params.get('product') || params.get('machine');
   const select = form.elements.namedItem('machineId') as HTMLSelectElement;
   if (selected && [...select.options].some((o) => o.value === selected)) select.value = selected;
@@ -124,6 +134,7 @@ export function initEnquiryForm() {
             _subject: `TECHNICSAN · ${productName || (tr ? 'Satış talebi' : 'Sales enquiry')}`,
             page: document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href,
             reference: key,
+            ...(guide ? { guide: guide.guideId, product_family: guide.family } : {}),
           }
         : data;
       const response = await fetch(form.action, {
@@ -162,6 +173,8 @@ export function initEnquiryForm() {
             language: data.language,
             machineId: data.machineId || null,
             preview: !!result.preview,
+            guideId: guide?.guideId,
+            family: guide?.family,
           },
         }),
       );

@@ -1,3 +1,4 @@
+import { sectionComplete } from '../src/lib/guides';
 import { defineType, defineField, defineArrayMember } from 'sanity';
 import { productTypes } from '../src/data/product-types';
 const required = (rule: any) => rule.required();
@@ -341,10 +342,7 @@ const translatedDocument = (rule: any) =>
             : ['name', 'summary', 'description'];
       if (required.some((field) => !doc[field]?.[locale]?.trim()))
         return `Complete required ${locale} text or remove that language from publication.`;
-      if (
-        doc._type === 'article' &&
-        doc.sections?.some((s: any) => !s.heading?.[locale] || !s.text?.[locale])
-      )
+      if (doc._type === 'article' && doc.sections?.some((s: any) => !sectionComplete(s, locale)))
         return `Complete ${locale} article sections.`;
       if (
         ['newModel', 'usedMachine'].includes(doc._type) &&
@@ -455,6 +453,59 @@ const brand = defineType({
     }),
   ],
 });
+const guideBlock = defineType({
+  name: 'guideBlock',
+  title: 'Guide content block',
+  type: 'object',
+  fields: [
+    defineField({
+      name: 'kind',
+      type: 'string',
+      options: { list: ['paragraph', 'list', 'table', 'figure', 'checklist'] },
+      validation: required,
+    }),
+    defineField({
+      name: 'text',
+      type: 'localeText',
+      hidden: ({ parent }: any) => parent?.kind !== 'paragraph',
+    }),
+    defineField({
+      name: 'items',
+      type: 'array',
+      of: [{ type: 'localeString' }],
+      hidden: ({ parent }: any) => !['list', 'checklist'].includes(parent?.kind),
+    }),
+    defineField({
+      name: 'columns',
+      type: 'array',
+      of: [{ type: 'localeString' }],
+      hidden: ({ parent }: any) => parent?.kind !== 'table',
+    }),
+    defineField({
+      name: 'rows',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [defineField({ name: 'cells', type: 'array', of: [{ type: 'localeText' }] })],
+        },
+      ],
+      hidden: ({ parent }: any) => parent?.kind !== 'table',
+    }),
+    defineField({
+      name: 'image',
+      type: 'image',
+      fields: [defineField({ name: 'alt', type: 'localeString' })],
+      hidden: ({ parent }: any) => parent?.kind !== 'figure',
+    }),
+    defineField({
+      name: 'caption',
+      type: 'localeText',
+      hidden: ({ parent }: any) => parent?.kind !== 'figure',
+    }),
+  ],
+  preview: { select: { title: 'kind', subtitle: 'text.en', media: 'image' } },
+});
 const article = defineType({
   name: 'article',
   title: 'Guides & articles',
@@ -487,6 +538,8 @@ const article = defineType({
     }),
     defineField({
       name: 'minutes',
+      title: 'Legacy reading time (website calculates automatically)',
+      hidden: true,
       type: 'number',
       initialValue: 4,
       validation: (rule) => rule.required().min(1),
@@ -499,7 +552,12 @@ const article = defineType({
           type: 'object',
           fields: [
             defineField({ name: 'heading', type: 'localeString', validation: required }),
-            defineField({ name: 'text', type: 'localeText', validation: required }),
+            defineField({
+              name: 'text',
+              title: 'Legacy text (used when blocks are empty)',
+              type: 'localeText',
+            }),
+            defineField({ name: 'blocks', type: 'array', of: [{ type: 'guideBlock' }] }),
           ],
         }),
       ],
@@ -565,6 +623,12 @@ const siteSettings = defineType({
   title: 'Company & launch settings',
   type: 'document',
   fields: [
+    defineField({
+      name: 'featuredGuide',
+      title: 'Featured guide',
+      type: 'reference',
+      to: [{ type: 'article' }],
+    }),
     defineField({
       name: 'pageSeo',
       title: 'Home, About and Contact search approval',
@@ -655,5 +719,6 @@ export const schemaTypes = [
   brand,
   newModel,
   usedMachine,
+  guideBlock,
   article,
 ];

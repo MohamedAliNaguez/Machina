@@ -12,7 +12,7 @@ const id = import.meta.env.PUBLIC_GA4_MEASUREMENT_ID || '';
 // Activation requires an owner-controlled property with enhanced measurement disabled.
 const active =
   enabled && import.meta.env.PUBLIC_ANALYTICS_REVIEWED === 'true' && /^G-[A-Z0-9]+$/.test(id);
-const { machines } = await getContent();
+const { machines, articles } = await getContent();
 ---
 
 {active && (
@@ -26,6 +26,9 @@ const { machines } = await getContent();
     data-language={locale}
     data-family={family}
     data-path={Astro.url.pathname}
+    data-guides={JSON.stringify(
+      Object.fromEntries(articles.filter((a) => !a.sample).map((a) => [a.id, a.categoryId])),
+    )}
     data-products={JSON.stringify(Object.fromEntries(machines.map((m) => [m.id, m.categoryId])))}
     aria-label={l(locale, 'İstatistik tercihleri', 'Analytics preferences')}
   >

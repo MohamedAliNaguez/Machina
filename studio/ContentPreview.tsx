@@ -65,7 +65,58 @@ export function ContentPreview(props: { document: { displayed: Record<string, an
         {doc.sections?.map((section: any, i: number) => (
           <Stack key={section._key || i} style={{ gap: 12 }}>
             <Heading size={1}>{section.heading?.[locale]}</Heading>
-            <Text>{section.text?.[locale]}</Text>
+            {section.blocks?.length ? (
+              section.blocks.map((block: any, j: number) => (
+                <div key={block._key || j}>
+                  {block.kind === 'paragraph' && <Text>{block.text?.[locale]}</Text>}
+                  {['list', 'checklist'].includes(block.kind) && (
+                    <ul>
+                      {block.items?.map((item: any, k: number) => (
+                        <li key={k}>{item[locale]}</li>
+                      ))}
+                    </ul>
+                  )}
+                  {block.kind === 'table' && (
+                    <div style={{ overflowX: 'auto' }}>
+                      <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+                        <thead>
+                          <tr>
+                            {block.columns?.map((col: any, k: number) => (
+                              <th style={{ padding: 12, textAlign: 'left' }} key={k}>
+                                {col[locale]}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {block.rows?.map((row: any, k: number) => (
+                            <tr key={k}>
+                              {row.cells?.map((cell: any, n: number) => (
+                                <td style={{ padding: 12, borderTop: '1px solid #ccc' }} key={n}>
+                                  {cell[locale]}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                  {block.kind === 'figure' && block.image?.asset && (
+                    <figure>
+                      <img
+                        style={{ width: '100%' }}
+                        src={builder.image(block.image).width(1000).url()}
+                        alt={block.image.alt?.[locale] || ''}
+                      />
+                      <figcaption>{block.caption?.[locale]}</figcaption>
+                    </figure>
+                  )}
+                </div>
+              ))
+            ) : (
+              <Text>{section.text?.[locale]}</Text>
+            )}
           </Stack>
         ))}
       </Stack>

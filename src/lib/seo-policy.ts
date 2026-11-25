@@ -1,3 +1,4 @@
+import { sectionComplete } from './guides';
 import type { Article, Category, Content, Locale, Machine, SeoFields } from './types';
 const text = (value: unknown): value is string => typeof value === 'string' && !!value.trim();
 const date = (value: unknown) =>
@@ -65,7 +66,7 @@ export function articleSearchIssues(article: Article, locale: Locale): string[] 
     (!text(article.title?.[locale]) ||
       !text(article.excerpt?.[locale]) ||
       !article.sections?.length ||
-      article.sections.some((s) => !text(s.heading?.[locale]) || !text(s.text?.[locale]))) &&
+      article.sections.some((s) => !sectionComplete(s, locale))) &&
       'Complete this article translation',
   ].filter(Boolean) as string[];
 }

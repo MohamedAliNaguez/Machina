@@ -1,0 +1,25 @@
+---
+import ArticleDetail from '../../../../components/ArticleDetail.astro';
+import { initialGuideDrafts } from '../../../../data/seo-editorial';
+import { repositoryContent } from '../../../../data/repository';
+import type { Locale } from '../../../../lib/types';
+export function getStaticPaths() {
+  return (['en', 'tr'] as Locale[]).flatMap((locale) =>
+    initialGuideDrafts.map((article) => ({
+      params: { locale, slug: article.slug[locale] },
+      props: {
+        locale,
+        article: {
+          ...article,
+          image: repositoryContent.machines.find((m) => m.categoryId === article.categoryId)!
+            .images[0].src,
+          imageAlt: { en: 'Draft equipment illustration', tr: 'Taslak ekipman görseli' },
+        },
+      },
+    })),
+  );
+}
+const { locale, article } = Astro.props;
+---
+
+<ArticleDetail locale={locale} article={article} />

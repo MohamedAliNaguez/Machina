@@ -1,4 +1,5 @@
 ---
+import { guideContext } from '../lib/guides';
 import { withBase } from '../lib/paths';
 import { getContent } from '../lib/content';
 import { l, url, labels } from '../lib/i18n';
@@ -11,7 +12,7 @@ interface Props {
   heading?: string;
 }
 const { locale, machineId, heading } = Astro.props;
-const { machines, settings, categories } = await getContent();
+const { machines, settings, categories, articles } = await getContent();
 const selected = machines.find((machine) => machine.id === machineId);
 const staticHosting = enquiryProvider === 'formspree';
 const emailDelivery = !!hostedEnquiryEndpoint;
@@ -31,6 +32,11 @@ const phoneCountries = getCountries()
   class="enquiry-form"
   data-enquiry-form
   data-locale={locale}
+  data-guide-options={JSON.stringify(
+    articles
+      .filter((a) => !a.sample && a.published.includes(locale))
+      .map((a) => guideContext(articles, a.id, locale)),
+  )}
   data-preview={!settings.identityVerified}
   data-static-hosting={staticHosting}
   data-delivery={emailDelivery ? 'formspree' : 'local'}
@@ -41,6 +47,7 @@ const phoneCountries = getCountries()
 >
   <h2>{heading || l(locale, 'Teklif isteyin', 'Request a quote')}</h2>
   <slot name="intro" />
+  <p data-guide-context hidden></p>
   <div class="enquiry-machine-context" data-machine-context hidden={!selected}>
     <img
       data-context-image

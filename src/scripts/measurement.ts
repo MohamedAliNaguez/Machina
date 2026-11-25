@@ -15,11 +15,12 @@ export function initMeasurement() {
   if (!/^G-[A-Z0-9]+$/.test(id)) return;
   const w = window as unknown as AnalyticsWindow;
   const products: Record<string, string> = JSON.parse(root.dataset.products || '{}');
+  const guides: Record<string, string> = JSON.parse(root.dataset.guides || '{}');
   const notice = root.querySelector<HTMLElement>('[data-consent-notice]')!;
   const settings = root.querySelector<HTMLButtonElement>('[data-consent-settings]')!;
   let consent = false;
   let loaded = false;
-  const send = (event: Interaction, family = root.dataset.family) => {
+  const send = (event: Interaction, family = root.dataset.family, guideId?: string) => {
     if (!consent) return;
     // Only explicit, bounded fields cross this boundary. Never spread form/event data.
     const payload = measurementPayload(
@@ -29,6 +30,7 @@ export function initMeasurement() {
     );
     w.gtag?.('event', event, {
       ...payload,
+      ...(guideId && Object.hasOwn(guides, guideId) ? { guide_id: guideId } : {}),
       page_location: location.origin + payload.page_path,
       page_referrer: document.referrer ? new URL(document.referrer).origin : '',
       page_title: 'TECHNICSAN',
@@ -98,14 +100,27 @@ export function initMeasurement() {
   else if (saved === 'denied') choose(false);
   else notice.hidden = false;
   window.addEventListener('enquiry:accepted', (event) => {
-    const detail = (event as CustomEvent<{ machineId?: string; preview?: boolean }>).detail;
+    const detail = (
+      event as CustomEvent<{ machineId?: string; preview?: boolean; guideId?: string }>
+    ).detail;
     if (detail?.preview) return;
-    send('enquiry_success', detail?.machineId ? products[detail.machineId] : undefined);
+    send(
+      'enquiry_success',
+      detail?.machineId
+        ? products[detail.machineId]
+        : detail?.guideId
+          ? guides[detail.guideId]
+          : undefined,
+      detail?.guideId,
+    );
   });
   document.addEventListener('click', (event) => {
     const anchor = (event.target as Element)?.closest?.('a');
     if (!anchor) return;
     const href = anchor.getAttribute('href') || '';
+    const guideId = anchor.closest<HTMLElement>('[data-guide-product]')?.dataset.guideProduct;
+    if (guideId && Object.hasOwn(guides, guideId))
+      send('guide_product_click', guides[guideId], guideId);
     const eventName = href.startsWith('tel:')
       ? 'phone_click'
       : href.startsWith('mailto:')
