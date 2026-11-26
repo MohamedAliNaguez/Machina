@@ -9,6 +9,16 @@ const { blocks, locale } = Astro.props as { blocks: GuideBlock[]; locale: Locale
 {blocks.map((block) => (
   <>
     {block.kind === 'paragraph' && <p>{block.text?.[locale]}</p>}
+    {block.kind === 'heading' && <h3>{block.text?.[locale]}</h3>}
+    {block.kind === 'links' && (
+      <ul class="guide-resource-links">
+        {block.links?.map((link) => (
+          <li>
+            <a href={withBase(link.href)}>{link.label[locale]}</a>
+          </li>
+        ))}
+      </ul>
+    )}
     {block.kind === 'list' && (
       <ul>
         {block.items?.map((item) => (
@@ -63,6 +73,14 @@ const { blocks, locale } = Astro.props as { blocks: GuideBlock[]; locale: Locale
           height="800"
         />
         <figcaption>{block.caption?.[locale]}</figcaption>
+        <a
+          class="guide-figure-full"
+          href={withBase(block.image.src)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {l(locale, 'Görseli tam boyutta aç', 'Open figure at full size')}
+        </a>
       </figure>
     )}
   </>

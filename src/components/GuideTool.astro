@@ -88,12 +88,74 @@ const rfq = [
           payload: l(locale, 'Yük ön değerlendirmesi', 'Payload screening'),
           components: l(locale, 'Ekipmanı keşfedin', 'Explore the equipment'),
           unloading: l(locale, 'Süre senaryosu', 'Time scenario'),
+          fleet: l(locale, 'Filo verimliliği senaryosu', 'Fleet productivity scenario'),
           comparison: l(locale, 'Teklif kapsamı çalışma tablosu', 'Quotation coverage worksheet'),
           rfq: l(locale, 'Teklif özetinizi hazırlayın', 'Build your quotation brief'),
         }[kind]
       }
     </h3>
   </div>
+  {kind === 'fleet' && (
+    <>
+      <p class="tool-intro">
+        {l(
+          locale,
+          'Kendi varsayımlarınızla yıllık zaman ve yatırım senaryosunu karşılaştırın.',
+          'Compare annual vehicle time and an investment scenario using your own assumptions.',
+        )}
+      </p>
+      <form class="tool-fields" data-calculator novalidate>
+        {[
+          ['vehicles', 'Vehicles', 'Araç sayısı', 'vehicles'],
+          [
+            'deliveries',
+            'Annual deliveries per vehicle',
+            'Araç başına yıllık teslimat',
+            'deliveries/year',
+          ],
+          ['current', 'Current turnaround', 'Mevcut toplam süre', 'min'],
+          ['target', 'Target turnaround', 'Hedef toplam süre', 'min'],
+          [
+            'hourly',
+            'Assumed time-related cost',
+            'Varsayılan zamana bağlı maliyet',
+            '€/vehicle-hour',
+          ],
+          ['recoverable', 'Recoverable share of time value', 'Geri kazanılabilir değer payı', '%'],
+          ['investment', 'Extra investment per vehicle', 'Araç başına ek yatırım', '€'],
+        ].map(([name, en, tt, unit]) => (
+          <label>
+            <span>
+              {tr ? tt : en} <small>{unit}</small>
+            </span>
+            <input
+              name={name}
+              type="number"
+              inputmode="decimal"
+              required
+              step={['vehicles', 'deliveries'].includes(name) ? '1' : 'any'}
+              min={['hourly', 'recoverable', 'investment'].includes(name) ? '0' : '1'}
+              max={name === 'recoverable' ? '100' : undefined}
+              aria-describedby="fleet-note"
+            />
+          </label>
+        ))}
+        <button type="button" class="tool-example" data-example>
+          {l(locale, 'Makaledeki örneği yükle', 'Load the article example')}
+        </button>
+      </form>
+      <div class="tool-result" aria-live="polite" aria-atomic="true" data-result>
+        {l(locale, 'Hesaplamak için tüm değerleri girin.', 'Enter all values to calculate.')}
+      </div>
+      <p class="tool-note" id="fleet-note">
+        {l(
+          locale,
+          'Varsayımsal değerlendirme. Zaman değeri nakit tasarrufu değildir. Finansman, ek bakım, enerji farkları ve vergiler dahil değildir. Değerler bu sekmede kalır.',
+          'Illustrative assessment. Time-related value is not cash savings. Financing, additional maintenance, energy differences and taxes are excluded. Your inputs stay in this tab.',
+        )}
+      </p>
+    </>
+  )}
   {kind === 'payload' && (
     <>
       <form class="tool-fields" data-calculator novalidate>

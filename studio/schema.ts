@@ -461,13 +461,31 @@ const guideBlock = defineType({
     defineField({
       name: 'kind',
       type: 'string',
-      options: { list: ['paragraph', 'list', 'table', 'figure', 'checklist'] },
+      options: { list: ['paragraph', 'heading', 'list', 'table', 'figure', 'checklist', 'links'] },
       validation: required,
     }),
     defineField({
       name: 'text',
       type: 'localeText',
-      hidden: ({ parent }: any) => parent?.kind !== 'paragraph',
+      hidden: ({ parent }: any) => !['paragraph', 'heading'].includes(parent?.kind),
+    }),
+    defineField({
+      name: 'links',
+      type: 'array',
+      hidden: ({ parent }: any) => parent?.kind !== 'links',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({ name: 'label', type: 'localeString', validation: required }),
+            defineField({
+              name: 'href',
+              type: 'string',
+              validation: (rule) => rule.required().regex(/^\/(?!\/)[a-zA-Z0-9/?=&%_-]*$/),
+            }),
+          ],
+        },
+      ],
     }),
     defineField({
       name: 'items',
@@ -576,6 +594,7 @@ const article = defineType({
                   { title: 'Payload estimator', value: 'payload' },
                   { title: 'Equipment diagram', value: 'components' },
                   { title: 'Unloading time estimator', value: 'unloading' },
+                  { title: 'Fleet productivity calculator', value: 'fleet' },
                   { title: 'Quotation comparison', value: 'comparison' },
                   { title: 'RFQ builder and sales form', value: 'rfq' },
                 ],

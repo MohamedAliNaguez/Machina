@@ -69,6 +69,16 @@ export function ContentPreview(props: { document: { displayed: Record<string, an
               section.blocks.map((block: any, j: number) => (
                 <div key={block._key || j}>
                   {block.kind === 'paragraph' && <Text>{block.text?.[locale]}</Text>}
+                  {block.kind === 'heading' && <h3>{block.text?.[locale]}</h3>}
+                  {block.kind === 'links' && (
+                    <ul>
+                      {block.links?.map((link: any, i: number) => (
+                        <li key={i}>
+                          {link.label?.[locale]} ({link.href})
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                   {['list', 'checklist'].includes(block.kind) && (
                     <ul>
                       {block.items?.map((item: any, k: number) => (

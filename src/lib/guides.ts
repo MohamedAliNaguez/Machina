@@ -1,6 +1,7 @@
 import type { Article, Locale, Localized } from './types';
 export interface GuideBlock {
-  kind: 'paragraph' | 'list' | 'table' | 'figure' | 'checklist';
+  kind: 'paragraph' | 'heading' | 'list' | 'table' | 'figure' | 'checklist' | 'links';
+  links?: { label: Localized; href: string }[];
   text?: Localized;
   items?: Localized[];
   columns?: Localized[];
@@ -10,7 +11,14 @@ export interface GuideBlock {
 }
 export function blockComplete(block: GuideBlock, locale: Locale): boolean {
   const text = (value?: Localized) => !!value?.[locale]?.trim();
-  if (block.kind === 'paragraph') return text(block.text);
+  if (block.kind === 'paragraph' || block.kind === 'heading') return text(block.text);
+  if (block.kind === 'links')
+    return (
+      !!block.links?.length &&
+      block.links.every(
+        (link) => text(link.label) && /^\/(?!\/)[a-zA-Z0-9/?=&%_-]*$/.test(link.href),
+      )
+    );
   if (block.kind === 'list' || block.kind === 'checklist')
     return !!block.items?.length && block.items.every(text);
   if (block.kind === 'figure')
@@ -32,7 +40,9 @@ export function sectionComplete(section: Article['sections'][number], locale: Lo
   return (
     !!section.heading?.[locale]?.trim() &&
     (!section.tool ||
-      ['payload', 'components', 'unloading', 'comparison', 'rfq'].includes(section.tool)) &&
+      ['payload', 'components', 'unloading', 'fleet', 'comparison', 'rfq'].includes(
+        section.tool,
+      )) &&
     (section.blocks?.length
       ? section.blocks.every((block) => blockComplete(block, locale))
       : !!section.text?.[locale]?.trim())

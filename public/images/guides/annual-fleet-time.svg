@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="864pt" height="576pt" viewBox="0 0 864 576" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-26T15:51:08.470342</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 576 
+L 864 576 
+L 864 0 
+L 0 0 
+z
+" style="fill: #f0f1e9"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 190.08 414.72 
+L 794.88 414.72 
+L 794.88 195.84 
+L 190.08 195.84 
+z
+" style="fill: #f0f1e9"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 190.08 414.72 
+L 190.08 195.84 
+" clip-path="url(#pc530678ae1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2"/>
+     <g id="text_1">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="190.08" y="438.116484" transform="rotate(-0 190.08 438.116484)">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 258.807273 414.72 
+L 258.807273 195.84 
+" clip-path="url(#pc530678ae1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4"/>
+     <g id="text_2">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="258.807273" y="438.116484" transform="rotate(-0 258.807273 438.116484)">250</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 327.534545 414.72 
+L 327.534545 195.84 
+" clip-path="url(#pc530678ae1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6"/>
+     <g id="text_3">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="327.534545" y="438.116484" transform="rotate(-0 327.534545 438.116484)">500</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_7">
+      <path d="M 396.261818 414.72 
+L 396.261818 195.84 
+" clip-path="url(#pc530678ae1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8"/>
+     <g id="text_4">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="396.261818" y="438.116484" transform="rotate(-0 396.261818 438.116484)">750</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_9">
+      <path d="M 464.989091 414.72 
+L 464.989091 195.84 
+" clip-path="url(#pc530678ae1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10"/>
+     <g id="text_5">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="464.989091" y="438.116484" transform="rotate(-0 464.989091 438.116484)">1000</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_11">
+      <path d="M 533.716364 414.72 
+L 533.716364 195.84 
+" clip-path="url(#pc530678ae1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12"/>
+     <g id="text_6">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="533.716364" y="438.116484" transform="rotate(-0 533.716364 438.116484)">1250</text>
+     </g>
+    </g>
+    <g id="xtick_7">
+     <g id="line2d_13">
+      <path d="M 602.443636 414.72 
+L 602.443636 195.84 
+" clip-path="url(#pc530678ae1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_14"/>
+     <g id="text_7">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="602.443636" y="438.116484" transform="rotate(-0 602.443636 438.116484)">1500</text>
+     </g>
+    </g>
+    <g id="xtick_8">
+     <g id="line2d_15">
+      <path d="M 671.170909 414.72 
+L 671.170909 195.84 
+" clip-path="url(#pc530678ae1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_16"/>
+     <g id="text_8">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="671.170909" y="438.116484" transform="rotate(-0 671.170909 438.116484)">1750</text>
+     </g>
+    </g>
+    <g id="xtick_9">
+     <g id="line2d_17">
+      <path d="M 739.898182 414.72 
+L 739.898182 195.84 
+" clip-path="url(#pc530678ae1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_18"/>
+     <g id="text_9">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="739.898182" y="438.116484" transform="rotate(-0 739.898182 438.116484)">2000</text>
+     </g>
+    </g>
+    <g id="text_10">
+     <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #153c2b" x="492.48" y="468.117656" transform="rotate(-0 492.48 468.117656)">Annual vehicle-hours occupied by turnaround</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_19"/>
+     <g id="text_11">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; fill: #526653" transform="translate(125.940938 235.504508)">75 min</text>
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; fill: #526653" transform="translate(121.743281 253.507438)">Current</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_20"/>
+     <g id="text_12">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; fill: #526653" transform="translate(125.940938 369.951683)">45 min</text>
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; fill: #526653" transform="translate(131.671406 387.954613)">Target</text>
+     </g>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 190.08 270.323735 
+L 705.534545 270.323735 
+L 705.534545 205.789091 
+L 190.08 205.789091 
+z
+" clip-path="url(#pc530678ae1)" style="fill: #0a3424"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 190.08 404.770909 
+L 499.352727 404.770909 
+L 499.352727 340.236265 
+L 190.08 340.236265 
+z
+" clip-path="url(#pc530678ae1)" style="fill: #688769"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 499.352727 404.770909 
+L 705.534545 404.770909 
+L 705.534545 340.236265 
+L 499.352727 340.236265 
+z
+" clip-path="url(#pc530678ae1)" style="fill: #9bc900"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 190.08 414.72 
+L 794.88 414.72 
+" style="fill: none; stroke: #aabca0; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_13">
+    <text style="font-weight: 700; font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #153c2b" x="715.156364" y="242.213288" transform="rotate(-0 715.156364 242.213288)">1,875 h</text>
+   </g>
+   <g id="text_14">
+    <text style="font-weight: 700; font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="344.029091" y="376.660462" transform="rotate(-0 344.029091 376.660462)">1,125 h</text>
+   </g>
+   <g id="text_15">
+    <text style="font-weight: 700; font-size: 16px; font-family: 'DejaVu Sans'; fill: #0a3424" transform="translate(577.264886 367.058275)">750 h</text>
+    <text style="font-weight: 700; font-size: 16px; font-family: 'DejaVu Sans'; fill: #0a3424" transform="translate(563.591136 386.26265)">released</text>
+   </g>
+  </g>
+  <g id="line2d_21">
+   <path d="M 47.52 120.96 
+L 816.48 120.96 
+" style="fill: none; stroke: #bdc9b4; stroke-linecap: square"/>
+  </g>
+  <g id="text_16">
+   <text style="font-weight: 700; font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #526653" x="47.52" y="34.56" transform="rotate(-0 47.52 34.56)">TECHNICSAN  /  ENGINEERING SERIES  /  FIGURE 03</text>
+  </g>
+  <g id="text_17">
+   <text style="font-weight: 700; font-size: 22px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #153c2b" x="47.52" y="72" transform="rotate(-0 47.52 72)">What 30 minutes can mean across a fleet</text>
+  </g>
+  <g id="text_18">
+   <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #526653" x="47.52" y="98.496" transform="rotate(-0 47.52 98.496)">Scenario: 5 vehicles × 300 annual deliveries per vehicle = 1,500 deliveries</text>
+  </g>
+  <g id="text_19">
+   <text style="font-weight: 700; font-size: 45px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0a3424" x="47.52" y="155.52" transform="rotate(-0 47.52 155.52)">750</text>
+  </g>
+  <g id="text_20">
+   <text style="font-weight: 700; font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #153c2b" x="194.4" y="150.912" transform="rotate(-0 194.4 150.912)">VEHICLE-HOURS RELEASED PER YEAR</text>
+  </g>
+  <g id="text_21">
+   <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #526653" transform="translate(47.52 534.08)">Time released = vehicles × annual deliveries per vehicle × minutes released per delivery ÷ 60</text>
+   <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #526653" transform="translate(47.52 550.08)">Illustrative scenario · Released time and economic value do not automatically become cash savings.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pc530678ae1">
+   <rect x="190.08" y="195.84" width="604.8" height="218.88"/>
+  </clipPath>
+ </defs>
+</svg>

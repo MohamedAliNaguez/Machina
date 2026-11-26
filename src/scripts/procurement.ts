@@ -2,6 +2,8 @@ import {
   buildRfq,
   estimatePayload,
   estimateUnloading,
+  estimateFleet,
+  type FleetInputs,
   type PayloadInputs,
 } from '../lib/procurement';
 function download(text: string, filename: string) {
@@ -17,7 +19,7 @@ export function initProcurementTools() {
     const tr = root.dataset.locale === 'tr';
     const number = new Intl.NumberFormat(tr ? 'tr-TR' : 'en-GB', { maximumFractionDigits: 2 });
     const kind = root.dataset.buyerTool;
-    if (kind === 'payload' || kind === 'unloading') {
+    if (kind === 'payload' || kind === 'unloading' || kind === 'fleet') {
       const form = root.querySelector<HTMLFormElement>('[data-calculator]')!;
       const result = root.querySelector<HTMLElement>('[data-result]')!;
       form.addEventListener('submit', (e) => e.preventDefault());
@@ -41,7 +43,52 @@ export function initProcurementTools() {
             : 'Check the values; zero, negative or invalid values cannot be calculated.';
           return;
         }
-        if (kind === 'payload') {
+        if (kind === 'fleet') {
+          const value = estimateFleet(values as unknown as FleetInputs);
+          result.replaceChildren();
+          if (!value) {
+            result.textContent = tr
+              ? 'Değerleri kontrol edin. Hedef süre mevcut süreden büyük olamaz.'
+              : 'Check the values. Target turnaround cannot exceed current turnaround.';
+            return;
+          }
+          const title = document.createElement('span');
+          title.textContent = tr
+            ? 'Yıllık serbest kalan araç zamanı'
+            : 'Annual vehicle time released';
+          const hours = document.createElement('strong');
+          hours.textContent = number.format(value.hours) + ' h';
+          result.append(title, hours);
+          const lines = [
+            [
+              tr ? 'Zamana bağlı ekonomik değer' : 'Time-related economic value',
+              '€' + number.format(value.timeValue) + '/year',
+            ],
+            [
+              tr
+                ? 'Varsayılan geri kazanılabilir yıllık fayda'
+                : 'Assumed recoverable annual benefit',
+              '€' + number.format(value.annualBenefit) + '/year',
+            ],
+            [
+              tr ? 'Toplam ek filo yatırımı' : 'Total additional fleet investment',
+              '€' + number.format(value.totalInvestment),
+            ],
+            [
+              tr ? 'Basit geri ödeme' : 'Simple payback',
+              value.payback === undefined
+                ? tr
+                  ? 'Yıllık fayda sıfır; hesaplanamaz'
+                  : 'No positive annual benefit; not calculable'
+                : number.format(value.payback) + (tr ? ' ay' : ' months'),
+            ],
+          ];
+          lines.forEach(([label, amount]) => {
+            const p = document.createElement('p');
+            p.textContent = label + ': ' + amount;
+            result.append(p);
+          });
+        } else if (kind === 'payload') {
           const value = estimatePayload(values as unknown as PayloadInputs);
           if (!value) {
             result.textContent = tr
@@ -82,9 +129,22 @@ export function initProcurementTools() {
       form.addEventListener('input', update);
       root.querySelector('[data-example]')?.addEventListener('click', () => {
         const values =
-          kind === 'payload'
-            ? { volume: 35, density: 1.2, fill: 90, tractor: 8, trailer: 6.5, gross: 40 }
-            : { payload: 25.5, rate: 30, handling: 10 };
+          kind === 'fleet'
+            ? {
+                vehicles: 5,
+                deliveries: 300,
+                current: 75,
+                target: 45,
+                hourly: 35,
+                recoverable: 50,
+                investment: 4000,
+              }
+            : kind === 'payload'
+              ? { volume: 35, density: 1.2, fill: 90, tractor: 8, trailer: 6.5, gross: 40 }
+              : root.closest('[data-guide-id]')?.getAttribute('data-guide-id') ===
+                  'guide-cement-bulker-unloading'
+                ? { payload: 25, rate: 40, handling: 15 }
+                : { payload: 25.5, rate: 30, handling: 10 };
         Object.entries(values).forEach(([key, value]) => {
           (form.elements.namedItem(key) as HTMLInputElement).value = String(value);
         });

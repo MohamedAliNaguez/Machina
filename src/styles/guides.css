@@ -917,3 +917,41 @@
     color: black;
   }
 }
+
+.steel-page .guide-reader .guide-prose .guide-section h3 {
+  font: 600 clamp(21px, 2vw, 27px)/1.25 var(--body);
+  letter-spacing: -0.025em;
+  color: #143e29;
+  margin: 36px 0 16px;
+}
+.guide-related-reading {
+  margin: 48px 0;
+}
+.guide-related-reading > a {
+  display: grid;
+  gap: 12px;
+  padding: 24px 0;
+  border-block: 1px solid #b7c5ae;
+  text-decoration: none;
+}
+.guide-related-reading > a > span {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.guide-related-reading small {
+  color: #53665b;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.guide-resource-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding: 24px !important;
+  background: #e5ebdb;
+  list-style: none;
+}
+.guide-resource-links li {
+  margin: 0 !important;
+}

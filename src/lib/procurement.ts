@@ -1,4 +1,44 @@
-export type GuideTool = 'payload' | 'components' | 'unloading' | 'comparison' | 'rfq';
+export type GuideTool = 'payload' | 'components' | 'unloading' | 'fleet' | 'comparison' | 'rfq';
+
+export interface FleetInputs {
+  vehicles: number;
+  deliveries: number;
+  current: number;
+  target: number;
+  hourly: number;
+  recoverable: number;
+  investment: number;
+}
+export function estimateFleet(v: FleetInputs) {
+  if (
+    !Object.values(v).every(Number.isFinite) ||
+    !Number.isInteger(v.vehicles) ||
+    !Number.isInteger(v.deliveries) ||
+    v.vehicles <= 0 ||
+    v.deliveries <= 0 ||
+    v.current <= 0 ||
+    v.target <= 0 ||
+    v.target > v.current ||
+    v.hourly < 0 ||
+    v.recoverable < 0 ||
+    v.recoverable > 100 ||
+    v.investment < 0
+  )
+    return undefined;
+  const hours = (v.vehicles * v.deliveries * (v.current - v.target)) / 60;
+  const timeValue = hours * v.hourly;
+  const annualBenefit = (timeValue * v.recoverable) / 100;
+  const totalInvestment = v.vehicles * v.investment;
+  if (![hours, timeValue, annualBenefit, totalInvestment].every(Number.isFinite)) return undefined;
+  const payback = annualBenefit > 0 ? (totalInvestment / annualBenefit) * 12 : undefined;
+  return {
+    hours,
+    timeValue,
+    annualBenefit,
+    totalInvestment,
+    payback: payback !== undefined && Number.isFinite(payback) ? payback : undefined,
+  };
+}
 export interface PayloadInputs {
   volume: number;
   density: number;

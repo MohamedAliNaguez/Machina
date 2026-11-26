@@ -15,7 +15,10 @@ interface Props {
   article: Article;
 }
 const { locale, article } = Astro.props;
-const { categories, machines } = await getContent();
+const { categories, machines, articles } = await getContent();
+const relatedGuides = articles.filter(
+  (a) => a.id !== article.id && a.categoryId === article.categoryId && a.published.includes(locale),
+);
 const category = categories.find((c) => c.id === article.categoryId);
 const related = (article.relatedProductIds || []).flatMap((id) =>
   machines.filter((m) => m.id === id && m.published.includes(locale)),
@@ -214,6 +217,17 @@ const answer = article.excerpt[locale];
               </li>
             ))}
           </ul>
+        </section>
+      )}
+      {relatedGuides.length > 0 && (
+        <section class="guide-related-reading">
+          <h2>{l(locale, 'Okumaya devam edin', 'Continue reading')}</h2>
+          {relatedGuides.map((guide) => (
+            <a href={url(locale, 'guides', guide.slug[locale])}>
+              <span>{guide.title[locale]}</span>
+              <small>{guide.excerpt[locale]}</small>
+            </a>
+          ))}
         </section>
       )}
       {related.length > 0 && (
