@@ -3,6 +3,7 @@ import { Card, Stack, Text, Heading, Badge } from '@sanity/ui';
 import { useClient } from 'sanity';
 import {
   companySearchIssues,
+  brandSearchIssues,
   categorySearchIssues,
   articleSearchIssues,
   productSearchIssues,
@@ -24,8 +25,9 @@ export function SearchReadiness(props: { document: { displayed: Record<string, a
     };
   }, [client]);
   const company = doc._type === 'siteSettings' ? (doc as Settings) : settings;
+  const brandOnly = company?.searchReleaseMode === 'brand-only';
   const common = company
-    ? companySearchIssues({ settings: company } as Content)
+    ? (brandOnly ? brandSearchIssues : companySearchIssues)({ settings: company } as Content)
     : ['Loading company checks'];
   return (
     <Card padding={5}>
@@ -35,15 +37,24 @@ export function SearchReadiness(props: { document: { displayed: Record<string, a
           Publishing and search approval are separate. The website also checks HTTPS and enquiry
           configuration at release. This panel never approves content automatically.
         </Text>
+        {brandOnly && (
+          <Text size={1}>
+            Brand-only scope: Home and Contact can pass using confirmed brand and contact facts. All
+            other pages remain excluded; legal identity, manufacturing, company history and
+            technical content are not certified by this release.
+          </Text>
+        )}
         <Badge tone="caution">
           Public dataset · keep confidential provenance outside this editor
         </Badge>
         {(['en', 'tr'] as const).map((locale) => {
           let issues = [...common];
-          if (!company?.about?.[locale]?.trim())
+          if (!brandOnly && !company?.about?.[locale]?.trim())
             issues.push('Add the approved company description');
-          if (!company?.privacyNotice?.[locale]?.trim())
+          if (!brandOnly && !company?.privacyNotice?.[locale]?.trim())
             issues.push('Add the reviewed privacy notice');
+          if (brandOnly && doc._type !== 'siteSettings')
+            issues.push('This document is outside the Home-and-Contact search release');
           if (doc._type === 'category')
             issues.push(...categorySearchIssues(doc as Category, locale));
           else if (doc._type === 'article')
@@ -72,7 +83,9 @@ export function SearchReadiness(props: { document: { displayed: Record<string, a
               ),
             );
           else if (doc._type === 'siteSettings')
-            for (const page of ['home', 'about', 'contact'] as const) {
+            for (const page of (brandOnly ? ['home', 'contact'] : ['home', 'about', 'contact']) as (
+              'home' | 'about' | 'contact'
+            )[]) {
               issues.push(
                 ...seoIssues(doc.pageSeo?.[page], locale).map((issue) => `${page}: ${issue}`),
               );

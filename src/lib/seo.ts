@@ -3,6 +3,7 @@ import { companyHistory } from '../data/history';
 import { paths, url } from './i18n';
 import {
   companySearchIssues,
+  brandSearchIssues,
   seoIssues,
   categorySearchIssues,
   productSearchIssues,
@@ -22,10 +23,11 @@ export function resolveSeoPage(content: Content, pathname: string): SeoPage {
   const start = parts.findIndex((p) => p === 'en' || p === 'tr');
   const locale: Locale = parts[start] === 'tr' ? 'tr' : 'en';
   const [section, slug] = parts.slice(start + 1);
-  const common = [...companySearchIssues(content)];
-  if (!text(content.settings.about?.[locale]))
+  const brandOnly = content.settings.searchReleaseMode === 'brand-only';
+  const common = brandOnly ? brandSearchIssues(content) : companySearchIssues(content);
+  if (!brandOnly && !text(content.settings.about?.[locale]))
     common.push(`Approve the ${locale} company description`);
-  if (!text(content.settings.privacyNotice?.[locale]))
+  if (!brandOnly && !text(content.settings.privacyNotice?.[locale]))
     common.push(`Approve the ${locale} privacy notice`);
   let kind = 'excluded';
   let seo: SeoFields | undefined;
@@ -72,6 +74,8 @@ export function resolveSeoPage(content: Content, pathname: string): SeoPage {
         : ['Publish at least one approved guide'];
     }
   }
+  if (brandOnly && !['home', 'contact'].includes(kind))
+    common.push('Brand-only release is limited to Home and Contact');
   return { locale, kind, seo, family, issues: [...common, ...issues] };
 }
 export function searchReleasePages(content: Content) {

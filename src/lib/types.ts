@@ -105,6 +105,7 @@ export interface Article extends SeoFields {
   published: Locale[];
 }
 export interface Settings {
+  searchReleaseMode?: 'brand-only' | 'company';
   featuredGuideId?: string;
   name: string;
   legalName?: string;

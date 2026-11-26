@@ -176,3 +176,41 @@ test('static hosting requires an endpoint and unsupported hosting is rejected', 
   assert.throws(() => validateEnquirySetup({ hosting: 'github-pages', formId: '' }), /Formspree/);
   assert.throws(() => validateEnquirySetup({ hosting: 'local' }), /production hosting/);
 });
+
+test('brand-only release indexes exactly Home and Contact without certifying missing company facts', () => {
+  const content = structuredClone(repositoryContent);
+  content.settings.searchReleaseMode = 'brand-only';
+  content.settings.pageSeo = {
+    home: structuredClone(approved),
+    contact: structuredClone(approved),
+    about: structuredClone(approved),
+  };
+  content.settings.identityVerified = false;
+  content.settings.manufacturerVerified = false;
+  content.settings.privacyReviewed = false;
+  content.settings.legalName = '';
+  content.settings.address = '';
+  content.categories.forEach((c) => Object.assign(c, structuredClone(approved)));
+  validateContent(content, true, { enquiryProvider: 'formspree' });
+  assert.deepEqual(
+    searchReleasePages(content)
+      .filter((p) => !p.issues.length)
+      .map((p) => p.path)
+      .sort(),
+    ['/en/', '/en/contact/', '/tr/', '/tr/iletisim/'].sort(),
+  );
+  assert.equal(seoHeadState(content, '/en/', '/tr/', release).indexing, true);
+  assert.equal(seoHeadState(content, '/en/about/', '/tr/hakkimizda/', release).indexing, false);
+  assert.equal(
+    seoHeadState(content, '/en/', '/tr/', { ...release, preview: true }).indexing,
+    false,
+  );
+  content.settings.manufacturerVerified = true;
+  assert.throws(
+    () => validateContent(content, true, { enquiryProvider: 'formspree' }),
+    /manufacturing positioning/,
+  );
+  content.settings.manufacturerVerified = false;
+  content.settings.email = '';
+  assert.equal(seoHeadState(content, '/en/', '/tr/', release).indexing, false);
+});

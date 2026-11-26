@@ -1,98 +1,34 @@
 # TECHNICSAN search release
 
-## Current state
+## Current release scope
 
-The SEO implementation supports selective English and Turkish releases. It does **not** approve company facts or publish the guide drafts automatically. The owner has not yet supplied the legal business name, public factory address or actual guide author/reviewer, and has no Search Console, Bing or GA4 accounts configured.
+The owner approved a **brand-only release on 26 November 2026**: English and Turkish Home and Contact only. These four pages use confirmed TECHNICSAN branding, Ankara location and sales contact details. This does not verify the registered company identity, factory address, manufacturing role, privacy review, company history, product specifications or guide authorship.
 
-- Published CMS content: five categories and fourteen products, all search approvals pending.
-- Five original bilingual buying-guide drafts are in the authenticated Sanity Studio. They are not public articles. Sources, actual authorship, image descriptions and expert review must be completed before publication/search approval. No publication or review dates have been invented.
-- All five category landing pages have editable explanations, selection advice and buyer questions. Their production-evidence fields need original, reviewed company information.
-- HTTPS certificate provisioning remains an external GitHub prerequisite. The current certificate must be checked again before release. Never disable certificate validation to pass a check.
+Sanity → Company & launch settings → Search release scope controls this boundary. `brand-only` requires valid brand/contact facts and separate language-specific SEO approval, and excludes every other page regardless of its individual approval. `company` restores the complete company-evidence requirements plus each page's checks. Existing verification flags were left unchanged.
 
-## Editor workflow
+The first release sitemap must contain exactly:
 
-Open [TECHNICSAN Content Studio](https://technicsan-content.sanity.studio/). Each document has a **Search readiness** tab.
+- `https://technicsan.com/en/`
+- `https://technicsan.com/tr/`
+- `https://technicsan.com/en/contact/`
+- `https://technicsan.com/tr/iletisim/`
 
-1. Complete Company & launch settings: legal identity, public address, sales contacts, approved company description and privacy notice. Confirm the manufacturing role against real company evidence. Only use information suitable for the public dataset.
-2. Review Home, About and Contact search titles/descriptions separately for English and Turkish. About also requires approval of the visible company chronology.
-3. Review each category's explanation, applications, configurations, buyer questions and actual production evidence. Keep the navigation label **LPG catalog**. Record only verified capabilities; imported catalogue data and branded illustrations are not proof of manufacturing.
-4. Approve a language's SEO only when its content and evidence are complete. Publishing in Sanity alone does not grant search approval. An unfinished Turkish version does not block an approved English version.
-5. Release products individually after reconciling the facts with actual TECHNICSAN documentation. Each needs technical approval, complete published-language facts, image rights and at least **one genuine approved photograph**. Extra gallery views are optional. Use a real model code/SKU only when the company actually has one. A sold unit may retain its useful page and related alternatives.
-6. Complete the five private guide drafts with first-hand input, supporting sources, the actual author and technical reviewer, image descriptions and actual publication/review dates. Publish and approve the language versions that are complete. Technical and safety statements need the appropriate expert review.
+Catalogue filters, categories, products, company history/About, guides and privacy remain `noindex`. Public non-indexable pages remain crawlable so search engines can read their exclusion instructions. cPanel and webmail should not be indexed; their older Search Console exclusions are not sales-website errors.
 
-Do not put confidential supplier provenance or customer enquiries in the public Sanity dataset. The migration fills missing fields, snapshots content locally and preserves existing copy, flags and drafts. It does not overwrite editorial changes or grant approvals.
+## Deployment
 
-## Release checks and deployment
+Production uses Cloudflare Pages with a managed certificate, HTTPS redirects and the canonical host `https://technicsan.com`. The deployed sales form uses Formspree. Cloudflare preview hostnames always receive `X-Robots-Tag: noindex, follow`, even when the production artifact is search-enabled. Design routes are removed from every production artifact.
 
-Useful commands from the project root:
+`deployment/cloudflare/search-release.json` records that normal production deployments are search-enabled. `npm run cloudflare:build` and `npm run cloudflare:deploy` preserve the release by default. Readiness checks verify published content, the enquiry endpoint, HTTPS and canonical-host redirects before release. They do not send test emails.
 
-```text
-npm run seo:audit          # Report readiness without approving anything
-npm run content:check      # Validate the published CMS snapshot; never substitute samples
-npm run check
-npm run studio:check
-npm test
-npm run build
-npm run test:browser
-```
+Use `--review` explicitly to generate or deploy an entirely excluded review artifact. `--search-release` explicitly requests release; it cannot be combined with `--review`. The manual GitHub workflow defaults its `search_release` input to true; turning it off explicitly passes `--review`. Repository deployment credentials still need to be present for the GitHub button to work; local authenticated deployment remains available.
 
-`npm run verify:launch` additionally requires `PUBLIC_SITE_URL=https://technicsan.com`, `PUBLIC_HOSTING=github-pages`, published Sanity content, the configured enquiry endpoint, approved company checks and at least one eligible page. It tests the real HTTPS certificate and HTTP/www redirects. It does not send an email.
+## Verification
 
-Commit and push these local workflow changes before expecting the new release option in GitHub. This implementation has not redeployed the public website.
+Run the relevant unit/browser checks and Studio typecheck before deployment. Production build verification checks canonical URLs, reciprocal language alternates, structured data, internal links/assets and sitemap membership. Confirm the four-page sitemap, crawlable robots file, indexable Home/Contact HTML and excluded product/guide HTML on the canonical host after deployment. Confirm preview hostnames remain excluded.
 
-The [Deploy TECHNICSAN workflow](https://github.com/MohamedAliNaguez/Machina/actions/workflows/deploy.yml) stays manual. Its **search_release** option defaults to **false**. Leave it false for a review deployment. When the prerequisites pass, selecting it releases only the eligible pages; pending pages keep `noindex,follow`.
+Submit `https://technicsan.com/sitemap.xml` to the owner-controlled Search Console property after deployment. Use live URL inspection on representative Home/Contact pages. An accepted sitemap or indexing request does not guarantee indexing or rankings. Historical reports can still list URLs crawled before the hosting move.
 
-The first wave can contain up to sixteen pages: Home, About, Contact and five categories in each language. Public product filters always remain `noindex,follow`, directly in HTML. Editorial categories link to the separate interactive catalogue. Empty Guides/Brands and privacy pages remain excluded. Design experiments are removed from deployment artifacts.
+## Expanding the release
 
-Released `robots.txt` permits crawling, including AI search and training bots, and references the sitemap. Pending public pages stay crawlable so search engines can read their `noindex` directive. Review/preview builds retain the blanket crawl exclusion and an empty sitemap. Neither robots rules nor noindex are authentication; actual Sanity drafts stay behind sign-in.
-
-Canonicals use the production HTTPS host. Eligible translations receive reciprocal `hreflang`; English receives `x-default`. Unavailable or unapproved translations are not advertised to search engines. Language navigation still works for available review pages. The root redirects immediately to `/en/`. Existing direct legacy aliases and proper 404 responses remain intact.
-
-Organization, breadcrumb, Product and Article identifiers are stable and connected. Product data uses verified visible properties without invented prices, stock offers or ratings. Basic Product markup alone does not promise a Google product rich result.
-
-## Free search accounts
-
-Create accounts under company-controlled access. Keep ownership and recovery access with the company.
-
-1. [Google Search Console](https://search.google.com/search-console): add `technicsan.com` as a Domain property and copy its TXT verification value into Namecheap Advanced DNS. Add a new TXT record; preserve all existing MX, SPF, DKIM and other mail records. Alternatively, a URL-prefix property can use the optional `PUBLIC_GOOGLE_SITE_VERIFICATION` value.
-2. [Bing Webmaster Tools](https://www.bing.com/webmasters/): verify the site or import the verified Search Console property. The optional HTML value is `PUBLIC_BING_SITE_VERIFICATION`.
-3. After HTTPS and the first approved release, submit `https://technicsan.com/sitemap.xml` to both. Inspect representative English/Turkish Home, category and product URLs as they become eligible. Check fetched HTML, canonical, crawl permission and indexing eligibility. Submission does not guarantee indexing or ranking.
-
-Verification values are public; configure them as GitHub repository Actions variables with the names above. Never put account passwords or private tokens in public variables.
-
-## Optional consent-aware GA4
-
-Create an owner-controlled [Google Analytics](https://analytics.google.com/) property with the production HTTPS web stream. Disable **all Enhanced Measurement** for this stream, including page-history, form, scroll and outbound tracking. This project sends explicit events instead. Disable Google Signals, advertising personalization and user-provided data collection, and review the applicable privacy text before activation.
-
-Set repository variables `PUBLIC_GA4_MEASUREMENT_ID=G-…` and `PUBLIC_ANALYTICS_REVIEWED=true` only after that review. Empty/default values leave the integration inactive. Preview builds never activate it.
-
-The integration loads Google's tag only after a visitor opts in. Visitors can decline or change their preference. Events are:
-
-| Event                                            | Meaning                                                                                    |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `enquiry_success`                                | The delivery endpoint accepted the enquiry; local samples and failed requests are excluded |
-| `phone_click` / `whatsapp_click` / `email_click` | A contact link interaction; not a confirmed enquiry                                        |
-| `brochure_click`                                 | A brochure interaction; not a confirmed enquiry                                            |
-| `page_view`                                      | A consented navigation                                                                     |
-
-Only language, a known product family and the page path are emitted. Query strings, fragments, names, email addresses, phone numbers, messages, raw form values and enquiry IDs are not sent. Referrer information is restricted to its origin. Create an event-scoped custom dimension for `product_family`. Mark only `enquiry_success` as a key event. Qualification remains a separate sales review.
-
-## Performance and ongoing measurement
-
-`npm run perf:baseline` checks production HTTPS and runs Lighthouse for Home, category, product, Contact and About in mobile and desktop modes. For a built local preview, use `PERF_BASE_URL=http://127.0.0.1:4335 npm run perf:baseline -- --local` (set the environment variable with PowerShell syntax on Windows). Set `CHROME_PATH` when needed. Results and network details stay in ignored `.local/lighthouse/` folders. Run without competing browser tests or builds and repeat measurements before drawing conclusions.
-
-Responsive Sanity images and thumbnail sizes preserve full-resolution gallery originals. Header-logo variants are lossless derivatives of the approved 4K artwork. About's background and decorative product/foliage sprites have AVIF sources with the original WebP fallbacks and prioritised background loading; its animated vector scene paints first, then loads the optional WebGL enhancement when idle and visible. Reduced-motion users do not download that enhancement initially. Animation pauses offscreen and in hidden tabs. No 3D product model is loaded without an approved asset and an explicit viewer interaction.
-
-The 24 November local diagnostics measured Home, category, product and Contact at 98–100 performance on mobile, with LCP 1.07–2.33 seconds and CLS below 0.05. About remains the exception: roughly 3.6 seconds LCP and 524 ms lab TBT in the final throttled run, despite reducing its transfer size from 1.32 MB to 0.89 MB. Its desktop performance was 99. Further mobile animation profiling is a launch follow-up; do not present its targets as achieved. All five tested page types scored 100 in the automated Lighthouse accessibility category; this is not a full accessibility certification. Reports are local diagnostics, not field results.
-
-Targets are LCP ≤2.5 seconds, INP ≤200 ms and CLS ≤0.1. Lighthouse provides lab diagnostics and TBT, **not field INP**. Local reports are not production Core Web Vitals evidence. After HTTPS works, establish the production baseline and later use Search Console/CrUX field data when traffic is sufficient.
-
-Each month, review impressions, clicks, queries, countries and landing pages by product family and language, alongside consented enquiries and separately qualified leads. Record identifiable AI referrals without claiming a complete citation count. Add original production stories, technical answers and legitimate industry references as evidence becomes available. Avoid repetitive country pages and fabricated reviews, certifications or projects.
-
-## Rollback and recovery
-
-Before content migrations, export the dataset with the authenticated Sanity CLI or `npm run content:export`. A full CLI archive includes assets; the lightweight script export requires a read token and separate asset backup. Local migration snapshots live in `.local/sanity/`; keep protected backups outside the public repository. A complete rehearsal on 24 November 2026 exported 25 documents and 69 assets, restored them into a temporary **private** dataset, and matched the content, five draft documents and published catalogue against production. The temporary dataset was removed after verification; the archive and report remain in ignored `exports/`. `studio/recovery-check.ts` provides the repeatable authenticated comparison using a `RECOVERY_DATASET` beginning with `seo-recovery-`. Always restore into a private isolated dataset before relying on a backup. Never replace current production content just to test recovery.
-
-For code rollback, select a previously verified commit and run the manual deployment workflow for that revision. Use a revision containing the approval policy and keep review mode unless its own release preflight passes. A rollback must not remove preview exclusions or turn pending content into indexed content. Account-dependent URL Inspection and an actual production deployment rollback remain release-stage checks. The recovery rehearsal did not replace production content.
-
-References: [Google robots directives](https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag), [AI search guidance](https://developers.google.com/search/docs/appearance/ai-features), [Product requirements](https://developers.google.com/search/docs/appearance/structured-data/product-snippet), [helpful content](https://developers.google.com/search/docs/fundamentals/creating-helpful-content).
+Legal company name, public address, manufacturing evidence and actual technical author/reviewer remain outstanding. Complete and review these facts before switching to company scope. Categories require original evidence and translated editorial content; products require verified technical facts and genuine approved photography; guides require genuine authorship, sources and review/publication dates. Publishing in Sanity remains separate from search approval and requires a website rebuild. Do not invent verification flags, addresses, dates or authors to pass a gate.

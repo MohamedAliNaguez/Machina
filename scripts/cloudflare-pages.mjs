@@ -4,7 +4,14 @@ const command = process.argv[2] || 'build';
 if (!['build', 'deploy'].includes(command)) throw new Error('Use build or deploy.');
 if (process.env.SANITY_PREVIEW === 'true')
   throw new Error('Authenticated drafts cannot be deployed to public Pages URLs.');
-const release = process.argv.includes('--search-release');
+const searchPolicy = JSON.parse(
+  await readFile('deployment/cloudflare/search-release.json', 'utf8'),
+);
+if (process.argv.includes('--review') && process.argv.includes('--search-release'))
+  throw new Error('Choose review mode or search release, not both.');
+const release =
+  !process.argv.includes('--review') &&
+  (process.argv.includes('--search-release') || searchPolicy.enabled === true);
 const env = {
   ...process.env,
   PUBLIC_HOSTING: 'cloudflare',

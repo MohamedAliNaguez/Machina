@@ -1,6 +1,6 @@
 import { sectionComplete } from './guides';
 import { repositoryContent } from '../data/repository';
-import { companySearchIssues } from './seo';
+import { companySearchIssues, brandSearchIssues } from './seo';
 import { verifySearchTransport } from './search-transport';
 import delivery from '../data/enquiry-delivery.json';
 import { validateEnquirySetup } from './launch-enquiries';
@@ -112,7 +112,10 @@ export function validateContent(
   )
     throw new Error('Catalogue must contain exactly the five approved TECHNICSAN product types.');
   if (live) {
-    const issues = companySearchIssues(value);
+    const issues =
+      value.settings.searchReleaseMode === 'brand-only'
+        ? brandSearchIssues(value)
+        : companySearchIssues(value);
     if (options.enquiryProvider !== 'formspree' && !value.settings.turnstileSiteKey)
       issues.push('Configure the enquiry challenge');
     if (issues.length) throw new Error(`Launch blocked: ${issues.join('; ')}.`);

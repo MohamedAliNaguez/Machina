@@ -3,6 +3,17 @@ import type { Article, Category, Content, Locale, Machine, SeoFields } from './t
 const text = (value: unknown): value is string => typeof value === 'string' && !!value.trim();
 const date = (value: unknown) =>
   text(value) && Number.isFinite(Date.parse(value)) && Date.parse(value) <= Date.now();
+/** A factual brand/contact presence does not certify legal identity or manufacturing claims. */
+export function brandSearchIssues(content: Content): string[] {
+  const s = content.settings;
+  return [
+    !text(s.name) && 'Add the public brand name',
+    !text(s.city) && 'Add the confirmed company city',
+    (!text(s.email) || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email)) && 'Add a valid sales email',
+    (!text(s.phone) || !/^\+[\d\s()-]{8,30}$/.test(s.phone)) && 'Add an international sales phone',
+    s.manufacturerVerified && 'Brand-only release must keep manufacturing positioning disabled',
+  ].filter(Boolean) as string[];
+}
 export function companySearchIssues(content: Content): string[] {
   const s = content.settings;
   return [

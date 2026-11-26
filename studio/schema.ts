@@ -657,6 +657,24 @@ const siteSettings = defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'searchReleaseMode',
+      title: 'Search release scope',
+      type: 'string',
+      initialValue: 'company',
+      options: {
+        list: [
+          { title: 'Brand presence — Home and Contact only', value: 'brand-only' },
+          {
+            title: 'Company release — full evidence and page approvals required',
+            value: 'company',
+          },
+        ],
+      },
+      description:
+        'Brand presence uses confirmed brand/contact facts only. It does not verify legal identity, manufacturing, privacy review, products, guides or history.',
+    }),
+
+    defineField({
       name: 'featuredGuide',
       title: 'Featured guide',
       type: 'reference',
