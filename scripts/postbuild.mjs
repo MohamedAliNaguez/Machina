@@ -1,6 +1,7 @@
 import { readdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import delivery from '../src/data/enquiry-delivery.json' with { type: 'json' };
+import sanity from '../src/data/sanity.json' with { type: 'json' };
 import { createSecurityHeaders } from '../deployment/cloudflare/worker.mjs';
 try {
   process.loadEnvFile();
@@ -108,7 +109,12 @@ if (
     source
       .replace('/*__TECHNICSAN_SEARCH_RELEASE__*/ false', String(live))
       .replace('/*__TECHNICSAN_ALIASES__*/ {}', JSON.stringify(aliases))
+      .replace('/*__TECHNICSAN_AVAILABILITY__*/ {}', JSON.stringify(sanity))
       .replace('/*__TECHNICSAN_SCRIPT_HASHES__*/ []', JSON.stringify([...inlineScriptHashes])),
+  );
+  await writeFile(
+    'dist/availability.mjs',
+    await readFile('deployment/cloudflare/availability.mjs', 'utf8'),
   );
   await writeFile(
     'dist/_routes.json',

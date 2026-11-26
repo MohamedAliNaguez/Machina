@@ -2,7 +2,13 @@ export async function verifySearchTransport(origin: string, request: typeof fetc
   if (origin !== 'https://technicsan.com')
     throw new Error('Search release requires https://technicsan.com.');
   const secure = await request(origin, { signal: AbortSignal.timeout(20000), redirect: 'follow' });
-  if (!secure.ok || new URL(secure.url).origin !== origin)
+  // An intentional maintenance response still verifies TLS and the canonical host.
+  // Keep deployment independent of availability; ordinary 503 outages still fail.
+  const maintenance =
+    secure.status === 503 &&
+    secure.headers.get('x-technicsan-status') === 'maintenance' &&
+    secure.headers.has('retry-after');
+  if ((!secure.ok && !maintenance) || new URL(secure.url).origin !== origin)
     throw new Error('Production HTTPS is not reachable on the canonical host.');
   for (const address of ['http://technicsan.com', 'https://www.technicsan.com']) {
     const response = await request(address, {

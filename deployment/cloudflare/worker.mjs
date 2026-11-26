@@ -1,3 +1,5 @@
+import { createAvailabilityReader, maintenanceResponse } from './availability.mjs';
+
 export const securityHeaders = {
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
@@ -19,8 +21,16 @@ export function createSecurityHeaders(scriptHashes = []) {
 }
 
 /** Static assets plus canonical redirects; no enquiry storage or mail credentials. */
-export function createSiteWorker(searchRelease = false, aliases = {}, scriptHashes = []) {
+export function createSiteWorker(
+  searchRelease = false,
+  aliases = {},
+  scriptHashes = [],
+  availability = {},
+) {
   const responseHeaders = createSecurityHeaders(scriptHashes);
+  const readStatus =
+    availability.readStatus ||
+    (availability.projectId ? createAvailabilityReader(availability) : undefined);
   return {
     async fetch(request, env) {
       const url = new URL(request.url);
@@ -46,9 +56,13 @@ export function createSiteWorker(searchRelease = false, aliases = {}, scriptHash
         return headersFor(Response.redirect(url.href, 308));
       }
       if (url.pathname === '/') {
+        if (readStatus && (await readStatus()) === 'maintenance')
+          return headersFor(maintenanceResponse(request));
         url.pathname = '/en/';
         return headersFor(Response.redirect(url.href, 302));
       }
+      if (readStatus && (await readStatus()) === 'maintenance')
+        return headersFor(maintenanceResponse(request));
       const target =
         aliases[url.pathname] ||
         aliases[url.pathname.endsWith('/') ? url.pathname : url.pathname + '/'];
@@ -66,4 +80,5 @@ export default createSiteWorker(
   /*__TECHNICSAN_SEARCH_RELEASE__*/ false,
   /*__TECHNICSAN_ALIASES__*/ {},
   /*__TECHNICSAN_SCRIPT_HASHES__*/ [],
+  /*__TECHNICSAN_AVAILABILITY__*/ {},
 );

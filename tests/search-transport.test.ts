@@ -30,3 +30,21 @@ test('search release requires valid HTTPS plus apex and www canonical redirects'
     /redirect/,
   );
 });
+
+test('intentional maintenance allows deployment without accepting an unexplained outage', async () => {
+  const request = (async (input: string | URL | Request) => {
+    if (!String(input).startsWith('https://technicsan.com'))
+      return response(String(input), 308, 'https://technicsan.com/');
+    const value = response('https://technicsan.com/', 503);
+    value.headers.set('x-technicsan-status', 'maintenance');
+    value.headers.set('retry-after', '3600');
+    return value;
+  }) as typeof fetch;
+  await verifySearchTransport('https://technicsan.com', request);
+  await assert.rejects(
+    () =>
+      verifySearchTransport('https://technicsan.com', (async () =>
+        response('https://technicsan.com/', 503)) as typeof fetch),
+    /HTTPS/,
+  );
+});

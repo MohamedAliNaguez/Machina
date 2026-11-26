@@ -47,3 +47,7 @@ Published content is fetched at build time. Production is static and requires a 
 ## Search approval
 
 Use the **Search readiness** tab on a product, category, article or company settings document. It reports company prerequisites and language-specific missing facts, metadata, evidence, genuine photography and author/reviewer dates. Publishing does not automatically approve a page for search. See [SEO release](SEO-RELEASE.md) before selecting the manual search-release deployment option.
+
+## Website online / maintenance control
+
+The separate [Website status tool](https://technicsan-content.sanity.studio/website-status) has **Switch to maintenance** and **Bring website online** buttons. This control acts on the deployed website within about 30 seconds and needs no build or deployment. Ordinary content publishing still follows the deployment process above. See [the status runbook](WEBSITE-STATUS.md) for operation, temporary-outage behavior and recovery.

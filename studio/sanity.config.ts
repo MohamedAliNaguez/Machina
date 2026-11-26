@@ -5,6 +5,7 @@ import { ContentPreview } from './ContentPreview';
 import { SearchReadiness } from './SearchReadiness';
 import config from '../src/data/sanity.json';
 import { productTypes } from '../src/data/product-types';
+import { WebsiteStatusTool } from './WebsiteStatusTool';
 
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID || config.projectId;
 if (!projectId)
@@ -55,16 +56,22 @@ export default defineConfig({
     }),
   ],
   schema: { types: schemaTypes },
+  tools: [{ name: 'website-status', title: 'Website status', component: WebsiteStatusTool }],
   document: {
     actions: (previous, context) =>
-      ['siteSettings', 'category'].includes(context.schemaType)
-        ? previous.filter(
-            (action) => !['delete', 'duplicate', 'unpublish'].includes(action.action || ''),
-          )
-        : previous,
+      context.schemaType === 'websiteAvailability'
+        ? []
+        : ['siteSettings', 'category'].includes(context.schemaType)
+          ? previous.filter(
+              (action) => !['delete', 'duplicate', 'unpublish'].includes(action.action || ''),
+            )
+          : previous,
     newDocumentOptions: (previous) =>
       previous.filter(
-        (item) => !['siteSettings', 'usedMachine', 'category', 'brand'].includes(item.templateId),
+        (item) =>
+          !['websiteAvailability', 'siteSettings', 'usedMachine', 'category', 'brand'].includes(
+            item.templateId,
+          ),
       ),
   },
 });

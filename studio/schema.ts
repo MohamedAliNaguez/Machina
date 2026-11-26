@@ -775,6 +775,24 @@ const siteSettings = defineType({
   preview: { select: { title: 'name' } },
 });
 export const schemaTypes = [
+  defineType({
+    name: 'websiteAvailability',
+    title: 'Website availability',
+    type: 'document',
+    fields: [
+      defineField({
+        name: 'status',
+        type: 'string',
+        readOnly: true,
+        options: { list: ['online', 'maintenance'] },
+        description: 'Change this through the separate Website status tool.',
+      }),
+    ],
+    preview: {
+      select: { subtitle: 'status' },
+      prepare: ({ subtitle }) => ({ title: 'Website availability', subtitle }),
+    },
+  }),
   seoApproval,
   pageSeo,
   localeString,
