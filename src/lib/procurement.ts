@@ -1,4 +1,11 @@
-export type GuideTool = 'payload' | 'components' | 'unloading' | 'fleet' | 'comparison' | 'rfq';
+export type GuideTool =
+  'payload' | 'components' | 'unloading' | 'fleet' | 'comparison' | 'rfq' | 'silo';
+export function toolSupportsCategory(tool: string, category: string) {
+  return tool === 'silo'
+    ? category === 'silos'
+    : ['payload', 'components', 'unloading', 'fleet', 'comparison', 'rfq'].includes(tool) &&
+        category === 'cement-bulker';
+}
 
 export interface FleetInputs {
   vehicles: number;

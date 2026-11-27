@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="864pt" height="576pt" viewBox="0 0 864 576" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-27T12:21:43.427333</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 576 
+L 864 576 
+L 864 0 
+L 0 0 
+z
+" style="fill: #f0f1e9"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 64.8 328.32 
+L 799.2 328.32 
+L 799.2 184.32 
+L 64.8 184.32 
+z
+" style="fill: #f0f1e9"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 64.8 328.32 
+L 64.8 184.32 
+" clip-path="url(#pccc3c683c1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2"/>
+     <g id="text_1">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="64.8" y="349.716484" transform="rotate(-0 64.8 349.716484)">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 211.68 328.32 
+L 211.68 184.32 
+" clip-path="url(#pccc3c683c1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4"/>
+     <g id="text_2">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="211.68" y="349.716484" transform="rotate(-0 211.68 349.716484)">16</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 358.56 328.32 
+L 358.56 184.32 
+" clip-path="url(#pccc3c683c1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6"/>
+     <g id="text_3">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="358.56" y="349.716484" transform="rotate(-0 358.56 349.716484)">32</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_7">
+      <path d="M 505.44 328.32 
+L 505.44 184.32 
+" clip-path="url(#pccc3c683c1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8"/>
+     <g id="text_4">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="505.44" y="349.716484" transform="rotate(-0 505.44 349.716484)">48</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_9">
+      <path d="M 652.32 328.32 
+L 652.32 184.32 
+" clip-path="url(#pccc3c683c1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10"/>
+     <g id="text_5">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="652.32" y="349.716484" transform="rotate(-0 652.32 349.716484)">64</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_11">
+      <path d="M 762.48 328.32 
+L 762.48 184.32 
+" clip-path="url(#pccc3c683c1)" style="fill: none; stroke: #d7dece; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12"/>
+     <g id="text_6">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526653" x="762.48" y="349.716484" transform="rotate(-0 762.48 349.716484)">76</text>
+     </g>
+    </g>
+    <g id="text_7">
+     <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #153c2b" x="432" y="379.717656" transform="rotate(-0 432 379.717656)">Working inventory target (tonnes)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2"/>
+   <g id="patch_3">
+    <path d="M 64.8 290.88 
+L 211.68 290.88 
+L 211.68 221.76 
+L 64.8 221.76 
+z
+" clip-path="url(#pccc3c683c1)" style="fill: #6b8661"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 211.68 290.88 
+L 505.44 290.88 
+L 505.44 221.76 
+L 211.68 221.76 
+z
+" clip-path="url(#pccc3c683c1)" style="fill: #0a3424"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 505.44 290.88 
+L 762.48 290.88 
+L 762.48 221.76 
+L 505.44 221.76 
+z
+" clip-path="url(#pccc3c683c1)" style="fill: #9bc900"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 64.8 328.32 
+L 799.2 328.32 
+" style="fill: none; stroke: #aabca0; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_8">
+    <text style="font-weight: 700; font-size: 13px; font-family: 'DejaVu Sans'; fill: #ffffff" transform="translate(123.825234 250.645703)">16 t</text>
+    <text style="font-weight: 700; font-size: 13px; font-family: 'DejaVu Sans'; fill: #ffffff" transform="translate(108.6975 271.366484)">Reserve</text>
+   </g>
+   <g id="text_9">
+    <text style="font-weight: 700; font-size: 13px; font-family: 'DejaVu Sans'; fill: #ffffff" transform="translate(344.145234 250.651797)">32 t</text>
+    <text style="font-weight: 700; font-size: 13px; font-family: 'DejaVu Sans'; fill: #ffffff" transform="translate(289.992109 271.566563)">Lead-time demand</text>
+   </g>
+   <g id="text_10">
+    <text style="font-weight: 700; font-size: 13px; font-family: 'DejaVu Sans'; fill: #0a3424" transform="translate(619.545234 250.651797)">28 t</text>
+    <text style="font-weight: 700; font-size: 13px; font-family: 'DejaVu Sans'; fill: #0a3424" transform="translate(588.890625 270.256406)">Full delivery</text>
+   </g>
+  </g>
+  <g id="line2d_13">
+   <path d="M 47.52 120.96 
+L 816.48 120.96 
+" style="fill: none; stroke: #bdc9b4; stroke-linecap: square"/>
+  </g>
+  <g id="text_11">
+   <text style="font-weight: 700; font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #526653" x="47.52" y="34.56" transform="rotate(-0 47.52 34.56)">TECHNICSAN  /  ENGINEERING SERIES  /  FIGURE 02</text>
+  </g>
+  <g id="text_12">
+   <text style="font-weight: 700; font-size: 22px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #153c2b" x="47.52" y="72" transform="rotate(-0 47.52 72)">Plan for demand and the delivery</text>
+  </g>
+  <g id="text_13">
+   <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #526653" x="47.52" y="98.496" transform="rotate(-0 47.52 98.496)">Conservative scenario: a complete tanker arrives at the reorder point</text>
+  </g>
+  <g id="text_14">
+   <text style="font-weight: 700; font-size: 29px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0a3424" x="64.8" y="429.12" transform="rotate(-0 64.8 429.12)">48 t</text>
+  </g>
+  <g id="text_15">
+   <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #526653" x="64.8" y="455.04" transform="rotate(-0 64.8 455.04)">Reorder point</text>
+  </g>
+  <g id="text_16">
+   <text style="font-weight: 700; font-size: 29px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0a3424" x="328.32" y="429.12" transform="rotate(-0 328.32 429.12)">76 t</text>
+  </g>
+  <g id="text_17">
+   <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #526653" transform="translate(328.32 441.837852)">Working inventory</text>
+   <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #526653" transform="translate(328.32 455.04)">target</text>
+  </g>
+  <g id="text_18">
+   <text style="font-weight: 700; font-size: 29px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0a3424" x="604.8" y="429.12" transform="rotate(-0 604.8 429.12)">74.1 m³</text>
+  </g>
+  <g id="text_19">
+   <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #526653" transform="translate(604.8 441.836992)">Nominal volume</text>
+   <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #526653" transform="translate(604.8 455.04)">required</text>
+  </g>
+  <g id="text_20">
+   <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #153c2b" x="64.8" y="492.48" transform="rotate(-0 64.8 492.48)">32 t/day · 1-day lead time · 0.5-day reserve · 28 t delivery</text>
+  </g>
+  <g id="text_21">
+   <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #526653" transform="translate(47.52 534.08)">Nominal volume = (76 t target + 4 t unavailable) ÷ (1.20 t/m³ × 0.90)</text>
+   <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #526653" transform="translate(47.52 550.08)">Illustrative planning only · Verify actual receiving capacity before every delivery.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pccc3c683c1">
+   <rect x="64.8" y="184.32" width="734.4" height="144"/>
+  </clipPath>
+ </defs>
+</svg>

@@ -1,0 +1,85 @@
+---
+import type { Locale } from '../lib/types';
+import { l } from '../lib/i18n';
+const { locale } = Astro.props as { locale: Locale };
+const groups = [
+  {
+    title: l(locale, 'Üretim ve tedarik', 'Production & replenishment'),
+    fields: [
+      ['production', 'Daily concrete production', 'Günlük beton üretimi', 'm³/operating day'],
+      ['dosage', 'Cement dosage', 'Çimento dozajı', 'kg/m³'],
+      ['lead', 'Delivery lead time', 'Teslimat süresi', 'operating days'],
+      ['reserve', 'Reserve duration', 'Rezerv süresi', 'operating days'],
+      ['delivery', 'Tanker delivery mass', 'Tanker teslimat miktarı', 't'],
+    ],
+  },
+  {
+    title: l(locale, 'Malzeme ve silo varsayımları', 'Material & silo assumptions'),
+    fields: [
+      ['density', 'Material bulk density', 'Malzeme yığın yoğunluğu', 't/m³'],
+      ['fill', 'Assumed usable filling fraction', 'Varsayılan kullanılabilir dolum oranı', '%'],
+      ['unavailable', 'Unavailable material allowance', 'Kullanılamayan malzeme payı', 't'],
+      ['volume', 'Proposed nominal silo volume', 'Önerilen nominal silo hacmi', 'm³'],
+    ],
+  },
+];
+---
+
+<div data-silo-planner data-locale={locale}>
+  <p class="tool-intro">
+    {l(
+      locale,
+      'Üretim talebinizi, teslimat planınızı ve önerilen silo hacmini karşılaştırın.',
+      'Connect production demand and delivery logistics to a proposed silo volume.',
+    )}
+  </p>
+  <form data-silo-form novalidate>
+    {groups.map((group) => (
+      <fieldset class="silo-field-group">
+        <legend>{group.title}</legend>
+        <div class="tool-fields">
+          {group.fields.map(([name, en, tr, unit]) => (
+            <label>
+              <span>
+                {locale === 'tr' ? tr : en}
+                <small>{unit}</small>
+              </span>
+              <input
+                name={name}
+                type="number"
+                inputmode="decimal"
+                step="any"
+                required
+                min={['lead', 'reserve', 'unavailable'].includes(name) ? '0' : '0.000001'}
+                max={name === 'fill' ? '100' : undefined}
+                aria-describedby="silo-planner-note"
+              />
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    ))}
+    <div class="silo-planner-actions">
+      <button type="button" class="tool-example" data-silo-example>
+        {l(locale, 'Makaledeki örneği yükle', 'Load the article example')}
+      </button>
+      <button type="reset" class="tool-example">
+        {l(locale, 'Değerleri temizle', 'Clear values')}
+      </button>
+    </div>
+  </form>
+  <div class="tool-result" data-silo-result role="status" aria-live="polite" aria-atomic="true">
+    {l(locale, 'Hesaplamak için tüm değerleri girin.', 'Enter all values to calculate.')}
+  </div>
+  <p class="tool-note" id="silo-planner-note">
+    {l(
+      locale,
+      'Ön değerlendirme; güvenli dolum veya yapısal yük onayı değildir. Gerçek yığın yoğunluğunu, onaylı dolum sınırını, izin verilen malzeme kütlesini ve boşaltma özelliklerini doğrulayın. Örnekteki %90 evrensel bir dolum önerisi değildir. Girdiler bu sekmede kalır.',
+      'Procurement screening, not a safe filling limit or structural loading approval. Verify actual bulk density, approved fill level, permissible stored mass and discharge behavior. The example’s 90% is not a universal filling recommendation. Inputs stay in this tab.',
+    )}
+  </p>
+</div>
+<script>
+  import { initSiloPlanners } from '../scripts/silo-planner';
+  initSiloPlanners();
+</script>

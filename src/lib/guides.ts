@@ -40,7 +40,7 @@ export function sectionComplete(section: Article['sections'][number], locale: Lo
   return (
     !!section.heading?.[locale]?.trim() &&
     (!section.tool ||
-      ['payload', 'components', 'unloading', 'fleet', 'comparison', 'rfq'].includes(
+      ['payload', 'components', 'unloading', 'fleet', 'comparison', 'rfq', 'silo'].includes(
         section.tool,
       )) &&
     (section.blocks?.length

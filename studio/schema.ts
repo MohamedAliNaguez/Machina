@@ -1,4 +1,5 @@
 import { sectionComplete } from '../src/lib/guides';
+import { toolSupportsCategory } from '../src/lib/procurement';
 import { defineType, defineField, defineArrayMember } from 'sanity';
 import { productTypes } from '../src/data/product-types';
 const required = (rule: any) => rule.required();
@@ -578,16 +579,22 @@ const article = defineType({
             defineField({ name: 'blocks', type: 'array', of: [{ type: 'guideBlock' }] }),
             defineField({
               name: 'tool',
-              title: 'Cement bulker buyer tool',
+              title: 'Interactive buyer tool',
               type: 'string',
               description:
-                'Optional cement bulker procurement tool, shown after this section’s text.',
+                'Optional tool for the selected product family, shown after this section’s text.',
               validation: (rule) =>
                 rule.custom(
                   (value, context) =>
                     !value ||
-                    (context.document?.category as any)?._ref === 'category-cement-bulker' ||
-                    'These tools currently support the cement bulker category only.',
+                    toolSupportsCategory(
+                      String(value),
+                      String((context.document?.category as any)?._ref || '').replace(
+                        /^category-/,
+                        '',
+                      ),
+                    ) ||
+                    'Choose a tool supported by this product family. The silo planner requires Silos; other tools require Cement bulker.',
                 ),
               options: {
                 list: [
@@ -595,6 +602,7 @@ const article = defineType({
                   { title: 'Equipment diagram', value: 'components' },
                   { title: 'Unloading time estimator', value: 'unloading' },
                   { title: 'Fleet productivity calculator', value: 'fleet' },
+                  { title: 'Cement silo capacity and inventory planner', value: 'silo' },
                   { title: 'Quotation comparison', value: 'comparison' },
                   { title: 'RFQ builder and sales form', value: 'rfq' },
                 ],
@@ -614,6 +622,14 @@ const article = defineType({
               'Use each interactive tool only once per guide.'
             );
           }),
+    }),
+    defineField({
+      name: 'relatedGuides',
+      title: 'Related guides',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'article' }] }],
+      description:
+        'Connect relevant guides across product families. Only published language versions are linked on the website.',
     }),
     defineField({
       name: 'sources',

@@ -3,6 +3,7 @@ import { l } from '../lib/i18n';
 import type { Locale } from '../lib/types';
 import type { GuideTool } from '../lib/procurement';
 import EnquiryForm from './EnquiryForm.astro';
+import SiloPlanner from './SiloPlanner.astro';
 import '../styles/guide-tools.css';
 const { kind, locale, guideId } = Astro.props as {
   kind: GuideTool;
@@ -89,12 +90,18 @@ const rfq = [
           components: l(locale, 'Ekipmanı keşfedin', 'Explore the equipment'),
           unloading: l(locale, 'Süre senaryosu', 'Time scenario'),
           fleet: l(locale, 'Filo verimliliği senaryosu', 'Fleet productivity scenario'),
+          silo: l(
+            locale,
+            'Silo kapasitesi ve stok planlayıcısı',
+            'Cement silo capacity & inventory planner',
+          ),
           comparison: l(locale, 'Teklif kapsamı çalışma tablosu', 'Quotation coverage worksheet'),
           rfq: l(locale, 'Teklif özetinizi hazırlayın', 'Build your quotation brief'),
         }[kind]
       }
     </h3>
   </div>
+  {kind === 'silo' && <SiloPlanner locale={locale} />}
   {kind === 'fleet' && (
     <>
       <p class="tool-intro">

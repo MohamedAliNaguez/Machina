@@ -80,6 +80,7 @@ export interface Machine extends SeoFields {
   published: Locale[];
 }
 export interface Article extends SeoFields {
+  relatedGuideIds?: string[];
   relatedProductIds?: string[];
   id: string;
   slug: Localized;

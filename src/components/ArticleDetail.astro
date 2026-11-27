@@ -17,7 +17,12 @@ interface Props {
 const { locale, article } = Astro.props;
 const { categories, machines, articles } = await getContent();
 const relatedGuides = articles.filter(
-  (a) => a.id !== article.id && a.categoryId === article.categoryId && a.published.includes(locale),
+  (a) =>
+    a.id !== article.id &&
+    a.published.includes(locale) &&
+    (a.categoryId === article.categoryId ||
+      article.relatedGuideIds?.includes(a.id) ||
+      a.relatedGuideIds?.includes(article.id)),
 );
 const category = categories.find((c) => c.id === article.categoryId);
 const related = (article.relatedProductIds || []).flatMap((id) =>

@@ -326,3 +326,50 @@
   width: 100%;
   max-width: none;
 }
+
+.silo-field-group {
+  border: 0;
+  padding: 0;
+  margin: 0 0 28px;
+  min-width: 0;
+}
+.silo-field-group legend {
+  padding: 0 0 18px;
+  font-weight: 600;
+  color: #21492c;
+  font-size: 16px;
+}
+.silo-planner-actions {
+  display: flex;
+  gap: 12px 28px;
+  flex-wrap: wrap;
+}
+.silo-plan-metrics {
+  margin: 24px 0;
+}
+.silo-plan-metrics > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid #45664a;
+}
+.silo-plan-metrics dt {
+  color: #d5e4c8;
+  font-size: 13px;
+}
+.silo-plan-metrics dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+  font-size: 15px;
+}
+@media (max-width: 600px) {
+  .silo-plan-metrics > div {
+    display: grid;
+    gap: 6px;
+  }
+  .silo-plan-metrics dd {
+    text-align: left;
+  }
+}

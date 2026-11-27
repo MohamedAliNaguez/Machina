@@ -31,7 +31,7 @@ test('published unloading guide preserves figures, structure, working links and 
   await page.goto('/en/guides/');
   await expect(page.locator(`a[href="${path}"]`).first()).toBeVisible();
   await page.goto('/en/guides/cement-bulker-quotation-checklist/');
-  await expect(page.locator('.guide-related-reading a')).toHaveAttribute('href', path);
+  await expect(page.locator(`.guide-related-reading a[href="${path}"]`)).toBeVisible();
 });
 
 test('unloading and fleet calculators reproduce the article and handle invalid scenarios', async ({

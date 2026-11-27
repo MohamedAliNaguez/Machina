@@ -1,4 +1,5 @@
 import { sectionComplete } from './guides';
+import { toolSupportsCategory } from './procurement';
 import { repositoryContent } from '../data/repository';
 import { companySearchIssues, brandSearchIssues } from './seo';
 import { verifySearchTransport } from './search-transport';
@@ -222,8 +223,10 @@ export function validateContent(
   }
   for (const article of value.articles) {
     const tools = (article.sections || []).flatMap((s) => (s.tool ? [s.tool] : []));
-    if (tools.length && article.categoryId !== 'cement-bulker')
-      throw new Error(`Procurement tools require the cement-bulker category: ${article.id}.`);
+    if (tools.some((tool) => !toolSupportsCategory(tool, article.categoryId)))
+      throw new Error(
+        `Interactive tool does not support category ${article.categoryId}: ${article.id}.`,
+      );
     if (new Set(tools).size !== tools.length)
       throw new Error(`Duplicate interactive tool in article ${article.id}.`);
     if (!article.published?.length || !article.sections?.length || !safeMediaUrl(article.image))

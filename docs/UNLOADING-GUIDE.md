@@ -9,7 +9,7 @@ The English guide is published in Sanity as `article-guide-cement-bulker-unloadi
 - `src/data/cement-unloading.ts` converts the supplied manuscript into editable Sanity blocks. The restricted importer recognizes paragraphs, subheadings, lists, tables and the three figure markers; it is not a general Markdown renderer.
 - `studio/unloading-guide-publish.ts` performs a one-time guarded publication. It refuses to overwrite an existing guide and saves a private backup before publication. Subsequent editorial changes belong in Sanity, rather than rerunning this importer.
 - Heading and internal resource-link blocks, captions, sources and calculator selection are editable in Studio. The new fleet calculator is also available in the section tool menu.
-- Shared category membership connects both guides through “Continue reading”. Neither guide's original body is overwritten.
+- Shared category membership and explicit related-guide references connect relevant guides through “Continue reading”, including the silo capacity guide. Neither existing guide's original body is overwritten.
 
 The new guide is English only. Its reserved Turkish slug is not published and does not appear as a translation alternate. No author, technical reviewer or review date was inferred. The actual first publication date is recorded, while SEO approval remains pending. The current brand-only release still indexes only Home and Contact in English and Turkish.
 
